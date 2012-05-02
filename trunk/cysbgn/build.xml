@@ -1,0 +1,144 @@
+<!-- =================================================================== -->
+<!-- Plugin build file     -->
+<!-- =================================================================== -->
+
+<project name="sbgnplugin" default="jar" basedir=".">
+
+  <!-- =================================================================== -->
+  <!-- Initialization target                                               -->
+  <!-- =================================================================== -->
+  <target name="init">
+    <property name="plugin_name" value="sbgnplugin"/>
+    <property name="plugin_class" value="sbgnplugin.SBGNplugin"/>  	  	
+    <property name="project.jar" value="${plugin_name}.jar"/>  	
+    <property name="version" value="0.9"/>
+    <property name="year" value="2012"/>
+  	
+    <echo message="Building plugin ${plugin_name} version ${version}..."/>
+
+    <!-- Define the plugin directories -->
+    <property name="src.dir" value="./src"/>
+    <property name="build.dir" value="./build"/>
+    <property name="images.dir" value="./images"/>
+    <property name="manifest.dir" value="./manifest"/>
+    <property name="lib.dir" value="./lib"/>
+
+  	<!-- Define the Cytoscape directories -->
+    <property name="cytoscape.dir" value="/Applications/Cytoscape_v2.8.2"/>
+  	<property name="cytoscape.lib.dir" value="${cytoscape.dir}/lib"/>
+    <property name="cytoscape.plugin.dir" value="${cytoscape.dir}/plugins"/>
+
+    <!-- Inheritable properties -->
+    <property name="debug" value="on"/>
+    <property name="optimize" value="off"/>
+    <property name="deprecation" value="off"/>
+    <property name="nowarn" value="true"/>
+    <property name="fork" value="false"/>
+  	
+    <!-- Check the availability of some files -->  	
+ 	<available file="${cytoscape.dir}/cytoscape.jar" property="cytoscape.present"/> 
+  	<available file="${images.dir}" property="images.dir.present"/>
+
+    <!-- Define the java class path -->
+    <path id="project.class.path">
+	  <pathelement location="${lib.dir}/org.sbgn.jar"/>
+	  <pathelement location="${lib.dir}/junit-4.10.jar"/>
+  	  <pathelement location="${lib.dir}/commons-math3-3.0.jar"/>
+      <pathelement location="${cytoscape.dir}/cytoscape.jar"/>
+      <pathelement path="${java.class.path}/"/>
+    </path>
+
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Compiles the project                                           -->
+  <!-- =================================================================== -->
+  <target name="compile" depends="init"  >
+
+   <echo message="COMPILE ${plugin_name} ..."/>
+    
+    <mkdir dir="${build.dir}"/>
+    <javac srcdir="${src.dir}"
+           excludes="${excludes}"
+           classpathref="project.class.path"
+           destdir="${build.dir}"
+           debug="${debug}"
+           nowarn="${nowarn}"
+           deprecation="${deprecation}" 
+           optimize="${optimize}"
+           fork="${fork}"/>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Creates the plugin jar file                                         -->
+  <!-- =================================================================== -->
+  <target name="jar" depends="compile, copy_plugin_prop, copy_images"  >
+  	
+	<unjar dest="${build.dir}">
+		<fileset dir="${lib.dir}" includes="org.sbgn.jar" />
+		<fileset dir="${lib.dir}" includes="commons-math3-3.0.jar" />
+	</unjar>
+  	
+    <jar destfile="${project.jar}">
+      	<manifest> <attribute name="Cytoscape-Plugin" value="${plugin_class}"/> </manifest>
+      	<fileset dir="${build.dir}" includes="**"/>
+    </jar>
+
+  </target>
+
+  <!-- If plugin.prop exist, copy it to build directory  -->	
+  <target name="copy_plugin_prop">
+		<copy todir="${build.dir}/sbgnplugin" file="./plugin.props"/>	
+  </target>
+
+  <!-- If there are any image files, copy them to build directory  -->	
+  <target name="copy_images">
+		<copy todir="${build.dir}">
+	        <fileset dir="${images.dir}"/> 
+		</copy>
+  </target>
+
+
+<!-- =================================================================== -->
+<!-- JUnit tests														 -->
+<!-- =================================================================== -->
+
+	<property name="lib" value="./lib" />
+	<!-- <property name="test.class.name" value="sbgnplugin.junits.AFReaderTest" /> -->
+	<property name="test.classes.dir" value="./src/sbgnplugin/junits" />
+	<property name="classes" value="./build" />
+	
+	<path id="test.classpath">
+		<pathelement location="${classes}" />
+		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+	<target name="test">
+		<junit fork="yes" haltonfailure="yes" printsummary="true">
+			<classpath refid="test.classpath" />
+			<!-- <test name="${test.class.name}" /> -->
+			
+			<batchtest>
+				<fileset dir="${classes}">
+					<include name="**/*Test.class" />
+				</fileset>
+			</batchtest>
+			
+			<formatter type="plain" usefile="false" />
+			
+		</junit>
+	</target>
+
+
+  <!-- =================================================================== -->
+  <!-- Clean up, get back to original state                                -->
+  <!-- =================================================================== -->
+  <target name="clean" depends="init">
+  	<delete dir="${build.dir}"/>
+  </target>
+
+</project>
+
+<!-- End of file -->
