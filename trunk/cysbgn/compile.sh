@@ -6,5 +6,5 @@ ant jar
 
 echo "[MOVE JAR]"
 echo ""
-chmod +x sbgnplugin.jar
-mv sbgnplugin.jar /Applications/Cytoscape_v2.8.2/plugins/
+chmod +x cysbgn.jar
+mv cysbgn.jar /Applications/Cytoscape_v2.8.2/plugins/
