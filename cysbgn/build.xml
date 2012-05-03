@@ -2,16 +2,16 @@
 <!-- Plugin build file     -->
 <!-- =================================================================== -->
 
-<project name="sbgnplugin" default="jar" basedir=".">
+<project name="cysbgn" default="jar" basedir=".">
 
   <!-- =================================================================== -->
   <!-- Initialization target                                               -->
   <!-- =================================================================== -->
   <target name="init">
-    <property name="plugin_name" value="sbgnplugin"/>
-    <property name="plugin_class" value="sbgnplugin.SBGNplugin"/>  	  	
+    <property name="plugin_name" value="cysbgn"/>
+    <property name="plugin_class" value="uk.ac.ebi.cysbgn.CySBGN"/>  	  	
     <property name="project.jar" value="${plugin_name}.jar"/>  	
-    <property name="version" value="0.9"/>
+    <property name="version" value="1.0"/>
     <property name="year" value="2012"/>
   	
     <echo message="Building plugin ${plugin_name} version ${version}..."/>
@@ -88,7 +88,7 @@
 
   <!-- If plugin.prop exist, copy it to build directory  -->	
   <target name="copy_plugin_prop">
-		<copy todir="${build.dir}/sbgnplugin" file="./plugin.props"/>	
+		<copy todir="${build.dir}/cysbgn" file="./plugin.props"/>	
   </target>
 
   <!-- If there are any image files, copy them to build directory  -->	
@@ -104,7 +104,6 @@
 <!-- =================================================================== -->
 
 	<property name="lib" value="./lib" />
-	<!-- <property name="test.class.name" value="sbgnplugin.junits.AFReaderTest" /> -->
 	<property name="test.classes.dir" value="./src/sbgnplugin/junits" />
 	<property name="classes" value="./build" />
 	

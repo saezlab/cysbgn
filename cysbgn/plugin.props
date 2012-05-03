@@ -5,7 +5,7 @@
 # -- The following properties are REQUIRED -- #
 
 # The plugin name that will be displayed to users
-pluginName=SBGNplugin
+pluginName=CySBGN
 
 # Description used to give users information about the plugin such as what it does.  
 # Html tags are encouraged for formatting purposes.
