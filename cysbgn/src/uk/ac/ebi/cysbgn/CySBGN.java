@@ -15,17 +15,17 @@ package uk.ac.ebi.cysbgn;
 
 import java.io.File;
 
+import uk.ac.ebi.cysbgn.cyInteraction.ExportAction;
 import uk.ac.ebi.cysbgn.cyInteraction.SBGNConverter;
 import uk.ac.ebi.cysbgn.cyInteraction.SbgnFilter;
 import uk.ac.ebi.cysbgn.io.MessagesHandler;
-import uk.ac.ebi.cysbgn.io.readers.Reader;
 import uk.ac.ebi.cysbgn.io.readers.SBGNReader;
 import uk.ac.ebi.cysbgn.io.writers.SBGNWriter;
-import uk.ac.ebi.cysbgn.io.writers.Writer;
 import uk.ac.ebi.cysbgn.mapunits.Diagram;
 import uk.ac.ebi.cysbgn.menu.CustomEdgesOption;
 import uk.ac.ebi.cysbgn.menu.NodeShapesOption;
 import uk.ac.ebi.cysbgn.visualization.SBGNVisualStyle;
+import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
 import cytoscape.actions.LoadNetworkTask;
 import cytoscape.plugin.CytoscapePlugin;
@@ -51,6 +51,7 @@ import cytoscape.view.CyNetworkView;
 public class CySBGN extends CytoscapePlugin {
 
 	public static final String SBGN_MENU = "Plugins.CySBGN";
+	public static final String SBGN_EXTENSION = ".sbgn";
 	
 	private SBGNVisualStyle visualStyle;
 	private SBGNConverter converter; 
@@ -70,6 +71,8 @@ public class CySBGN extends CytoscapePlugin {
 		CustomEdgesOption edgesShapesMenuAction = new CustomEdgesOption(this);
 		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction)edgesShapesMenuAction);
 
+		ExportAction exportAction = new ExportAction(this);
+		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction)exportAction);
 //		testMethod();
 	}
 	
@@ -94,20 +97,15 @@ public class CySBGN extends CytoscapePlugin {
     	cyNetworkView.redrawGraph(true, true);
 	}
 	
-	public Diagram readSBGNDiagram(String filePath){
-		Reader newReader = new SBGNReader(this);
-		
-		Diagram newDiagram = newReader.read(filePath);
-		
-		return newDiagram;
+	public Diagram readSBGNDiagram(String filePath) throws Exception{
+		SBGNReader newReader = new SBGNReader(this);
+		return newReader.read(filePath);
 	}
 	
 
-	public void writeSBGNDiagram(Diagram diagram, String filePath){
-		Writer sbgnWriter = new SBGNWriter();
-		
-		if( !sbgnWriter.save(diagram, filePath) )
-			MessagesHandler.showErrorMessageDialog(diagram.getName()+" couldn't be saved in "+filePath, "Diagram not saved", new Exception());
+	public void writeSBGNDiagram(CyNetwork network, CyNetworkView cyNetworkView, String filePath){
+		SBGNWriter sbgnWriter = new SBGNWriter(network, cyNetworkView, filePath);
+		MessagesHandler.executeTask(sbgnWriter, false);
 	}
 
 	
@@ -123,7 +121,7 @@ public class CySBGN extends CytoscapePlugin {
 	 * @param width
 	 * @return
 	 */
-	public static int convertXCoordinate(int xSbgn, int width){
+	public static int convert_X_coord_SBGN_to_Cytoscape(int xSbgn, int width){
 		int xCy = xSbgn + ( width / 2 );
 		return xCy;
 	}
@@ -139,12 +137,23 @@ public class CySBGN extends CytoscapePlugin {
 	 * @param height
 	 * @return
 	 */
-	public static int convertYCoordinate(int ySbgn, int height){
+	public static int convert_Y_coord_SBGN_to_Cytoscape(int ySbgn, int height){
 		int yCy = ySbgn + ( height / 2 );
 		return yCy;
 	}
+	
+	
+	public static float convert_X_coord_Cytoscape_to_SBGN(int xCy, int width){
+		int xSbgn = xCy - ( width / 2 );
+		return xSbgn;
+	}
+	
+	public static float convert_Y_coord_Cytoscape_to_SBGN(int yCy, int height){
+		int ySbgn = yCy - ( height / 2 );
+		return ySbgn;
+	}
 
-
+	
 	public Boolean getDrawCustomNodesShapes() {
 		return visualStyle.getDrawCustomNodesShapes();
 	}
