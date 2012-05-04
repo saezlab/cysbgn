@@ -19,6 +19,9 @@ import java.io.StringWriter;
 import javax.swing.JOptionPane;
 
 import cytoscape.Cytoscape;
+import cytoscape.task.Task;
+import cytoscape.task.ui.JTaskConfig;
+import cytoscape.task.util.TaskManager;
 
 /**
  * This class gathers all methods that should be used to print messages.
@@ -29,22 +32,10 @@ import cytoscape.Cytoscape;
 
 public class MessagesHandler {
 	
-	/**
-	 * Print a message in the command line
-	 * 
-	 * @param message
-	 */
 	public static void printMessageCommandLine(String message){
 		System.out.println("[SBGNPlugin] "+message+".");
 	}
 
-	/**
-	 * Print a message in a pop-up screen.
-	 * 
-	 * @param message
-	 * @param title
-	 * @param e
-	 */
 	public static void showErrorMessageDialog(String message, String title, Exception e){
 		
 		StringBuilder errorMessage = new StringBuilder();
@@ -58,4 +49,29 @@ public class MessagesHandler {
 		JOptionPane.showMessageDialog(Cytoscape.getDesktop(), errorMessage.toString(), title, JOptionPane.ERROR_MESSAGE);
 	}
 	
+	
+	public static void executeTask(Task task, boolean autoDispose){
+		executeTask(task, autoDispose, true, false);
+	}
+	
+	public static void executeTask(Task task, boolean autoDispose, boolean displayCancelButton, boolean displayTimeRemaining){
+		JTaskConfig jTaskConfig = new JTaskConfig();
+		jTaskConfig.setOwner(Cytoscape.getDesktop());
+		
+		jTaskConfig.displayCloseButton(true);
+		jTaskConfig.displayCancelButton(displayCancelButton);
+
+		jTaskConfig.displayStatus(true);
+		jTaskConfig.setAutoDispose(autoDispose);
+		
+		jTaskConfig.displayTimeRemaining(displayTimeRemaining);
+		
+		TaskManager.executeTask(task, jTaskConfig);
+	}
+	
+	public static String getStackTrace(Exception e){
+		StringWriter sw = new StringWriter();
+		e.printStackTrace(new PrintWriter(sw));
+		return sw.toString();
+	}
 }

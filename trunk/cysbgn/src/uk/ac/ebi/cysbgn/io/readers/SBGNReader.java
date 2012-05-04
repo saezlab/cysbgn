@@ -34,7 +34,6 @@ import org.sbgn.bindings.Port;
 import org.sbgn.bindings.Sbgn;
 
 import uk.ac.ebi.cysbgn.CySBGN;
-import uk.ac.ebi.cysbgn.io.MessagesHandler;
 import uk.ac.ebi.cysbgn.mapunits.Diagram;
 import uk.ac.ebi.cysbgn.mapunits.MapArc;
 import uk.ac.ebi.cysbgn.mapunits.MapNode;
@@ -49,7 +48,7 @@ import uk.ac.ebi.cysbgn.methods.SegmentationPoint;
  * @author emanuel
  *
  */
-public class SBGNReader implements Reader{
+public class SBGNReader{
 
 	private static final double ABSOLUTE_STIMULATION_DISTANCE = 11.0;
 	private static final double ABSOLUTE_INHIBITION_DISTANCE = 3.0;
@@ -66,19 +65,14 @@ public class SBGNReader implements Reader{
 	}
 	
 		
-	public Diagram read(String diagramFilePath){
-		try {
-			File file = new File(diagramFilePath);
-			
-			Sbgn sbgnMap = SbgnUtil.readFromFile(file);
-			
-			Diagram diagram = readMap(sbgnMap.getMap(), diagramFilePath); 
-			
-			return diagram;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+	public Diagram read(String diagramFilePath) throws Exception{
+		File file = new File(diagramFilePath);
+
+		Sbgn sbgnMap = SbgnUtil.readFromFile(file);
+
+		Diagram diagram = readMap(sbgnMap.getMap(), diagramFilePath); 
+
+		return diagram;
 	}
 
 	/**
@@ -87,8 +81,9 @@ public class SBGNReader implements Reader{
 	 * @param diagramMap
 	 * @param diagramName
 	 * @return
+	 * @throws Exception 
 	 */
-	protected Diagram readMap(Map diagramMap, String diagramName) {
+	protected Diagram readMap(Map diagramMap, String diagramName) throws Exception {
 		
 		Diagram newDiagram = new Diagram(diagramName);
 		
@@ -178,7 +173,7 @@ public class SBGNReader implements Reader{
 		newDiagram.add(newElement);
 	}
 	
-	private void getArc(Arc arc, Map diagramMap, Diagram newDiagram){
+	private void getArc(Arc arc, Map diagramMap, Diagram newDiagram) throws Exception{
 		try{
 			// Generate the arc and/or sub arcs 
 			List<MapArc> mapArcs = generateArc(arc, diagramMap, newDiagram);
@@ -187,9 +182,10 @@ public class SBGNReader implements Reader{
 				newDiagram.add(mapAcr);
 			
 		}catch(Exception e){
-			String errorMessage = "Arc "+ arc.getId() +": Invalid target or source node.\n\n";
-			MessagesHandler.showErrorMessageDialog(errorMessage, "SBGN arc import error", e);
-			e.printStackTrace();
+			throw new Exception("Arc "+ arc.getId() +": Invalid target or source node.\n\n", e);
+//			String errorMessage = "Arc "+ arc.getId() +": Invalid target or source node.\n\n";
+//			MessagesHandler.showErrorMessageDialog(errorMessage, "SBGN arc import error", e);
+//			e.printStackTrace();
 		}
 	}
 	
@@ -431,8 +427,8 @@ public class SBGNReader implements Reader{
 		int width = 1;
 		int height = 1;
 		
-		mapPort.setX( CySBGN.convertXCoordinate((int) port.getX(), width) );
-		mapPort.setY( CySBGN.convertYCoordinate((int) port.getY(), height) );
+		mapPort.setX( CySBGN.convert_X_coord_SBGN_to_Cytoscape((int) port.getX(), width) );
+		mapPort.setY( CySBGN.convert_Y_coord_SBGN_to_Cytoscape((int) port.getY(), height) );
 		
 		mapPort.setWidth( width );
 		mapPort.setHeight( height );
@@ -458,8 +454,8 @@ public class SBGNReader implements Reader{
 		
 		int xSBGN = (int) glyph.getBbox().getX();
 		int ySBGN = (int) glyph.getBbox().getY();
-		newElement.setX( CySBGN.convertXCoordinate(xSBGN, width) );
-		newElement.setY( CySBGN.convertYCoordinate(ySBGN, height) );
+		newElement.setX( CySBGN.convert_X_coord_SBGN_to_Cytoscape(xSBGN, width) );
+		newElement.setY( CySBGN.convert_Y_coord_SBGN_to_Cytoscape(ySBGN, height) );
 	}
 	
 	private void setNodeLabel(Glyph glyph, MapNode newElement, GlyphClazz nodeClass){

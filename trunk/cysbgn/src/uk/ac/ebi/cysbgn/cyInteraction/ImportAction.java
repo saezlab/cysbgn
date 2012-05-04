@@ -16,11 +16,11 @@ package uk.ac.ebi.cysbgn.cyInteraction;
 import java.io.IOException;
 
 import uk.ac.ebi.cysbgn.CySBGN;
-import uk.ac.ebi.cysbgn.io.MessagesHandler;
 import uk.ac.ebi.cysbgn.mapunits.Diagram;
 import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
 import cytoscape.data.readers.AbstractGraphReader;
+import cytoscape.task.TaskMonitor;
 import cytoscape.view.CyNetworkView;
 
 /**
@@ -34,6 +34,8 @@ public class ImportAction extends AbstractGraphReader{
 	protected CySBGN plugin;
 	protected Diagram diagram;
 	
+	private TaskMonitor taskMonitor;
+	
 	
 	public ImportAction(String fileName, CySBGN plugin){
 		super(fileName);
@@ -42,15 +44,21 @@ public class ImportAction extends AbstractGraphReader{
 
 	@Override
 	public void read() throws IOException {
-		diagram = plugin.readSBGNDiagram(fileName);
-		
-		if(diagram == null) 
-			MessagesHandler.showErrorMessageDialog("Could not load file!", "Error importing SBGN file", new Exception());
+		try {
+			diagram = plugin.readSBGNDiagram(fileName);
+		} catch (Exception e) {
+			throw new IOException(e.getMessage(), e);
+		}
 	}
 	
 	public void doPostProcessing(CyNetwork network){
 		CyNetworkView cyNetworkView = Cytoscape.getNetworkView(network.getIdentifier());
 		plugin.displayDiagram(diagram, cyNetworkView);
+	}
+	
+	@Override
+	public void setTaskMonitor(TaskMonitor monitor) throws IllegalThreadStateException {
+		taskMonitor = monitor;
 	}
 
 }

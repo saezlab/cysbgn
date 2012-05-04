@@ -3,7 +3,6 @@ package uk.ac.ebi.cysbgn.menu;
 import java.awt.event.ActionEvent;
 
 import uk.ac.ebi.cysbgn.CySBGN;
-import cytoscape.Cytoscape;
 import cytoscape.util.CytoscapeAction;
 
 public class CustomEdgesOption extends CytoscapeAction {
