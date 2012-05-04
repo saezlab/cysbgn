@@ -43,11 +43,6 @@ public class CustomEdgesOption extends CytoscapeAction {
 		}
 		
 		plugin.setDrawCustomEdgesShapes( !plugin.getDrawCustomEdgesShapes() );
-		
-		plugin.refreshCurrentNetworkVisualStyle(Cytoscape.getCurrentNetworkView());
-		
-		Cytoscape.getCurrentNetworkView().redrawGraph(true, true);
-
 	}
 
 }

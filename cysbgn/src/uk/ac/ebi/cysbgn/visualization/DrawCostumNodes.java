@@ -51,13 +51,6 @@ public class DrawCostumNodes {
 		this.plugin = plugin;
 	}
 	
-	public void drawCustomNodes(){
-		GraphView gview = Cytoscape.getCurrentNetworkView();
-		CyNetwork cyNetwork = Cytoscape.getCurrentNetwork();
-		
-		drawCustomNodes(cyNetwork, gview);
-	}
-	
 	public void drawCustomNodes(CyNetwork cyNetwork, GraphView gview){
 		Iterator<CyNode> iter = cyNetwork.nodesIterator();
 
@@ -66,16 +59,38 @@ public class DrawCostumNodes {
 
 			String nodeClassName = (String) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.CLASS.getName());
 
+			if( !nodeClassName.equals(MapNode.INVISIBLE_NODE) )
+			{
 
-			if( !plugin.getDrawCustomNodesShapes() ){
-				NodeView nv = gview.getNodeView(cyNode);
-				DNodeView dnv = (DNodeView) nv;
-				dnv.removeAllCustomGraphics();
-				
-			}else{
+				if( !plugin.getDrawCustomNodesShapes() ){
+					
+					GlyphClazz nodeClass = GlyphClazz.fromClazz(nodeClassName);
 
-				if( !nodeClassName.equals(MapNode.INVISIBLE_NODE) ){
+					switch(nodeClass){
+						case NUCLEIC_ACID_FEATURE : ;
+						case PERTURBATION : ;
+						case PERTURBING_AGENT : ;
+						case TERMINAL : ;
+						case TAG : ;
+						case ANNOTATION : ;
+						case COMPLEX : ;
+						case EXISTENCE : ;
+						case LOCATION : ;
+						case SOURCE_AND_SINK : ;
+						case SIMPLE_CHEMICAL : ;
+						case MACROMOLECULE : ;
+						case NUCLEIC_ACID_FEATURE_MULTIMER : ;
+						case MACROMOLECULE_MULTIMER : ;
+						case COMPLEX_MULTIMER: ;
+						case SIMPLE_CHEMICAL_MULTIMER : 
+							NodeView nv = gview.getNodeView(cyNode);
+							DNodeView dnv = (DNodeView) nv;
+							dnv.removeAllCustomGraphics();
+							break;
+						default : ;
+					}
 
+				}else{
 					GlyphClazz nodeClass = GlyphClazz.fromClazz(nodeClassName);
 
 					Boolean hasCloneMarker = false;
