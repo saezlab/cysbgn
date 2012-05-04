@@ -88,7 +88,7 @@
 
   <!-- If plugin.prop exist, copy it to build directory  -->	
   <target name="copy_plugin_prop">
-		<copy todir="${build.dir}/cysbgn" file="./plugin.props"/>	
+		<copy todir="${build.dir}/uk/ac/ebi/cysbgn" file="./plugin.props"/>	
   </target>
 
   <!-- If there are any image files, copy them to build directory  -->	

@@ -135,7 +135,8 @@ public class SBGNVisualStyle extends VisualStyle{
 	}
 	
 	
-	private CySBGN plugin;
+	private Boolean drawCustomNodesShapes = true;
+	private Boolean drawCustomEdgesShapes = true;
 	
 	/**
 	 * Class constructor.
@@ -144,7 +145,6 @@ public class SBGNVisualStyle extends VisualStyle{
 	public SBGNVisualStyle(CySBGN plugin) {
 		super(NAME);
 		costumNodeShapes = new DrawCostumNodes(plugin);
-		this.plugin = plugin;
 	}
 	
 	
@@ -163,7 +163,7 @@ public class SBGNVisualStyle extends VisualStyle{
 		setDefaultAppearanceAspects();
 
 		// Node features
-		if( plugin.getDrawCustomNodesShapes() )
+		if( drawCustomNodesShapes )
 			setNodeBorderOpacity(cyNetwork);
 		setNodeOpacity(cyNetwork);
 		setNodeLabels();
@@ -327,24 +327,47 @@ public class SBGNVisualStyle extends VisualStyle{
         networkView.setVisualStyle(vs.getName());
         manager.setVisualStyle(vs);
         
-        costumNodeShapes.drawCustomNodes();
-	}
-	
-	public void applyVisualStyle(CyNetwork network){
-        CyNetworkView networkView = Cytoscape.getNetworkView(network.getIdentifier());
-
-        VisualMappingManager manager = Cytoscape.getVisualMappingManager();
-        CalculatorCatalog catalog = manager.getCalculatorCatalog();
-
-        VisualStyle vs = catalog.getVisualStyle(NAME);
-        if (vs == null) {
-        	vs = init(network);
-        	catalog.addVisualStyle(vs);
-        }
-
-        networkView.setVisualStyle(vs.getName());
-        manager.setVisualStyle(vs);
-        
         costumNodeShapes.drawCustomNodes(network, networkView);
 	}
+	
+	public void refreshVisualStyle(CyNetwork network){
+		CyNetworkView cyNetworkView = Cytoscape.getNetworkView(network.getIdentifier());
+
+		VisualMappingManager manager = Cytoscape.getVisualMappingManager();
+		CalculatorCatalog catalog = manager.getCalculatorCatalog();
+
+		catalog.removeVisualStyle(NAME);
+
+		VisualStyle	vs = init(network);
+		catalog.addVisualStyle(vs);
+
+		cyNetworkView.setVisualStyle(vs.getName());
+		manager.setVisualStyle(vs);
+
+		costumNodeShapes.drawCustomNodes(network, cyNetworkView);
+	}
+
+
+	// Getters and setters
+	
+	public Boolean getDrawCustomNodesShapes() {
+		return drawCustomNodesShapes;
+	}
+
+
+	public void setDrawCustomNodesShapes(Boolean drawCustomNodesShapes) {
+		this.drawCustomNodesShapes = drawCustomNodesShapes;
+	}
+
+
+	public Boolean getDrawCustomEdgesShapes() {
+		return drawCustomEdgesShapes;
+	}
+
+
+	public void setDrawCustomEdgesShapes(Boolean drawCustomEdgesShapes) {
+		this.drawCustomEdgesShapes = drawCustomEdgesShapes;
+	}
+	
+	
 }

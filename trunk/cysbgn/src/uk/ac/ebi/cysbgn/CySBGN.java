@@ -31,8 +31,6 @@ import cytoscape.actions.LoadNetworkTask;
 import cytoscape.plugin.CytoscapePlugin;
 import cytoscape.util.CytoscapeAction;
 import cytoscape.view.CyNetworkView;
-import cytoscape.visual.CalculatorCatalog;
-import cytoscape.visual.VisualMappingManager;
 
 
 /**
@@ -57,24 +55,21 @@ public class CySBGN extends CytoscapePlugin {
 	private SBGNVisualStyle visualStyle;
 	private SBGNConverter converter; 
 	
-	private Boolean drawCustomNodesShapes = true;
-	private Boolean drawCustomEdgesShapes = true;
-	
 	
 	public CySBGN(){
 		System.out.println("Loading CySBGN...");
 		
-		Cytoscape.getImportHandler().addFilter(new SbgnFilter(this));
-
 		visualStyle = new SBGNVisualStyle(this);
 		converter = new SBGNConverter();
 		
+		Cytoscape.getImportHandler().addFilter(new SbgnFilter(this));
+
 		NodeShapesOption nodeShapesMenuAction = new NodeShapesOption(this);
 		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction)nodeShapesMenuAction);
 		
 		CustomEdgesOption edgesShapesMenuAction = new CustomEdgesOption(this);
 		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction)edgesShapesMenuAction);
-		
+
 //		testMethod();
 	}
 	
@@ -89,18 +84,14 @@ public class CySBGN extends CytoscapePlugin {
     	
 		visualStyle.applyVisualStyle();
     	
-    	cyNetworkView.redrawGraph(true, false);
+    	cyNetworkView.redrawGraph(true, true);
 	}
 
 	public void refreshCurrentNetworkVisualStyle(CyNetworkView cyNetworkView){
 		
-		VisualMappingManager manager = Cytoscape.getVisualMappingManager();
-        CalculatorCatalog catalog = manager.getCalculatorCatalog();
-        catalog.removeVisualStyle(SBGNVisualStyle.NAME);
-		
-		visualStyle.applyVisualStyle(cyNetworkView.getNetwork());
+		visualStyle.refreshVisualStyle(cyNetworkView.getNetwork());
     	
-    	cyNetworkView.redrawGraph(true, false);
+    	cyNetworkView.redrawGraph(true, true);
 	}
 	
 	public Diagram readSBGNDiagram(String filePath){
@@ -155,22 +146,21 @@ public class CySBGN extends CytoscapePlugin {
 
 
 	public Boolean getDrawCustomNodesShapes() {
-		return drawCustomNodesShapes;
+		return visualStyle.getDrawCustomNodesShapes();
 	}
 
 
 	public void setDrawCustomNodesShapes(Boolean drawCustomNodesShapes) {
-		this.drawCustomNodesShapes = drawCustomNodesShapes;
+		this.visualStyle.setDrawCustomNodesShapes( drawCustomNodesShapes );
 	}
 
 
 	public Boolean getDrawCustomEdgesShapes() {
-		return drawCustomEdgesShapes;
+		return visualStyle.getDrawCustomEdgesShapes();
 	}
 
-
 	public void setDrawCustomEdgesShapes(Boolean drawCustomEdgesShapes) {
-		this.drawCustomEdgesShapes = drawCustomEdgesShapes;
+		this.visualStyle.setDrawCustomEdgesShapes( drawCustomEdgesShapes );
 	}
 	
 	

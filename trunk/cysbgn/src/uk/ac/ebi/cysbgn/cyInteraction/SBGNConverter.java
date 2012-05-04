@@ -85,8 +85,10 @@ public class SBGNConverter {
 			cyNodeAttrs.setAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName(), new Boolean(false) );
 		
 		// Set Label
-		if( mapNode.getLabel() != null )
+		if( mapNode.getLabel() != null ){
 			cyNodeAttrs.setAttribute(cyNode.getIdentifier(), VisualPropertyType.NODE_LABEL.getBypassAttrName(), mapNode.getLabel());
+			cyNodeAttrs.setAttribute(cyNode.getIdentifier(), "canonicalName",  mapNode.getLabel());
+		}
 		
 		// Set Tag orientation
 		if( mapNode.getOrientation() != null)
@@ -102,11 +104,24 @@ public class SBGNConverter {
 		CyNode source = mapMapNode2CyNode(arc.getSourceNode().getId(), cyNetwork);
 		CyNode target = mapMapNode2CyNode(arc.getTargetNode().getId(), cyNetwork);
 		
-		CyEdge cyEdge = Cytoscape.getCyEdge(source, target, Semantics.INTERACTION, "pp", true, true);
+		String interaction;
+		switch( arc.getType() ){
+			case INHIBITION : interaction = "-1"; break;
+			case ABSOLUTE_INHIBITION : interaction = "-1"; break;
+			default : interaction = "1";
+		}
+		
+		CyEdge cyEdge = Cytoscape.getCyEdge(source, target, Semantics.INTERACTION, interaction, true, true);
 		
 		CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
 		cyEdgeAttrs.setAttribute(cyEdge.getIdentifier(), SBGNAttributes.SBGN_ID.getName(), new String(arc.getId()) );
 		cyEdgeAttrs.setAttribute(cyEdge.getIdentifier(), SBGNAttributes.CLASS.getName(), new String(arc.getType().getClazz()) );
+		
+		CyAttributes cyNodeAttrs = Cytoscape.getNodeAttributes();
+		String sourceCanonicalName = cyNodeAttrs.getStringAttribute(source.getIdentifier(), "canonicalName");
+		String targetCanonicalName = cyNodeAttrs.getStringAttribute(target.getIdentifier(), "canonicalName");
+		String canonicalName = sourceCanonicalName + " (" + interaction + ") " + targetCanonicalName;
+		cyEdgeAttrs.setAttribute(cyEdge.getIdentifier(), "canonicalName", canonicalName );
 		
 		cyNetwork.addEdge(cyEdge);
 	}

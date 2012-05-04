@@ -9,7 +9,7 @@ pluginName=CySBGN
 
 # Description used to give users information about the plugin such as what it does.  
 # Html tags are encouraged for formatting purposes.
-pluginDescription=SBGN assumes to be the standard graphical notation for systems biology. This plugin adds the support to Cytoscape to load SBGN-ML networks.
+pluginDescription=SBGN aims to be the standard graphical notation for systems biology. This plugin adds the support to Cytoscape to load SBGN-ML networks.
 
 # Plugin version number, this must be two numbers separated by a decimlal.  Ex. 0.2, 14.03
 pluginVersion=1.0
