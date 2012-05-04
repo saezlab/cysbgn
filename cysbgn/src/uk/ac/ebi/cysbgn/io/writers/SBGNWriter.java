@@ -137,13 +137,9 @@ public class SBGNWriter implements Task{
 		
 		
 		// Set glyph bbox
-//		double glyphWidth = nodeAttributes.getDoubleAttribute(node.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
 		double glyphWidth = cyNetworkView.getNodeView(node).getWidth();
-//		double glyphHeight = nodeAttributes.getDoubleAttribute(node.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		double glyphHeight = cyNetworkView.getNodeView(node).getHeight();
-//		double glyphX = nodeAttributes.getDoubleAttribute(node.getIdentifier(), SBGNAttributes.NODE_POS_X.getName());
 		double glyphX = cyNetworkView.getNodeView(node).getXPosition();
-//		double glyphY = nodeAttributes.getDoubleAttribute(node.getIdentifier(), SBGNAttributes.NODE_POS_Y.getName());
 		double glyphY = cyNetworkView.getNodeView(node).getYPosition();
 		
 		Bbox glyphBBox = new Bbox();
@@ -162,7 +158,8 @@ public class SBGNWriter implements Task{
 		String label = nodeAttributes.getStringAttribute(node.getIdentifier(), VisualPropertyType.NODE_LABEL.getBypassAttrName());
 		if( label != null ){
 			Label glyphLabel = new Label();
-			glyphLabel.setText( label );
+			glyphLabel.setText(label);
+			glyph.setLabel(glyphLabel);
 		}
 		
 		// Add glyph
