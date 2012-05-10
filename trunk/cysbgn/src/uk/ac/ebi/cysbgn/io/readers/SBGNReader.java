@@ -130,47 +130,54 @@ public class SBGNReader{
 	
 	private void getNode(Glyph glyph, Diagram newDiagram){
 		
-		GlyphClazz nodeClass = GlyphClazz.fromClazz( glyph.getClazz() );
-		
-		// Create all inner Glyphs
-		for(Glyph innerGlyphs : glyph.getGlyph())
-			getNode(innerGlyphs, newDiagram);
-		
-		MapNode newElement = null;
-		
-		switch(nodeClass){
+		// Invisible nodes
+		if( glyph.getClazz().equals( MapNode.INVISIBLE_NODE ) ){
+			
+			addPort(glyph, newDiagram);
+			
+		}else{
+			GlyphClazz nodeClass = GlyphClazz.fromClazz( glyph.getClazz() );
+
+			// Create all inner Glyphs
+			for(Glyph innerGlyphs : glyph.getGlyph())
+				getNode(innerGlyphs, newDiagram);
+
+			MapNode newElement = null;
+
+			switch(nodeClass){
 			case UNIT_OF_INFORMATION : newElement = readUnitOfInformationNode(glyph); break;
 			case ANNOTATION :
 				newElement = new MapNode(glyph.getId(), nodeClass);
-				
+
 				String annotationArcID = glyph.getId() + "callout";
 				String targetID = ((Glyph)glyph.getCallout().getTarget()).getId();
 				MapArc annotationArc = new MapArc(annotationArcID, 
 						ArcClazz.LOGIC_ARC, 
 						newElement, 
 						newDiagram.getNode(targetID));
-				
+
 				newDiagram.add(annotationArc);
-				
+
 				break;
 			default : newElement = new MapNode(glyph.getId(), nodeClass);
+			}
+
+			setNodeLabel(glyph, newElement, nodeClass);
+			setNodeBbox(glyph, newElement);
+
+			// Add node ports
+			for(Port glyphPort : glyph.getPort())
+				newElement.getPorts().add(glyphPort);
+
+			// Set tag and terminal shapes orientation
+			if( nodeClass == GlyphClazz.TERMINAL || nodeClass == GlyphClazz.TAG )
+				newElement.setOrientation( glyph.getOrientation() );
+
+			if( glyph.getClone() != null )
+				newElement.setCloneMarker(true);
+
+			newDiagram.add(newElement);
 		}
-		
-		setNodeLabel(glyph, newElement, nodeClass);
-		setNodeBbox(glyph, newElement);
-		
-		// Add node ports
-		for(Port glyphPort : glyph.getPort())
-			newElement.getPorts().add(glyphPort);
-		
-		// Set tag and terminal shapes orientation
-		if( nodeClass == GlyphClazz.TERMINAL || nodeClass == GlyphClazz.TAG )
-			newElement.setOrientation( glyph.getOrientation() );
-		
-		if( glyph.getClone() != null )
-			newElement.setCloneMarker(true);
-		
-		newDiagram.add(newElement);
 	}
 	
 	private void getArc(Arc arc, Map diagramMap, Diagram newDiagram) throws Exception{
@@ -429,6 +436,25 @@ public class SBGNReader{
 		
 		mapPort.setX( CySBGN.convert_X_coord_SBGN_to_Cytoscape((int) port.getX(), width) );
 		mapPort.setY( CySBGN.convert_Y_coord_SBGN_to_Cytoscape((int) port.getY(), height) );
+		
+		mapPort.setWidth( width );
+		mapPort.setHeight( height );
+		
+		mapPort.setLabel("");
+		
+		diagram.add(mapPort);
+		
+		return mapPort;
+	}
+	
+	private MapNode addPort(Glyph glyph, Diagram diagram){
+		MapNode mapPort = createInvisibleNode(glyph.getId());
+
+		int width = 1;
+		int height = 1;
+		
+		mapPort.setX( CySBGN.convert_X_coord_SBGN_to_Cytoscape((int) glyph.getBbox().getX(), width) );
+		mapPort.setY( CySBGN.convert_Y_coord_SBGN_to_Cytoscape((int) glyph.getBbox().getY(), height) );
 		
 		mapPort.setWidth( width );
 		mapPort.setHeight( height );
