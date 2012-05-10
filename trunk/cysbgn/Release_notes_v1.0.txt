@@ -12,6 +12,8 @@ NOTE :
 	Main features:
 		- Display SBGN diagrams
 		- Display SBGN-ML networks
+		- Import SBGN-ML files
+		- Export SBGN-ML files
 		- Suports Entity Relationship (ER) diagrams
 		- Suports Activity Flow (AF) diagrams
 		- Suports Process Description (PD) diagrams
