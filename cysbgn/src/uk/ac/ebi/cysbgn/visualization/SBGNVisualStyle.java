@@ -173,7 +173,7 @@ public class SBGNVisualStyle extends VisualStyle{
 		setNodeFontSize(cyNetwork);
 		setNodeColour(cyNetwork);
 		setNodeBorderWidthPosition(cyNetwork);
-//		setNodeLabelPosition(cyNetwork); NOT WORKING: Cytoscape bug, no effect is taken
+//		setNodeLabelPosition(cyNetwork);// NOT WORKING: Cytoscape bug, no effect is taken
 
 		// Edge features
 		setEdgeTargetArrowShape(cyNetwork);
