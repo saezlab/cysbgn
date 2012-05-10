@@ -24,7 +24,7 @@
     <property name="lib.dir" value="./lib"/>
 
   	<!-- Define the Cytoscape directories -->
-    <property name="cytoscape.dir" value="/Applications/Cytoscape_v2.8.2"/>
+    <property name="cytoscape.dir" value="/Applications/Cytoscape_v2.8.3"/>
   	<property name="cytoscape.lib.dir" value="${cytoscape.dir}/lib"/>
     <property name="cytoscape.plugin.dir" value="${cytoscape.dir}/plugins"/>
 
