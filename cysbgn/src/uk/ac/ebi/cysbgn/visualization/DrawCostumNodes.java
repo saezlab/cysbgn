@@ -59,14 +59,15 @@ public class DrawCostumNodes {
 
 			String nodeClassName = (String) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.CLASS.getName());
 
-			if( !nodeClassName.equals(MapNode.INVISIBLE_NODE) )
-			{
+			if( nodeClassName != null )
+				if( !nodeClassName.equals(MapNode.INVISIBLE_NODE) )
+				{
 
-				if( !plugin.getDrawCustomNodesShapes() ){
-					
-					GlyphClazz nodeClass = GlyphClazz.fromClazz(nodeClassName);
+					if( !plugin.getDrawCustomNodesShapes() ){
 
-					switch(nodeClass){
+						GlyphClazz nodeClass = GlyphClazz.fromClazz(nodeClassName);
+
+						switch(nodeClass){
 						case NUCLEIC_ACID_FEATURE : ;
 						case PERTURBATION : ;
 						case PERTURBING_AGENT : ;
@@ -88,59 +89,59 @@ public class DrawCostumNodes {
 							dnv.removeAllCustomGraphics();
 							break;
 						default : ;
-					}
+						}
 
-				}else{
-					GlyphClazz nodeClass = GlyphClazz.fromClazz(nodeClassName);
+					}else{
+						GlyphClazz nodeClass = GlyphClazz.fromClazz(nodeClassName);
 
-					Boolean hasCloneMarker = false;
-					switch(nodeClass){
-					case NUCLEIC_ACID_FEATURE : 
-						hasCloneMarker = (Boolean) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName());
-						if( hasCloneMarker ){
-							drawNucleicAcidCloneMarkerNodes(cyNode, gview);
+						Boolean hasCloneMarker = false;
+						switch(nodeClass){
+						case NUCLEIC_ACID_FEATURE : 
+							hasCloneMarker = (Boolean) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName());
+							if( hasCloneMarker ){
+								drawNucleicAcidCloneMarkerNodes(cyNode, gview);
+							}
+							else{
+								drawNucleicAcidFeature(cyNode, gview); 
+							}
+							break;
+						case PERTURBATION : drawPerturbationNodes(cyNode, gview); break;
+						case PERTURBING_AGENT : drawPerturbationNodes(cyNode, gview); break;
+						case TERMINAL : drawTerminalandTagNodes(cyNode, gview); break;
+						case TAG : drawTerminalandTagNodes(cyNode, gview); break;
+						case ANNOTATION : drawAnnotationNodes(cyNode, gview); break;
+						case COMPLEX : 
+							hasCloneMarker = (Boolean) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName());
+							if( hasCloneMarker ){
+								drawComplexCloneMarkerNodes(cyNode, gview);
+							}
+							else{
+								drawComplexNodes(cyNode, gview);
+							}
+							break;
+						case EXISTENCE : drawExistenceNodes(cyNode, gview); break;
+						case LOCATION : drawLocationNodes(cyNode, gview); break;
+						case SOURCE_AND_SINK : drawSourceSLinkNodes(cyNode, gview); break;
+						case SIMPLE_CHEMICAL :
+							hasCloneMarker = (Boolean) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName());
+							if( hasCloneMarker ){
+								drawSimpleChemicalCloneMarkerNodes(cyNode, gview); 
+							}
+							break;
+						case MACROMOLECULE :
+							hasCloneMarker = (Boolean) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName());
+							if( hasCloneMarker ){
+								drawMacromoleculeCloneMarkerNodes(cyNode, gview); 
+							}
+							break;
+						case NUCLEIC_ACID_FEATURE_MULTIMER : drawNucleicAcidFeatureMultimerNodes(cyNode, gview); break;
+						case MACROMOLECULE_MULTIMER : drawMacromoleculeMultimer(cyNode, gview); break;
+						case COMPLEX_MULTIMER: drawComplexMultimer(cyNode, gview); break;
+						case SIMPLE_CHEMICAL_MULTIMER : drawSimpleChemicalMultimer(cyNode, gview); break;
+						default :;
 						}
-						else{
-							drawNucleicAcidFeature(cyNode, gview); 
-						}
-						break;
-					case PERTURBATION : drawPerturbationNodes(cyNode, gview); break;
-					case PERTURBING_AGENT : drawPerturbationNodes(cyNode, gview); break;
-					case TERMINAL : drawTerminalandTagNodes(cyNode, gview); break;
-					case TAG : drawTerminalandTagNodes(cyNode, gview); break;
-					case ANNOTATION : drawAnnotationNodes(cyNode, gview); break;
-					case COMPLEX : 
-						hasCloneMarker = (Boolean) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName());
-						if( hasCloneMarker ){
-							drawComplexCloneMarkerNodes(cyNode, gview);
-						}
-						else{
-							drawComplexNodes(cyNode, gview);
-						}
-						break;
-					case EXISTENCE : drawExistenceNodes(cyNode, gview); break;
-					case LOCATION : drawLocationNodes(cyNode, gview); break;
-					case SOURCE_AND_SINK : drawSourceSLinkNodes(cyNode, gview); break;
-					case SIMPLE_CHEMICAL :
-						hasCloneMarker = (Boolean) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName());
-						if( hasCloneMarker ){
-							drawSimpleChemicalCloneMarkerNodes(cyNode, gview); 
-						}
-						break;
-					case MACROMOLECULE :
-						hasCloneMarker = (Boolean) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName());
-						if( hasCloneMarker ){
-							drawMacromoleculeCloneMarkerNodes(cyNode, gview); 
-						}
-						break;
-					case NUCLEIC_ACID_FEATURE_MULTIMER : drawNucleicAcidFeatureMultimerNodes(cyNode, gview); break;
-					case MACROMOLECULE_MULTIMER : drawMacromoleculeMultimer(cyNode, gview); break;
-					case COMPLEX_MULTIMER: drawComplexMultimer(cyNode, gview); break;
-					case SIMPLE_CHEMICAL_MULTIMER : drawSimpleChemicalMultimer(cyNode, gview); break;
-					default :;
 					}
 				}
-			}
 		}
 
 		Cytoscape.getCurrentNetworkView().redrawGraph(true, true);
