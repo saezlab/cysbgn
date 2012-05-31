@@ -173,7 +173,7 @@ public class SBGNVisualStyle extends VisualStyle{
 		setNodeFontSize(cyNetwork);
 		setNodeColour(cyNetwork);
 		setNodeBorderWidthPosition(cyNetwork);
-//		setNodeLabelPosition(cyNetwork);// NOT WORKING: Cytoscape bug, no effect is taken
+//		setNodeLabelPosition(cyNetwork);
 
 		// Edge features
 		setEdgeTargetArrowShape(cyNetwork);
@@ -208,14 +208,14 @@ public class SBGNVisualStyle extends VisualStyle{
 		nac.setCalculator(nodeBorderOpacity);
 	}
 	
-	private void setNodeLabelPosition(CyNetwork cyNetwork){
-		DiscreteMapping disMapping = new DiscreteMapping(nac.getDefaultAppearance().get(VisualPropertyType.NODE_LABEL_POSITION), ObjectMapping.NODE_MAPPING);
-		disMapping.setControllingAttributeName(SBGNAttributes.CLASS.getName(), cyNetwork, false);
-		disMapping.putMapValue(GlyphClazz.COMPARTMENT.getClazz(), VisualPropertyType.NODE_LABEL_POSITION);
-		
-		Calculator nodeBorderOpacity = new BasicCalculator("Node label position calculator", disMapping, VisualPropertyType.NODE_LABEL_POSITION);
-		nac.setCalculator(nodeBorderOpacity);
-	}
+//	private void setNodeLabelPosition(CyNetwork cyNetwork){
+//		DiscreteMapping disMapping = new DiscreteMapping(nac.getDefaultAppearance().get(VisualPropertyType.NODE_LABEL_POSITION), ObjectMapping.NODE_MAPPING);
+//		disMapping.setControllingAttributeName(SBGNAttributes.CLASS.getName(), cyNetwork, false);
+//		disMapping.putMapValue(GlyphClazz.COMPARTMENT.getClazz(), LabelPosition.northEastName);
+//		
+//		Calculator nodeBorderOpacity = new BasicCalculator("Node label position calculator", disMapping, VisualPropertyType.NODE_LABEL_POSITION);
+//		nac.setCalculator(nodeBorderOpacity);
+//	}
 	
 	private void setNodeColour(CyNetwork cyNetwork){
 		DiscreteMapping disMapping = new DiscreteMapping(nac.getDefaultAppearance().get(VisualPropertyType.NODE_FILL_COLOR), ObjectMapping.NODE_MAPPING);

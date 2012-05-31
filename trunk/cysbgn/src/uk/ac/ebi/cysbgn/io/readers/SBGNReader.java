@@ -21,8 +21,10 @@ import java.util.List;
 
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.sbgn.ArcClazz;
+import org.sbgn.ConvertMilestone1to2;
 import org.sbgn.GlyphClazz;
 import org.sbgn.SbgnUtil;
+import org.sbgn.SbgnVersionFinder;
 import org.sbgn.bindings.Arc;
 import org.sbgn.bindings.Arc.End;
 import org.sbgn.bindings.Arc.Next;
@@ -67,8 +69,16 @@ public class SBGNReader{
 		
 	public Diagram read(String diagramFilePath) throws Exception{
 		File file = new File(diagramFilePath);
-
-		Sbgn sbgnMap = SbgnUtil.readFromFile(file);
+		File targetFile = file;
+		
+		int version = SbgnVersionFinder.getVersion(targetFile);
+		if (version == 1){
+			 targetFile = File.createTempFile(file.getName(), ".sbgn");
+             System.out.println ("Converted to " + targetFile);
+             ConvertMilestone1to2.convert (file, targetFile);
+		}
+		
+		Sbgn sbgnMap = SbgnUtil.readFromFile(targetFile);
 
 		Diagram diagram = readMap(sbgnMap.getMap(), diagramFilePath); 
 
