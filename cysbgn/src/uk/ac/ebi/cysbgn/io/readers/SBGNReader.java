@@ -13,13 +13,12 @@
  ******************************************************************************/
 package uk.ac.ebi.cysbgn.io.readers;
 
-import java.awt.Point;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.sbgn.ArcClazz;
 import org.sbgn.ConvertMilestone1to2;
 import org.sbgn.GlyphClazz;
@@ -36,12 +35,17 @@ import org.sbgn.bindings.Port;
 import org.sbgn.bindings.Sbgn;
 
 import uk.ac.ebi.cysbgn.CySBGN;
-import uk.ac.ebi.cysbgn.mapunits.Diagram;
-import uk.ac.ebi.cysbgn.mapunits.MapArc;
-import uk.ac.ebi.cysbgn.mapunits.MapNode;
+import uk.ac.ebi.cysbgn.enums.SBGNAttributes;
 import uk.ac.ebi.cysbgn.methods.ArcSegmentationAlgorithm;
-import uk.ac.ebi.cysbgn.methods.SegmentMethods;
+import uk.ac.ebi.cysbgn.methods.CustomEdgePoint;
 import uk.ac.ebi.cysbgn.methods.SegmentationPoint;
+import uk.ac.ebi.cysbgn.utils.CyEdgeAttrUtils;
+import uk.ac.ebi.cysbgn.utils.CyNetworkUtils;
+import cytoscape.CyEdge;
+import cytoscape.CyNetwork;
+import cytoscape.CyNode;
+import cytoscape.Cytoscape;
+import cytoscape.data.Semantics;
 
 
 /**
@@ -52,25 +56,28 @@ import uk.ac.ebi.cysbgn.methods.SegmentationPoint;
  */
 public class SBGNReader{
 
-	private static final double ABSOLUTE_STIMULATION_DISTANCE = 11.0;
-	private static final double ABSOLUTE_INHIBITION_DISTANCE = 3.0;
-	private static final double NECESSARY_STIMULATION_DISTANCE = 13.0;
-
+	
 	private ArcSegmentationAlgorithm nextPortCreator;
 	
-	private CySBGN plugin;
+	private Sbgn map;
+	
+	/**
+	 * HashMap<SBGN_ID, Cytoscape_ID>
+	 */
+	private HashMap<String,String> nodesIDs;
 	
 	
-	public SBGNReader(CySBGN plugin){
+	public SBGNReader(){
 		nextPortCreator = new ArcSegmentationAlgorithm();
-		this.plugin = plugin;
+		nodesIDs = new HashMap<String, String>();
 	}
 	
 		
-	public Diagram read(String diagramFilePath) throws Exception{
-		File file = new File(diagramFilePath);
+	public CyNetwork read(String networkFilePath, Boolean isAnalysisStyle, CyNetwork cyNetwork) throws Exception{
+		File file = new File(networkFilePath);
 		File targetFile = file;
 		
+		// Check file version
 		int version = SbgnVersionFinder.getVersion(targetFile);
 		if (version == 1){
 			 targetFile = File.createTempFile(file.getName(), ".sbgn");
@@ -78,484 +85,381 @@ public class SBGNReader{
              ConvertMilestone1to2.convert (file, targetFile);
 		}
 		
-		Sbgn sbgnMap = SbgnUtil.readFromFile(targetFile);
+		map = SbgnUtil.readFromFile(targetFile);
+		CyNetwork network = readNetwork(map.getMap(), isAnalysisStyle, cyNetwork);
 
-		Diagram diagram = readMap(sbgnMap.getMap(), diagramFilePath); 
-
-		return diagram;
+		return network;
 	}
-
+	
 	/**
 	 * Creates the Diagram containing all the information of the libSBGN Map.
 	 * 
 	 * @param diagramMap
-	 * @param diagramName
+	 * @param networkName
 	 * @return
 	 * @throws Exception 
 	 */
-	protected Diagram readMap(Map diagramMap, String diagramName) throws Exception {
-		
-		Diagram newDiagram = new Diagram(diagramName);
+	protected CyNetwork readNetwork(Map diagramNetwork, Boolean isAnalysisStyle, CyNetwork newNetwork) throws Exception {
 		
 		// Load all nodes
-		for(Glyph glyph : diagramMap.getGlyph())
-			getNode(glyph, newDiagram);
+		for(Glyph glyph : diagramNetwork.getGlyph())
+			createNode(glyph, newNetwork);
 		
 		// Load all Arc's Ports and Glyphs 
-		for(Arc arc : diagramMap.getArc()){
+		for(Arc arc : diagramNetwork.getArc()){
 			for(Port port : arc.getPort())
-				addPort(port, newDiagram);
+				createNode(port, newNetwork);
 
 			for(Glyph glyph : arc.getGlyph())
-				getNode(glyph, newDiagram);
+				createNode(glyph, newNetwork);
 		}
 		
 		// Draw all nodes and ports contained inside a ArcGroup
-		for(Arcgroup arcgroup : diagramMap.getArcgroup()){
+		for(Arcgroup arcgroup : diagramNetwork.getArcgroup()){
 			for(Glyph glyph : arcgroup.getGlyph())
-				getNode(glyph, newDiagram);
+				createNode(glyph, newNetwork);
 			
 			for(Arc arc : arcgroup.getArc()){
 				for(Port port : arc.getPort())
-					addPort(port, newDiagram);
+					createNode(port, newNetwork);
 
 				for(Glyph glyph : arc.getGlyph())
-					getNode(glyph, newDiagram);
+					createNode(glyph, newNetwork);
 			}
 
 		}
 		
 		// Draw all edges
-		for(Arc arc : diagramMap.getArc())
-			getArc(arc, diagramMap, newDiagram);
+		for(Arc arc : diagramNetwork.getArc())
+			getArc(arc, diagramNetwork, newNetwork);
 		
 		// Draw all nodes and edges contained inside a ArcGroup
-		for(Arcgroup arcgroup : diagramMap.getArcgroup())			
+		for(Arcgroup arcgroup : diagramNetwork.getArcgroup())			
 			for(Arc arc : arcgroup.getArc())
-				getArc(arc, diagramMap, newDiagram);
+				getArc(arc, diagramNetwork, newNetwork);
 		
-		return newDiagram;
+		return newNetwork;
 	}
 	
-	
-	private void getNode(Glyph glyph, Diagram newDiagram){
+	private CyNode createNode(Glyph glyph, CyNetwork newCyNetwork){
+
+		// Node attributes
+		GlyphClazz 	nodeClass = GlyphClazz.fromClazz( glyph.getClazz() );
+		String 		sbgnID = glyph.getId();
+		Double 		width = 1.0;
+		Double		height = 1.0;
+		Integer 	x = (int) glyph.getBbox().getX();
+		Integer 	y = (int) glyph.getBbox().getY();
+		String 		label = "";
+		String		compartment = SBGNAttributes.NODE_COMPARTMENT_NA.getName();
+		String 		orientation = SBGNAttributes.NODE_ORIENTATION_NA.getName();
+		Boolean		clone = false;
 		
-		// Invisible nodes
-		if( glyph.getClazz().equals( MapNode.INVISIBLE_NODE ) ){
-			
-			addPort(glyph, newDiagram);
-			
-		}else{
-			GlyphClazz nodeClass = GlyphClazz.fromClazz( glyph.getClazz() );
+		
+		// Create all inner Glyphs
+		for(Glyph innerGlyphs : glyph.getGlyph())
+			createNode(innerGlyphs, newCyNetwork);
+		
+		CyNode newCyNode = Cytoscape.getCyNode(glyph.getId(), true);
 
-			// Create all inner Glyphs
-			for(Glyph innerGlyphs : glyph.getGlyph())
-				getNode(innerGlyphs, newDiagram);
-
-			MapNode newElement = null;
-
-			switch(nodeClass){
-			case UNIT_OF_INFORMATION : newElement = readUnitOfInformationNode(glyph); break;
+		switch(nodeClass){
+			case UNIT_OF_INFORMATION : 
+				String newNodeClass;
+				if( glyph.getEntity() != null )
+					newNodeClass = glyph.getEntity().getName();
+				else
+					newNodeClass = glyph.getClazz();
+	
+				break;	
 			case ANNOTATION :
-				newElement = new MapNode(glyph.getId(), nodeClass);
-
 				String annotationArcID = glyph.getId() + "callout";
-				String targetID = ((Glyph)glyph.getCallout().getTarget()).getId();
-				MapArc annotationArc = new MapArc(annotationArcID, 
-						ArcClazz.LOGIC_ARC, 
-						newElement, 
-						newDiagram.getNode(targetID));
-
-				newDiagram.add(annotationArc);
-
+				
+				CyNode target = CyNetworkUtils.getNode(newCyNetwork, nodesIDs.get( ((Glyph)glyph.getCallout().getTarget()).getId()) ); 
+				CyEdge cyEdge = createEdge(newCyNode, target, ArcClazz.LOGIC_ARC, annotationArcID, new ArrayList<Point2D>());
+				
+				newCyNetwork.addEdge(cyEdge);
 				break;
-			default : newElement = new MapNode(glyph.getId(), nodeClass);
-			}
-
-			setNodeLabel(glyph, newElement, nodeClass);
-			setNodeBbox(glyph, newElement);
-
-			// Add node ports
-			for(Port glyphPort : glyph.getPort())
-				newElement.getPorts().add(glyphPort);
-
-			// Set tag and terminal shapes orientation
-			if( nodeClass == GlyphClazz.TERMINAL || nodeClass == GlyphClazz.TAG )
-				newElement.setOrientation( glyph.getOrientation() );
-
-			if( glyph.getClone() != null )
-				newElement.setCloneMarker(true);
-
-			newDiagram.add(newElement);
+			default : break; 
 		}
-	}
-	
-	private void getArc(Arc arc, Map diagramMap, Diagram newDiagram) throws Exception{
-		try{
-			// Generate the arc and/or sub arcs 
-			List<MapArc> mapArcs = generateArc(arc, diagramMap, newDiagram);
-			
-			for(MapArc mapAcr : mapArcs)
-				newDiagram.add(mapAcr);
-			
-		}catch(Exception e){
-			throw new Exception("Arc "+ arc.getId() +": Invalid target or source node.\n\n", e);
-//			String errorMessage = "Arc "+ arc.getId() +": Invalid target or source node.\n\n";
-//			MessagesHandler.showErrorMessageDialog(errorMessage, "SBGN arc import error", e);
-//			e.printStackTrace();
-		}
-	}
-	
-	private List<MapArc> generateArc(Arc arc, Map diagramMap, Diagram newDiagram){
-		
-		List<MapArc> arcs = new ArrayList<MapArc>();
-		
-		MapArc newElement = new MapArc(arc.getId());
-		
-		ArcClazz arcClass = ArcClazz.fromClazz( arc.getClazz() );
-		
-		// Get segment list points of the arc
-		List<SegmentationPoint> arcPoints = nextPortCreator.generateSortedPointsList(arc.getPort(), arc.getNext(), arc.getGlyph(), arc.getStart(), arc.getEnd());
-		
-		for(int i=0; i<arcPoints.size(); i++){
-			
-			Object currentPoint = arcPoints.get(i).getPoint(); 
-			
-			if( currentPoint instanceof Start){ // If the segment point is instance of Start class add it to the source of the arc
-				String sourceNodeID;
-				// Source can be a Glyph or a Port 
-				if( arc.getSource() instanceof Glyph)
-					sourceNodeID = ((Glyph)arc.getSource()).getId();
-				else
-					sourceNodeID = ((Port)arc.getSource()).getId();
-				
-				MapNode source = newDiagram.getNode( sourceNodeID );
-				
-				if(source == null){
-					String glyphId = getNodeByPort((Port)arc.getSource(), diagramMap);
-					source = newDiagram.getNode(glyphId);
-					
-					newElement.addAnchorPoint( ((Port)arc.getSource()) );
-				}
 
-				// Arcs that point into the same node have anchors in start and end point
-				if( arc.getSource().equals(arc.getTarget()) )
-					newElement.addAnchorPoint((Start)currentPoint);
-				
-				newElement.setSourceNode(source);
-				
-			} else if( currentPoint instanceof Next ){ // Add the anchor point of the segment
-				newElement.addAnchorPoint( (Next)currentPoint );
-				
-			}
-			else if( currentPoint instanceof Port ){ // If it's a port a sub arc must be created.
-				String targetNodeID = ((Port)currentPoint).getId();
-				MapNode target = newDiagram.getNode( targetNodeID );
-								
-				newElement.setTargetNode(newElement.getSourceNode());
-				
-				newElement.setSourceNode(target);
-				
-				newElement.setType(ArcClazz.LOGIC_ARC);
-				
-				arcs.add(newElement);
-				
-				newElement = new MapArc(arc.getId() + targetNodeID);
-				newElement.setSourceNode(target);
-				
-			} else if( currentPoint instanceof End){
-				String targetNodeID;
-				if(arc.getTarget() instanceof Glyph)
-					targetNodeID = ((Glyph)arc.getTarget()).getId();
-				else
-					targetNodeID = ((Port)arc.getTarget()).getId();
-				
-				MapNode target = newDiagram.getNode( targetNodeID );
-				
-				if(target == null){
-					String glyphID = getNodeByPort((Port)arc.getTarget(), diagramMap);
-					target = newDiagram.getNode(glyphID);
-					
-					newElement.addAnchorPoint( ((Port)arc.getTarget()) );
-				}
-				
-				newElement.setTargetNode(target);
-				
-				newElement.setType(ArcClazz.fromClazz(arc.getClazz()));
-				
-				if(arc.getTarget() instanceof Glyph){
-					if( ((Glyph)arc.getTarget()).getClazz().equals(GlyphClazz.IMPLICIT_XOR.getClazz()) )
-							newElement.setType(ArcClazz.LOGIC_ARC);
-				}
-				
-				// Arcs that point into the same node have anchors in start and end point
-				if( arc.getSource().equals(arc.getTarget()) )
-					newElement.addAnchorPoint((End)currentPoint);
-					
-				arcs.add(newElement);
-				
-			} else { // currentPoint instanceof Glyph
-				String targetNodeID = ((Glyph)currentPoint).getId();
-				MapNode target = newDiagram.getNode( targetNodeID );
-				
-				newElement.setTargetNode(newElement.getSourceNode());
-				
-				newElement.setSourceNode(target);
-				
-				newElement.setType(ArcClazz.LOGIC_ARC);
-				
-				arcs.add(newElement);
-				
-				newElement = new MapArc(arc.getId() + targetNodeID);
-				newElement.setSourceNode(target);
-			}
-		}
-		
-		switch( arcClass ){
-			case NECESSARY_STIMULATION : customEdges( arcs, newDiagram, ArcClazz.INHIBITION, NECESSARY_STIMULATION_DISTANCE); break;
-			case ABSOLUTE_INHIBITION : customEdges( arcs, newDiagram, ArcClazz.ABSOLUTE_INHIBITION, ABSOLUTE_INHIBITION_DISTANCE); break;
-			case ABSOLUTE_STIMULATION : customEdges( arcs, newDiagram, ArcClazz.STIMULATION, ABSOLUTE_STIMULATION_DISTANCE); break;
-			case INTERACTION :
-				for(int i=0; i<arcs.size(); i++){
-					
-					arcs.get(i).setType( ArcClazz.LOGIC_ARC );
-					
-					if( i==0 ){
-						arcs.get(i).setType( ArcClazz.INTERACTION );
-						
-						if( arcs.get(i).getTargetNode().isInvisible() )
-							arcs.get(i).setType(ArcClazz.LOGIC_ARC);
-						else
-							if( arcs.get(i).getTargetNode().getType().equals( GlyphClazz.INTERACTION ) )
-								arcs.get(i).setType( ArcClazz.LOGIC_ARC );
-						
-					}
-					
-					if( i==(arcs.size()-1) ){
-						arcs.get(i).setType( ArcClazz.INTERACTION );
-						
-						if( arcs.get(i).getTargetNode().isInvisible() )
-							arcs.get(i).setType( ArcClazz.LOGIC_ARC );
-						else
-							if( arcs.get(i).getTargetNode().getType().equals( GlyphClazz.INTERACTION ) )
-								arcs.get(i).setType( ArcClazz.LOGIC_ARC );
-					}
-				}
-				
-				break;
-			default : ;
-		}
-		
-		return arcs;
-	}
-	
-	
-	// Auxiliary methods
-	private void customEdges(List<MapArc> arcs, Diagram diagram, ArcClazz auxArcClazz, Double distance){
-		
-		// Is draw custom edges option is set to false just do nothing
-		if(!plugin.getDrawCustomEdgesShapes())
-			return;
-		
-		// Get target arc
-		MapArc arc = arcs.get( arcs.size()-1 );
-		
-		// Create port and calculate port position
-		Port auxPort = new Port();		
-		auxPort.setId(arc.getId() + "AuxPort");
-		calculateAuxPortPosition(arc, auxPort, distance);
-		
-		MapNode auxTargetNode = addPort(auxPort, diagram);
-		
-		// Create auxiliary arc
-		MapArc auxArc = new MapArc(arc.getId() + "Aux");
-		auxArc.setType(auxArcClazz);
-		
-		// Set anchors
-		auxArc.setAnchors(arc.getAnchors());
-		
-		// Set source
-		auxArc.setSourceNode(arc.getSourceNode());
-		
-		// Set target
-		auxArc.setTargetNode(auxTargetNode);
-		
-		// Re set the source node of the original arc
-		arc.setSourceNode(auxTargetNode);
-		
-		arc.setAnchors(new ArrayList<Point>());
-		
-		// Add arc to the list
-		arcs.add(auxArc);
-		
-	}
-	
-	public void calculateAuxPortPosition(MapArc arc, Port auxPort, Double distance){
-		int arcLastX;
-		int arcLastY;
-		
-		boolean isAnchor = false;
-		
-		// Get previous last point of the arc line
-		if( arc.getAnchors().size() > 0 ){
-			arcLastX = (int) arc.getAnchors().get( (arc.getAnchors().size()-1) ).getX();
-			arcLastY = (int) arc.getAnchors().get( (arc.getAnchors().size()-1) ).getY();
-			
-			isAnchor = true;
-		}
-		else{
-			arcLastX = arc.getStartX();
-			arcLastY = arc.getStartY();
-		}
-		
-		// Get arc end point
-		int arcEndX = arc.getEndX();
-		int arcEndY = arc.getEndY();
-		
-		// Node boundary rectangle
-		Rectangle2D.Double nodeRectangle = new Rectangle2D.Double(
-				arc.getTargetNode().getX() - arc.getTargetNode().getWidth()/2, 
-				arc.getTargetNode().getY() - arc.getTargetNode().getHeight()/2, 
-				arc.getTargetNode().getWidth(), 
-				arc.getTargetNode().getHeight());
-		
-		Vector2D portPosition = SegmentMethods.pointOutNodeBoundary(nodeRectangle, new Vector2D(arcEndX, arcEndY), new Vector2D(arcLastX, arcLastY), distance);
-
-		if( isAnchor ){
-			Rectangle2D.Double portBoundaries = new Rectangle2D.Double(portPosition.getX(), portPosition.getY(), 3, 3);
-			
-			if( portBoundaries.contains(arcLastX, arcLastY) ){
-				arc.getAnchors().remove((arc.getAnchors().size()-1));
-				
-				calculateAuxPortPosition(arc, auxPort, distance);
-				
-				return;
-			}
-		}
-		
-		auxPort.setX( (float) portPosition.getX() );
-		auxPort.setY( (float) portPosition.getY() );
-	}
-
-	
-	private MapNode addPort(Port port, Diagram diagram){
-		MapNode mapPort = createInvisibleNode(port.getId());
-
-		int width = 1;
-		int height = 1;
-		
-		mapPort.setX( CySBGN.convert_X_coord_SBGN_to_Cytoscape((int) port.getX(), width) );
-		mapPort.setY( CySBGN.convert_Y_coord_SBGN_to_Cytoscape((int) port.getY(), height) );
-		
-		mapPort.setWidth( width );
-		mapPort.setHeight( height );
-		
-		mapPort.setLabel("");
-		
-		diagram.add(mapPort);
-		
-		return mapPort;
-	}
-	
-	private MapNode addPort(Glyph glyph, Diagram diagram){
-		MapNode mapPort = createInvisibleNode(glyph.getId());
-
-		int width = 1;
-		int height = 1;
-		
-		mapPort.setX( CySBGN.convert_X_coord_SBGN_to_Cytoscape((int) glyph.getBbox().getX(), width) );
-		mapPort.setY( CySBGN.convert_Y_coord_SBGN_to_Cytoscape((int) glyph.getBbox().getY(), height) );
-		
-		mapPort.setWidth( width );
-		mapPort.setHeight( height );
-		
-		mapPort.setLabel("");
-		
-		diagram.add(mapPort);
-		
-		return mapPort;
-	}
-	
-	private void setNodeBbox(Glyph glyph, MapNode newElement){
-		int height = (int) glyph.getBbox().getH();
-		int width = (int) glyph.getBbox().getW();
-		
-		if( height <= 0 ) 
-			height = 1;
-		if( width <= 0 ) 
-			width = 1;
-		
-		newElement.setHeight(height);
-		newElement.setWidth(width);
-		
-		int xSBGN = (int) glyph.getBbox().getX();
-		int ySBGN = (int) glyph.getBbox().getY();
-		newElement.setX( CySBGN.convert_X_coord_SBGN_to_Cytoscape(xSBGN, width) );
-		newElement.setY( CySBGN.convert_Y_coord_SBGN_to_Cytoscape(ySBGN, height) );
-	}
-	
-	private void setNodeLabel(Glyph glyph, MapNode newElement, GlyphClazz nodeClass){
-		
 		switch( nodeClass ){
-			case AND : newElement.setLabel( "AND" ); break;
-			case OR : newElement.setLabel( "OR" ); break;
-			case NOT : newElement.setLabel( "NOT" ); break;
-			case OMITTED_PROCESS : newElement.setLabel( "\\\\" ); break;
-			case UNCERTAIN_PROCESS : newElement.setLabel( "?" ); break;
-			case DISSOCIATION : newElement.setLabel( "O" ); break;
-			case DELAY : newElement.setLabel( "\u03C4" ); break;
+			case AND : label = "AND"; break;
+			case OR : label = "OR"; break;
+			case NOT : label = "NOT"; break;
+			case OMITTED_PROCESS : label = "\\\\"; break;
+			case UNCERTAIN_PROCESS : label = "?"; break;
+			case DISSOCIATION : label = "O"; break;
+			case DELAY : label = "\u03C4"; break;
 			case STATE_VARIABLE : 
-				if( glyph.getState() == null ) return;
-				StringBuilder label = null;
-				
-				if( glyph.getState().getValue() != null ){
-					label = new StringBuilder();
-					label.append(glyph.getState().getValue());
-				}
-				
-				if( glyph.getState().getVariable() != null ){
-					if(label == null) 
-						label = new StringBuilder();
-					else 
-						label.append("@");
+				if( glyph.getState() != null ){
+					label = "";
 					
-					label.append(glyph.getState().getVariable());
-				}
+					String value = null;
+					String variable = null;
 					
-				newElement.setLabel(label.toString()); 
+					if( glyph.getState().getValue() != null )
+						value = glyph.getState().getValue();
+					if( glyph.getState().getVariable() != null )
+						variable = glyph.getState().getVariable();
+					
+					if( (value != null) && (variable != null) )
+						label = value + "@" + variable;
+					if( (value != null) && (variable == null) )
+						label = value;
+					if( (value == null) && (variable != null) )
+						label = variable;
+				}
 				break;
-			case LOCATION : newElement.setLabel(""); break;
-			case ASSOCIATION : newElement.setLabel(""); break;
-			case PROCESS : newElement.setLabel(""); break;
-			case SOURCE_AND_SINK : newElement.setLabel(""); break;
-			case OUTCOME : newElement.setLabel(""); break;
-			case INTERACTION : newElement.setLabel(""); break;
-			case EXISTENCE : newElement.setLabel(""); break;
+			case LOCATION : label = ""; break;
+			case ASSOCIATION : label = ""; break;
+			case PROCESS : label = ""; break;
+			case SOURCE_AND_SINK : label = ""; break;
+			case OUTCOME : label = ""; break;
+			case INTERACTION : label = ""; break;
+			case EXISTENCE : label = ""; break;
 			default :
 				if( glyph.getLabel() != null )
-					newElement.setLabel( glyph.getLabel().getText() );
+					label =  glyph.getLabel().getText();
 				break;
 		}
 		
+		width = (double) glyph.getBbox().getW();
+		height = (double) glyph.getBbox().getH();
+		
+		if( height <= 0 ) height = 1.0;
+		if( width <= 0 ) width = 1.0;
+		
+		x = CySBGN.convert_X_coord_SBGN_to_Cytoscape(x, width);
+		y = CySBGN.convert_Y_coord_SBGN_to_Cytoscape(y, height);
+
+		// Set tag and terminal shapes orientation
+		if( nodeClass == GlyphClazz.TERMINAL || nodeClass == GlyphClazz.TAG )
+			orientation = glyph.getOrientation();
+
+		if( glyph.getClone() != null )
+			clone = true;
+
+		// Add the node and attributes
+		newCyNetwork.addNode(newCyNode);
+		
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.CLASS.getName(), nodeClass.getClazz());
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.SBGN_ID.getName(), sbgnID);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName(), width);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName(), height);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_POS_X.getName(), x);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_POS_Y.getName(), y);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_LABEL.getName(), label);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_COMPARTMENT.getName(), compartment);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_ORIENTATION.getName(), orientation);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName(), clone);
+		
+		nodesIDs.put(sbgnID, newCyNode.getIdentifier());
+		
+		return newCyNode;
 	}
 	
-	private MapNode readUnitOfInformationNode(Glyph glyph){
-		String newNodeClass;
+	private CyNode createNode(Port port, CyNetwork newCyNetwork){
+		// Node attributes 
+		String 		nodeClass = SBGNAttributes.CLASS_INVISIBLE.getName();
+		String 		sbgnID = port.getId();
+		Double 		width = 1.0;
+		Double		height = 1.0;
+		Integer 	x = (int) port.getX();
+		Integer 	y = (int) port.getY();
+		String 		label = "";
+		String		compartment = SBGNAttributes.NODE_COMPARTMENT_NA.getName();
+		String 		orientation = SBGNAttributes.NODE_ORIENTATION_NA.getName();
+		Boolean		clone = false;
 		
-		if( glyph.getEntity() != null ){
-			newNodeClass = glyph.getEntity().getName();
-		}
-		else{
-			newNodeClass = glyph.getClazz();
-		}
+		CyNode newCyNode = Cytoscape.getCyNode(sbgnID, true);
 		
-		return new MapNode(glyph.getId(), GlyphClazz.fromClazz(newNodeClass) );
+		x = CySBGN.convert_X_coord_SBGN_to_Cytoscape(x, width);
+		y = CySBGN.convert_Y_coord_SBGN_to_Cytoscape(y, height);
+		
+		// Add the node and attributes
+		newCyNetwork.addNode(newCyNode);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.CLASS.getName(), nodeClass);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.SBGN_ID.getName(), sbgnID);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName(), width);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName(), height);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_POS_X.getName(), x);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_POS_Y.getName(), y);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_LABEL.getName(), label);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_COMPARTMENT.getName(), compartment);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_ORIENTATION.getName(), orientation);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName(), clone);
+		
+		nodesIDs.put(sbgnID, newCyNode.getIdentifier());
+		
+		return newCyNode;
 	}
+
 	
-	private MapNode createInvisibleNode(String nodeID){
-		MapNode invisibleNode = new MapNode(nodeID, MapNode.INVISIBLE_NODE);
+	private void getArc(Arc arc, Map diagramMap, CyNetwork cyNetwork) throws Exception{
+		try{
+			// Edges attributes
+			ArcClazz		arcClass = ArcClazz.fromClazz( arc.getClazz() );
+			String 			sbgnID = arc.getId();
+			CyNode			source = null;
+			CyNode			target = null;
+			List<Point2D> 	bendPoints = new ArrayList<Point2D>();
+			
+
+			// Get segment list points of the arc
+			List<SegmentationPoint> arcPoints = nextPortCreator.generateSortedPointsList(arc);
+			
+			System.out.print(arc.getId()+": ");
+			System.out.println(arcPoints);
+			
+			for(int i=0; i<arcPoints.size(); i++){
 				
-		return invisibleNode;
+				Object currentPoint = arcPoints.get(i).getPoint(); 
+				
+				if( currentPoint instanceof Start){
+					String sourceNodeID;
+
+					if( arc.getSource() instanceof Glyph)
+						sourceNodeID = ((Glyph)arc.getSource()).getId();
+					else
+						sourceNodeID = ((Port)arc.getSource()).getId();
+					
+					source = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(sourceNodeID));
+					
+					if(source == null){ // No Node found, search node by port
+						String glyphID = getNodeByPort((Port)arc.getSource(), diagramMap);
+						source = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(glyphID));
+						addBendPoint( bendPoints, arc.getSource() );
+					}
+
+					// Arcs that point into the same node have anchors in start and end point
+					if( arc.getSource().equals(arc.getTarget()) )
+						addBendPoint( bendPoints, currentPoint );
+					
+				} else if( currentPoint instanceof Next ){ // Add the anchor point of the segment
+					addBendPoint( bendPoints, currentPoint );
+					
+				}
+				else if( currentPoint instanceof Port ){ // If it's a port a sub arc must be created.
+					target = createNode(((Port)currentPoint), cyNetwork);
+					
+					CyEdge cyEdge;
+					switch( arcClass ){
+						case INTERACTION : 
+							if( linksToStart(arcPoints, i) ){
+								cyEdge = createEdge(target, source, ArcClazz.INTERACTION, sbgnID, bendPoints);
+								break;
+							}
+						default : cyEdge = createEdge(source, target, ArcClazz.LOGIC_ARC, sbgnID, bendPoints);
+							
+					}
+					cyNetwork.addEdge(cyEdge);
+					
+					source = target;
+					bendPoints = new ArrayList<Point2D>();
+					
+				} else if( currentPoint instanceof End){
+					String targetNodeID;
+					if(arc.getTarget() instanceof Glyph)
+						targetNodeID = ((Glyph)arc.getTarget()).getId();
+					else
+						targetNodeID = ((Port)arc.getTarget()).getId();
+					
+					target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(targetNodeID));
+					
+					if(target == null){
+						String glyphID = getNodeByPort((Port)arc.getTarget(), diagramMap);
+						target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(glyphID));
+						
+						addBendPoint( bendPoints, arc.getTarget() );
+					}
+						
+					if(arc.getTarget() instanceof Glyph)
+						if( ((Glyph)arc.getTarget()).getClazz().equals(GlyphClazz.IMPLICIT_XOR.getClazz()) )
+							arcClass = ArcClazz.LOGIC_ARC;
+					
+					// Arcs that point into the same node have anchors in start and end point
+					if( arc.getSource().equals(arc.getTarget()) )
+						addBendPoint( bendPoints, currentPoint );
+						
+					CyEdge cyEdge = createEdge(source, target, arcClass, sbgnID, bendPoints);
+					cyNetwork.addEdge(cyEdge);
+					
+					bendPoints = new ArrayList<Point2D>();
+					
+				} else if( currentPoint instanceof Glyph){ 
+					sbgnID = ((Glyph)currentPoint).getId();
+					target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(sbgnID));
+					
+					GlyphClazz glyphClass = GlyphClazz.fromClazz( ((Glyph) currentPoint).getClazz() );
+					switch( glyphClass ){
+						case INTERACTION: ;
+						case CARDINALITY: ;
+						case OUTCOME : arcClass = ArcClazz.LOGIC_ARC; break;
+						default : break;
+					}
+					
+					CyEdge cyEdge;
+					switch( ArcClazz.fromClazz(arc.getClazz()) ){
+						case INTERACTION : 
+							if( linksToStart(arcPoints, i) ){
+								cyEdge = createEdge(target, source, ArcClazz.INTERACTION, sbgnID, bendPoints);
+								break;
+							}
+						default : 
+							cyEdge = createEdge(source, target, arcClass, sbgnID, bendPoints);
+					}
+					cyNetwork.addEdge(cyEdge);
+					
+					arcClass = ArcClazz.fromClazz( arc.getClazz() );
+					source = target;
+					bendPoints = new ArrayList<Point2D>();
+					
+				} else if( currentPoint instanceof CustomEdgePoint){
+					target = createNode(((CustomEdgePoint) currentPoint).getPort(), cyNetwork);
+					
+					CyEdge cyEdge = createEdge(source, target, ((CustomEdgePoint) currentPoint).getArcClazz(), sbgnID, bendPoints);
+					cyNetwork.addEdge(cyEdge);
+					
+					source = target;
+					bendPoints = new ArrayList<Point2D>();
+				}
+			}
+			
+		}catch(Exception e){
+			throw new Exception("Arc "+ arc.getId() +": Invalid target or source node.\n\n"+e.getMessage(), e.getCause());
+		}
+	}
+	
+	private CyEdge createEdge(CyNode source, CyNode target, ArcClazz arcClazz, String sbgnID, List<Point2D> bendPoints){
+		
+		String interaction;
+		switch(arcClazz){
+			case ABSOLUTE_INHIBITION: 
+			case INHIBITION: interaction = "-1"; break;
+			default : interaction = "1";
+		}
+		
+		CyEdge cyEdge = Cytoscape.getCyEdge(source, target, Semantics.INTERACTION, interaction, true);
+		
+		Cytoscape.getEdgeAttributes().setAttribute(cyEdge.getIdentifier(), SBGNAttributes.CLASS.getName(), arcClazz.getClazz());
+		Cytoscape.getEdgeAttributes().setAttribute(cyEdge.getIdentifier(), SBGNAttributes.SBGN_ID.getName(), sbgnID);
+		Cytoscape.getEdgeAttributes().setAttribute(cyEdge.getIdentifier(), SBGNAttributes.EDGE_ANCHORS.getName(), CyEdgeAttrUtils.getAnchorAttribute(bendPoints));
+		
+		return cyEdge;
+	}
+	
+	
+	private boolean linksToStart(List<SegmentationPoint> arcPoints, int currentPointIndex){
+		
+		for( int i=0; i<currentPointIndex; i++){
+			if(arcPoints.get(i).getPoint() instanceof Port)
+				return false;
+			
+			if(arcPoints.get(i).getPoint() instanceof Glyph)
+				return false;
+		}
+		
+		return true;
 	}
 	
 	private String getNodeByPort(Port port, Map diagramMap){
@@ -583,5 +487,49 @@ public class SBGNReader{
 		
 		return null;
 	}
+	
+	
+	public void addBendPoint(List<Point2D> list, Object point){
+		if( point instanceof Glyph )
+			addBendPoint(list, ((Glyph)point));
+		if( point instanceof Port )
+			addBendPoint(list, ((Port)point));
+		if( point instanceof End )
+			addBendPoint(list, ((End)point));
+		if( point instanceof Start )
+			addBendPoint(list, ((Start)point));
+		if( point instanceof Next )
+			addBendPoint(list, ((Next)point));
+	}
+	
+	public void addBendPoint(List<Point2D> list, Glyph point){
+		list.add( new Point2D.Float(point.getBbox().getX(), point.getBbox().getY()) );
+	}
+	
+	public void addBendPoint(List<Point2D> list, Port point){
+		list.add( new Point2D.Float(point.getX(), point.getY()) );
+	}
+	
+	public void addBendPoint(List<Point2D> list, Start point){
+		list.add( new Point2D.Float(point.getX(), point.getY()) );
+	}
+	
+	public void addBendPoint(List<Point2D> list, End point){
+		list.add( new Point2D.Float(point.getX(), point.getY()) );
+	}
+	
+	public void addBendPoint(List<Point2D> list, Next point){
+		list.add( new Point2D.Float(point.getX(), point.getY()) );
+	}
+
+	// Getters and Setters
+	public Sbgn getMap() {
+		return map;
+	}
+
+	public void setMap(Sbgn map) {
+		this.map = map;
+	}
+	
 	
 }

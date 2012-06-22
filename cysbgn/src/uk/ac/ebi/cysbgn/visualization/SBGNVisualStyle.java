@@ -13,8 +13,14 @@
  ******************************************************************************/
 package uk.ac.ebi.cysbgn.visualization;
 
+import giny.view.EdgeView;
+import giny.view.NodeView;
+
 import java.awt.Color;
+import java.awt.geom.Point2D;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.sbgn.ArcClazz;
@@ -22,7 +28,7 @@ import org.sbgn.GlyphClazz;
 
 import uk.ac.ebi.cysbgn.CySBGN;
 import uk.ac.ebi.cysbgn.enums.SBGNAttributes;
-import uk.ac.ebi.cysbgn.mapunits.MapNode;
+import uk.ac.ebi.cysbgn.utils.CyEdgeAttrUtils;
 import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
 import cytoscape.view.CyNetworkView;
@@ -135,9 +141,6 @@ public class SBGNVisualStyle extends VisualStyle{
 	}
 	
 	
-	private Boolean drawCustomNodesShapes = true;
-	private Boolean drawCustomEdgesShapes = true;
-	
 	/**
 	 * Class constructor.
 	 * 
@@ -163,8 +166,7 @@ public class SBGNVisualStyle extends VisualStyle{
 		setDefaultAppearanceAspects();
 
 		// Node features
-		if( drawCustomNodesShapes )
-			setNodeBorderOpacity(cyNetwork);
+		setNodeBorderOpacity(cyNetwork);
 		setNodeOpacity(cyNetwork);
 		setNodeLabels();
 		setNodeWidth();
@@ -230,7 +232,7 @@ public class SBGNVisualStyle extends VisualStyle{
 	private void setNodeBorderOpacity(CyNetwork cyNetwork){
 		DiscreteMapping disMapping = new DiscreteMapping(new Integer(255), ObjectMapping.NODE_MAPPING);
 		disMapping.setControllingAttributeName(SBGNAttributes.CLASS.getName(), cyNetwork, false);
-		disMapping.putMapValue(MapNode.INVISIBLE_NODE, new Double(0));
+		disMapping.putMapValue(SBGNAttributes.CLASS_INVISIBLE.getName(), new Double(0));
 		disMapping.putMapValue(GlyphClazz.NUCLEIC_ACID_FEATURE.getClazz(), new Double(0));
 		disMapping.putMapValue(GlyphClazz.PERTURBATION.getClazz(), new Double(0));
 		disMapping.putMapValue(GlyphClazz.TERMINAL.getClazz(), new Double(0));
@@ -310,64 +312,60 @@ public class SBGNVisualStyle extends VisualStyle{
 		eac.setCalculator(targetArrowCalculator);
 	}
 	
+	
+	// CyNetworkView methods
+	private void setNodesPosition(CyNetworkView cyNetworkView){
+		
+		Iterator<NodeView> nodesIterator = cyNetworkView.getNodeViewsIterator();
+		while( nodesIterator.hasNext() ){
+			NodeView nodeView = nodesIterator.next();
+			
+			int posX = Cytoscape.getNodeAttributes().getIntegerAttribute(nodeView.getNode().getIdentifier(), SBGNAttributes.NODE_POS_X.getName());
+			int posY = Cytoscape.getNodeAttributes().getIntegerAttribute(nodeView.getNode().getIdentifier(), SBGNAttributes.NODE_POS_Y.getName());
+			
+			nodeView.setXPosition( posX );
+			nodeView.setYPosition( posY );
+			
+		}
+		
+		cyNetworkView.fitContent();
+	}
+	
+	private void setEdgesAnchors(CyNetworkView cyNetworkView){
+		Iterator<EdgeView> edgesIterator = cyNetworkView.getEdgeViewsIterator();
+		while( edgesIterator.hasNext() ){
+			EdgeView edgeView = edgesIterator.next();
+			
+			String anchorAttribute = Cytoscape.getEdgeAttributes().getStringAttribute(edgeView.getEdge().getIdentifier(), SBGNAttributes.EDGE_ANCHORS.getName());
+			List<Point2D> anchors = CyEdgeAttrUtils.getAnchorAttribute(anchorAttribute);
+			
+			for(Point2D anchor : anchors)
+				edgeView.getBend().addHandle(anchor);
+		}
+		
+		cyNetworkView.fitContent();
+	}
+	
 	// Apply style methods
 	public void applyVisualStyle(){
-        CyNetwork network = Cytoscape.getCurrentNetwork();
-        CyNetworkView networkView = Cytoscape.getCurrentNetworkView();
+        CyNetwork cyNetwork = Cytoscape.getCurrentNetwork();
+        CyNetworkView cyNetworkView = Cytoscape.getCurrentNetworkView();
 
         VisualMappingManager manager = Cytoscape.getVisualMappingManager();
         CalculatorCatalog catalog = manager.getCalculatorCatalog();
 
         VisualStyle vs = catalog.getVisualStyle(NAME);
         if (vs == null) {
-        	vs = init(network);
+        	vs = init(cyNetwork);
         	catalog.addVisualStyle(vs);
         }
 
-        networkView.setVisualStyle(vs.getName());
+        setNodesPosition(cyNetworkView);
+        setEdgesAnchors(cyNetworkView);
+        
+        cyNetworkView.setVisualStyle(vs.getName());
         manager.setVisualStyle(vs);
         
-        costumNodeShapes.drawCustomNodes(network, networkView);
+        costumNodeShapes.drawCustomNodes(cyNetwork, cyNetworkView);
 	}
-	
-	public void refreshVisualStyle(CyNetwork network){
-		CyNetworkView cyNetworkView = Cytoscape.getNetworkView(network.getIdentifier());
-
-		VisualMappingManager manager = Cytoscape.getVisualMappingManager();
-		CalculatorCatalog catalog = manager.getCalculatorCatalog();
-
-		catalog.removeVisualStyle(NAME);
-
-		VisualStyle	vs = init(network);
-		catalog.addVisualStyle(vs);
-
-		cyNetworkView.setVisualStyle(vs.getName());
-		manager.setVisualStyle(vs);
-
-		costumNodeShapes.drawCustomNodes(network, cyNetworkView);
-	}
-
-
-	// Getters and setters
-	
-	public Boolean getDrawCustomNodesShapes() {
-		return drawCustomNodesShapes;
-	}
-
-
-	public void setDrawCustomNodesShapes(Boolean drawCustomNodesShapes) {
-		this.drawCustomNodesShapes = drawCustomNodesShapes;
-	}
-
-
-	public Boolean getDrawCustomEdgesShapes() {
-		return drawCustomEdgesShapes;
-	}
-
-
-	public void setDrawCustomEdgesShapes(Boolean drawCustomEdgesShapes) {
-		this.drawCustomEdgesShapes = drawCustomEdgesShapes;
-	}
-	
-	
 }

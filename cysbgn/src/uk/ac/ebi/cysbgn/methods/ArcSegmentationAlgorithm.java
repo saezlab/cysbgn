@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.sbgn.ArcClazz;
+import org.sbgn.bindings.Arc;
 import org.sbgn.bindings.Arc.End;
 import org.sbgn.bindings.Arc.Next;
 import org.sbgn.bindings.Arc.Start;
@@ -28,9 +31,20 @@ import org.sbgn.bindings.Port;
 
 public class ArcSegmentationAlgorithm {
 
-	private static final Double SAFETY_DISTANCE_NODE_ARC_INTERSECTION = 10.0;
 	
-	public List<SegmentationPoint> generateSortedPointsList(List<Port> ports, List<Next> nexts, List<Glyph> glyphs, Start startPoint, End endPoint){
+	private static final double ABSOLUTE_STIMULATION_DISTANCE = 11.0;
+	private static final double ABSOLUTE_INHIBITION_DISTANCE = 1.0;
+	private static final double NECESSARY_STIMULATION_DISTANCE = 13.0;
+	private static final double SAFETY_DISTANCE_NODE_ARC_INTERSECTION = 10.0;
+	
+	
+	public List<SegmentationPoint> generateSortedPointsList(Arc arc){
+		List<Port> ports = arc.getPort(); 
+		List<Next> nexts = arc.getNext();
+		List<Glyph> glyphs = arc.getGlyph();
+		Start startPoint = arc.getStart();
+		End endPoint = arc.getEnd();
+		
 		List<SegmentationPoint> segmentPoints = new ArrayList<SegmentationPoint>();
 
 		// Add starting point
@@ -73,9 +87,75 @@ public class ArcSegmentationAlgorithm {
 		// Sort the segment list by distance to the origin
 		Collections.sort(segmentPoints);
 		
+		// Add custom edges 
+		ArcClazz arcClass = ArcClazz.fromClazz(arc.getClazz());
+
+		switch( arcClass ){
+			case NECESSARY_STIMULATION : 
+				customEdges(arc, segmentPoints, ArcClazz.INHIBITION, NECESSARY_STIMULATION_DISTANCE); break;
+			case ABSOLUTE_INHIBITION : 
+				customEdges(arc, segmentPoints, ArcClazz.INHIBITION, ABSOLUTE_INHIBITION_DISTANCE); break;
+			case ABSOLUTE_STIMULATION : 
+				customEdges(arc, segmentPoints, ArcClazz.STIMULATION, ABSOLUTE_STIMULATION_DISTANCE); break;
+			default:;
+		}
+		
+		Collections.sort(segmentPoints);
+		
 		return segmentPoints;
 	}
 	
+	
+	private void customEdges(Arc arc, List<SegmentationPoint> segmentationPoints, ArcClazz auxArcClazz, Double distance){
+		
+		// Get target arc
+		SegmentationPoint arcTarget = segmentationPoints.get( segmentationPoints.size()-1 );
+		
+		// Create port and calculate port position
+		CustomEdgePoint customEdgePoint = new CustomEdgePoint(auxArcClazz);		
+		customEdgePoint.setID( arc.getId() + "CE" );
+		calculateAuxPortPosition(segmentationPoints, customEdgePoint, distance);
+		
+		SegmentationPoint customPoint = new SegmentationPoint(customEdgePoint);
+		customPoint.setDistanceFromPoint(segmentationPoints.get(segmentationPoints.size()-2));
+
+		segmentationPoints.add(customPoint);
+		
+	}
+	
+	public void calculateAuxPortPosition(List<SegmentationPoint> points, CustomEdgePoint customPoint, Double distance){
+		
+//		boolean isAnchor = false;
+//		if( points.size() > 2 )	
+//			isAnchor = true;
+		
+		// Get point before last
+		int pointBeforeLastX = (int) points.get( points.size()-2 ).getX();
+		int pointBeforeLastY = (int) points.get( points.size()-2 ).getY();
+		
+		// Get last point
+		int lastPointX = (int) points.get( points.size()-1 ).getX();
+		int lastPointY = (int) points.get( points.size()-1 ).getY();
+		
+		Vector2D portPosition = SegmentMethods.calculateLinePointByDistanceToStart(new Vector2D(lastPointX, lastPointY), new Vector2D(pointBeforeLastX, pointBeforeLastY), distance);
+
+//		if( isAnchor ){
+//			Rectangle2D.Double portBoundaries = new Rectangle2D.Double(portPosition.getX(), portPosition.getY(), 3, 3);
+//			
+//			if( portBoundaries.contains(arcLastX, arcLastY) ){
+//				edgeAnchors.remove( (edgeAnchors.size()-1) );
+//				
+//				Cytoscape.getEdgeAttributes().setAttribute(edge.getIdentifier(), SBGNAttributes.EDGE_ANCHORS.getName(), CyEdgeAttrUtils.getAnchorAttribute(edgeAnchors));
+//				
+//				calculateAuxPortPosition(arc, edge, auxPort, distance);
+//				
+//				return;
+//			}
+//		}
+		
+		customPoint.setX( (float) portPosition.getX() );
+		customPoint.setY( (float) portPosition.getY() );
+	}
 	
 	public void checkGlyphIntersection(List<SegmentationPoint> segmentPoints, SegmentationPoint point){
 		

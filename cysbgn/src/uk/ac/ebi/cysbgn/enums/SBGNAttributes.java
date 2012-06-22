@@ -26,6 +26,8 @@ import java.util.Map;
 public enum SBGNAttributes {
 
 	CLASS ("Class"),
+	CLASS_INVISIBLE ("Invisible"),
+	
 	SBGN_ID ("SBGN_ID"),
 	
 	NODE_WIDTH ("Width"),
@@ -33,14 +35,20 @@ public enum SBGNAttributes {
 	NODE_POS_X ("X"),
 	NODE_POS_Y ("Y"),
 	NODE_LABEL ("Label"),
+	
+	NODE_COMPARTMENT ("Compartment"),
+	NODE_COMPARTMENT_NA ("N/A"),
+	
 	NODE_ORIENTATION_UP ("up"),
 	NODE_ORIENTATION_DOWN ("down"),
 	NODE_ORIENTATION_LEFT ("left"),
 	NODE_ORIENTATION_RIGHT ("right"),
 	NODE_ORIENTATION ("Orientation"),
-	NODE_CLONE_MARKER ("clone"),
+	NODE_ORIENTATION_NA ("N/A"),
 	
-	EDGE_ANCHORS ("anchors")
+	NODE_CLONE_MARKER ("isClone"),
+	
+	EDGE_ANCHORS ("Anchors")
 	;
 	
 	private static Map<String, SBGNAttributes> attributeLookupMap = new HashMap<String, SBGNAttributes>();
