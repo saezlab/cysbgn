@@ -29,7 +29,6 @@ import org.sbgn.GlyphClazz;
 
 import uk.ac.ebi.cysbgn.CySBGN;
 import uk.ac.ebi.cysbgn.enums.SBGNAttributes;
-import uk.ac.ebi.cysbgn.mapunits.MapNode;
 import cytoscape.CyNetwork;
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
@@ -46,115 +45,83 @@ import ding.view.DNodeView;
 public class DrawCostumNodes {
 
 	private CySBGN plugin;
-	
+
 	public DrawCostumNodes(CySBGN plugin){
 		this.plugin = plugin;
 	}
-	
+
 	public void drawCustomNodes(CyNetwork cyNetwork, GraphView gview){
 		Iterator<CyNode> iter = cyNetwork.nodesIterator();
 
 		while(iter.hasNext()){
 			CyNode cyNode = iter.next();
-
 			String nodeClassName = (String) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.CLASS.getName());
+			
+			if( (nodeClassName != null) && (!nodeClassName.equals(SBGNAttributes.CLASS_INVISIBLE.getName())) ){
+				GlyphClazz nodeClass = GlyphClazz.fromClazz(nodeClassName);
 
-			if( nodeClassName != null )
-				if( !nodeClassName.equals(MapNode.INVISIBLE_NODE) )
-				{
-
-					if( !plugin.getDrawCustomNodesShapes() ){
-
-						GlyphClazz nodeClass = GlyphClazz.fromClazz(nodeClassName);
-
-						switch(nodeClass){
-						case NUCLEIC_ACID_FEATURE : ;
-						case PERTURBATION : ;
-						case PERTURBING_AGENT : ;
-						case TERMINAL : ;
-						case TAG : ;
-						case ANNOTATION : ;
-						case COMPLEX : ;
-						case EXISTENCE : ;
-						case LOCATION : ;
-						case SOURCE_AND_SINK : ;
-						case SIMPLE_CHEMICAL : ;
-						case MACROMOLECULE : ;
-						case NUCLEIC_ACID_FEATURE_MULTIMER : ;
-						case MACROMOLECULE_MULTIMER : ;
-						case COMPLEX_MULTIMER: ;
-						case SIMPLE_CHEMICAL_MULTIMER : 
-							NodeView nv = gview.getNodeView(cyNode);
-							DNodeView dnv = (DNodeView) nv;
-							dnv.removeAllCustomGraphics();
-							break;
-						default : ;
+				Boolean hasCloneMarker = false;
+				switch(nodeClass){
+					case NUCLEIC_ACID_FEATURE : 
+						hasCloneMarker = (Boolean) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName());
+						if( hasCloneMarker ){
+							drawNucleicAcidCloneMarkerNodes(cyNode, gview);
 						}
-
-					}else{
-						GlyphClazz nodeClass = GlyphClazz.fromClazz(nodeClassName);
-
-						Boolean hasCloneMarker = false;
-						switch(nodeClass){
-						case NUCLEIC_ACID_FEATURE : 
-							hasCloneMarker = (Boolean) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName());
-							if( hasCloneMarker ){
-								drawNucleicAcidCloneMarkerNodes(cyNode, gview);
-							}
-							else{
-								drawNucleicAcidFeature(cyNode, gview); 
-							}
-							break;
-						case PERTURBATION : drawPerturbationNodes(cyNode, gview); break;
-						case PERTURBING_AGENT : drawPerturbationNodes(cyNode, gview); break;
-						case TERMINAL : drawTerminalandTagNodes(cyNode, gview); break;
-						case TAG : drawTerminalandTagNodes(cyNode, gview); break;
-						case ANNOTATION : drawAnnotationNodes(cyNode, gview); break;
-						case COMPLEX : 
-							hasCloneMarker = (Boolean) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName());
-							if( hasCloneMarker ){
-								drawComplexCloneMarkerNodes(cyNode, gview);
-							}
-							else{
-								drawComplexNodes(cyNode, gview);
-							}
-							break;
-						case EXISTENCE : drawExistenceNodes(cyNode, gview); break;
-						case LOCATION : drawLocationNodes(cyNode, gview); break;
-						case SOURCE_AND_SINK : drawSourceSLinkNodes(cyNode, gview); break;
-						case SIMPLE_CHEMICAL :
-							hasCloneMarker = (Boolean) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName());
-							if( hasCloneMarker ){
-								drawSimpleChemicalCloneMarkerNodes(cyNode, gview); 
-							}
-							break;
-						case MACROMOLECULE :
-							hasCloneMarker = (Boolean) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName());
-							if( hasCloneMarker ){
-								drawMacromoleculeCloneMarkerNodes(cyNode, gview); 
-							}
-							break;
-						case NUCLEIC_ACID_FEATURE_MULTIMER : drawNucleicAcidFeatureMultimerNodes(cyNode, gview); break;
-						case MACROMOLECULE_MULTIMER : drawMacromoleculeMultimer(cyNode, gview); break;
-						case COMPLEX_MULTIMER: drawComplexMultimer(cyNode, gview); break;
-						case SIMPLE_CHEMICAL_MULTIMER : drawSimpleChemicalMultimer(cyNode, gview); break;
-						default :;
+						else{
+							drawNucleicAcidFeature(cyNode, gview); 
 						}
-					}
+						break;
+					case PERTURBATION : drawPerturbationNodes(cyNode, gview); break;
+					case PERTURBING_AGENT : drawPerturbationNodes(cyNode, gview); break;
+					case TERMINAL : drawTerminalandTagNodes(cyNode, gview); break;
+					case TAG : drawTerminalandTagNodes(cyNode, gview); break;
+					case ANNOTATION : drawAnnotationNodes(cyNode, gview); break;
+					case COMPLEX : 
+						hasCloneMarker = (Boolean) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName());
+						if( hasCloneMarker ){
+							drawComplexCloneMarkerNodes(cyNode, gview);
+						}
+						else{
+							drawComplexNodes(cyNode, gview);
+						}
+						break;
+					case EXISTENCE : drawExistenceNodes(cyNode, gview); break;
+					case LOCATION : drawLocationNodes(cyNode, gview); break;
+					case SOURCE_AND_SINK : drawSourceSLinkNodes(cyNode, gview); break;
+					case SIMPLE_CHEMICAL :
+						hasCloneMarker = (Boolean) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName());
+						if( hasCloneMarker ){
+							drawSimpleChemicalCloneMarkerNodes(cyNode, gview); 
+						}
+						break;
+					case MACROMOLECULE :
+						hasCloneMarker = (Boolean) Cytoscape.getNodeAttributes().getAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName());
+						if( hasCloneMarker ){
+							drawMacromoleculeCloneMarkerNodes(cyNode, gview); 
+						}
+						break;
+					case NUCLEIC_ACID_FEATURE_MULTIMER : drawNucleicAcidFeatureMultimerNodes(cyNode, gview); break;
+					case MACROMOLECULE_MULTIMER : drawMacromoleculeMultimer(cyNode, gview); break;
+					case COMPLEX_MULTIMER: drawComplexMultimer(cyNode, gview); break;
+					case SIMPLE_CHEMICAL_MULTIMER : drawSimpleChemicalMultimer(cyNode, gview); break;
+					default :;
 				}
+			}
 		}
 
 		Cytoscape.getCurrentNetworkView().redrawGraph(true, true);
 	}
+
 	
+	// Drawing methods
 	private void drawSimpleChemicalMultimer(CyNode cyNode, GraphView gview){
 		Double height = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		Double width = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
-		
+
 		Rectangle2D shape = new Rectangle2D.Double(-(width/2), -(height/2), width, height);
-		
+
 		NodeView nv = gview.getNodeView(cyNode);
-		
+
 		Paint image = null;
 		try {
 			InputStream input = getClass().getResourceAsStream("/simple_chemical_multimer.png");
@@ -162,19 +129,19 @@ public class DrawCostumNodes {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DNodeView dnv = (DNodeView) nv;
 		dnv.addCustomGraphic(shape, image, NodeDetails.ANCHOR_CENTER);
 	}
-	
+
 	private void drawComplexMultimer(CyNode cyNode, GraphView gview){
 		Double height = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		Double width = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
-		
+
 		Rectangle2D shape = new Rectangle2D.Double(-(width/2), -(height/2), width, height);
-		
+
 		NodeView nv = gview.getNodeView(cyNode);
-		
+
 		Paint image = null;
 		try {
 			InputStream input = getClass().getResourceAsStream("/complex_multimer.png");
@@ -182,19 +149,19 @@ public class DrawCostumNodes {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DNodeView dnv = (DNodeView) nv;
 		dnv.addCustomGraphic(shape, image, NodeDetails.ANCHOR_CENTER);
 	}
-	
+
 	private void drawMacromoleculeMultimer(CyNode cyNode, GraphView gview){
 		Double height = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		Double width = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
-		
+
 		Rectangle2D shape = new Rectangle2D.Double(-(width/2), -(height/2), width, height);
-		
+
 		NodeView nv = gview.getNodeView(cyNode);
-		
+
 		Paint image = null;
 		try {
 			InputStream input = getClass().getResourceAsStream("/macromolecule_multimer.png");
@@ -202,19 +169,19 @@ public class DrawCostumNodes {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DNodeView dnv = (DNodeView) nv;
 		dnv.addCustomGraphic(shape, image, NodeDetails.ANCHOR_CENTER);
 	}
-	
+
 	private void drawSourceSLinkNodes(CyNode cyNode, GraphView gview){
 		Double height = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		Double width = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
-		
+
 		Rectangle2D shape = new Rectangle2D.Double(-(width/2), -(height/2), width, height);
-		
+
 		NodeView nv = gview.getNodeView(cyNode);
-		
+
 		Paint image = null;
 		try {
 			InputStream input = getClass().getResourceAsStream("/sourceSlink.png");
@@ -222,19 +189,19 @@ public class DrawCostumNodes {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DNodeView dnv = (DNodeView) nv;
 		dnv.addCustomGraphic(shape, image, NodeDetails.ANCHOR_CENTER);
 	}
-	
+
 	private void drawLocationNodes(CyNode cyNode, GraphView gview){
 		Double height = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		Double width = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
-		
+
 		Rectangle2D shape = new Rectangle2D.Double(-(width/2), -(height/2), width, height);
-		
+
 		NodeView nv = gview.getNodeView(cyNode);
-		
+
 		Paint image = null;
 		try {
 			InputStream input = getClass().getResourceAsStream("/location.png");
@@ -242,19 +209,19 @@ public class DrawCostumNodes {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DNodeView dnv = (DNodeView) nv;
 		dnv.addCustomGraphic(shape, image, NodeDetails.ANCHOR_CENTER);
 	}
-	
+
 	private void drawExistenceNodes(CyNode cyNode, GraphView gview){
 		Double height = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		Double width = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
-		
+
 		Rectangle2D shape = new Rectangle2D.Double(-(width/2), -(height/2), width, height);
-		
+
 		NodeView nv = gview.getNodeView(cyNode);
-		
+
 		Paint image = null;
 		try {
 			InputStream input = getClass().getResourceAsStream("/existence.png");
@@ -262,19 +229,19 @@ public class DrawCostumNodes {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DNodeView dnv = (DNodeView) nv;
 		dnv.addCustomGraphic(shape, image, NodeDetails.ANCHOR_CENTER);
 	}
-	
+
 	private void drawComplexNodes(CyNode cyNode, GraphView gview){
 		Double height = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		Double width = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
-		
+
 		Rectangle2D shape = new Rectangle2D.Double(-(width/2), -(height/2), width, height);
-		
+
 		NodeView nv = gview.getNodeView(cyNode);
-		
+
 		Paint image = null;
 		try {
 			InputStream input = getClass().getResourceAsStream("/complex.png");
@@ -282,19 +249,19 @@ public class DrawCostumNodes {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DNodeView dnv = (DNodeView) nv;
 		dnv.addCustomGraphic(shape, image, NodeDetails.ANCHOR_CENTER);
 	}
-	
+
 	private void drawNucleicAcidCloneMarkerNodes(CyNode cyNode, GraphView gview){
 		Double height = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		Double width = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
-		
+
 		Rectangle2D shape = new Rectangle2D.Double(-(width/2), -(height/2), width, height);
-		
+
 		NodeView nv = gview.getNodeView(cyNode);
-		
+
 		Paint image = null;
 		try {
 			InputStream input = getClass().getResourceAsStream("/cloneNucleicAcidFeatureMarker.png");
@@ -302,19 +269,19 @@ public class DrawCostumNodes {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DNodeView dnv = (DNodeView) nv;
 		dnv.addCustomGraphic(shape, image, NodeDetails.ANCHOR_CENTER);
 	}
-	
+
 	private void drawMacromoleculeCloneMarkerNodes(CyNode cyNode, GraphView gview){
 		Double height = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		Double width = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
-		
+
 		Rectangle2D shape = new Rectangle2D.Double(-(width/2), -(height/2), width, height);
-		
+
 		NodeView nv = gview.getNodeView(cyNode);
-		
+
 		Paint image = null;
 		try {
 			InputStream input = getClass().getResourceAsStream("/cloneMacromoleculeMarker.png");
@@ -322,19 +289,19 @@ public class DrawCostumNodes {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DNodeView dnv = (DNodeView) nv;
 		dnv.addCustomGraphic(shape, image, NodeDetails.ANCHOR_CENTER);
 	}
-	
+
 	private void drawComplexCloneMarkerNodes(CyNode cyNode, GraphView gview){
 		Double height = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		Double width = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
-		
+
 		Rectangle2D shape = new Rectangle2D.Double(-(width/2), -(height/2), width, height);
-		
+
 		NodeView nv = gview.getNodeView(cyNode);
-		
+
 		Paint image = null;
 		try {
 			InputStream input = getClass().getResourceAsStream("/cloneComplexMarker.png");
@@ -342,19 +309,19 @@ public class DrawCostumNodes {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DNodeView dnv = (DNodeView) nv;
 		dnv.addCustomGraphic(shape, image, NodeDetails.ANCHOR_CENTER);
 	}
-	
+
 	private void drawSimpleChemicalCloneMarkerNodes(CyNode cyNode, GraphView gview){
 		Double height = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		Double width = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
-		
+
 		Rectangle2D shape = new Rectangle2D.Double(-(width/2), -(height/2), width, height);
-		
+
 		NodeView nv = gview.getNodeView(cyNode);
-		
+
 		Paint image = null;
 		try {
 			InputStream input = getClass().getResourceAsStream("/cloneCircleMarker.png");
@@ -362,19 +329,19 @@ public class DrawCostumNodes {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DNodeView dnv = (DNodeView) nv;
 		dnv.addCustomGraphic(shape, image, NodeDetails.ANCHOR_CENTER);
 	}
-	
+
 	private void drawAnnotationNodes(CyNode cyNode, GraphView gview){
 		Double height = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		Double width = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
-		
+
 		Rectangle2D shape = new Rectangle2D.Double(-(width/2), -(height/2), width, height);
-		
+
 		NodeView nv = gview.getNodeView(cyNode);
-		
+
 		Paint image = null;
 		try {
 			InputStream input = getClass().getResourceAsStream("/annotation.png");
@@ -382,19 +349,19 @@ public class DrawCostumNodes {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DNodeView dnv = (DNodeView) nv;
 		dnv.addCustomGraphic(shape, image, NodeDetails.ANCHOR_CENTER);
 	}
-	
+
 	private void drawNucleicAcidFeatureMultimerNodes(CyNode cyNode, GraphView gview){
 		Double height = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		Double width = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
-		
+
 		Rectangle2D shape = new Rectangle2D.Double(-(width/2), -(height/2), width, height);
-		
+
 		NodeView nv = gview.getNodeView(cyNode);
-		
+
 		Paint image = null;
 		try {
 			InputStream input = getClass().getResourceAsStream("/nucleic_multimer.png");
@@ -402,19 +369,19 @@ public class DrawCostumNodes {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DNodeView dnv = (DNodeView) nv;
 		dnv.addCustomGraphic(shape, image, NodeDetails.ANCHOR_CENTER);
 	}
-	
+
 	private void drawNucleicAcidFeature(CyNode cyNode, GraphView gview){
 		Double height = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		Double width = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
-		
+
 		Rectangle2D shape = new Rectangle2D.Double(-(width/2), -(height/2), width, height);
-		
+
 		NodeView nv = gview.getNodeView(cyNode);
-		
+
 		Paint image = null;
 		try {
 			InputStream input = getClass().getResourceAsStream("/nucleic_acid_feature.png");
@@ -422,20 +389,20 @@ public class DrawCostumNodes {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DNodeView dnv = (DNodeView) nv;
 		dnv.addCustomGraphic(shape, image, NodeDetails.ANCHOR_CENTER);
 	}
-	
+
 	private void drawPerturbationNodes(CyNode cyNode, GraphView gview){
-		
+
 		Double height = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		Double width = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
-		
+
 		Rectangle2D shape = new Rectangle2D.Double(-(width/2), -(height/2), width, height);
-		
+
 		NodeView nv = gview.getNodeView(cyNode);
-		
+
 		Paint image = null;
 		try {
 			InputStream input = getClass().getResourceAsStream("/perturbation.png");
@@ -443,26 +410,26 @@ public class DrawCostumNodes {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DNodeView dnv = (DNodeView) nv;
 		dnv.addCustomGraphic(shape, image, NodeDetails.ANCHOR_CENTER);
 	}
-	
+
 	private void drawTerminalandTagNodes(CyNode cyNode, GraphView gview){
 		Double height = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_HEIGHT.getName());
 		Double width = Cytoscape.getNodeAttributes().getDoubleAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName());
-		
+
 		String orientation = Cytoscape.getNodeAttributes().getStringAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_ORIENTATION.getName());
-		
+
 		Rectangle2D shape = new Rectangle2D.Double(-(width/2), -(height/2), width, height);
-		
+
 		NodeView nv = gview.getNodeView(cyNode);
-		
+
 		Paint image = null;
 		try {
-			
+
 			InputStream input = null;
-			
+
 			if(orientation.equals(SBGNAttributes.NODE_ORIENTATION_UP.getName()) ){
 				input = getClass().getResourceAsStream("/tag_up.png");
 			}else if (orientation.equals(SBGNAttributes.NODE_ORIENTATION_DOWN.getName())) {
@@ -472,13 +439,13 @@ public class DrawCostumNodes {
 			}else {
 				input = getClass().getResourceAsStream("/tag_left.png");
 			}
-			
+
 			image = new TexturePaint( ImageIO.read(input), shape );
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DNodeView dnv = (DNodeView) nv;
 		dnv.addCustomGraphic(shape, image, NodeDetails.ANCHOR_CENTER);
 	}

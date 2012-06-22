@@ -46,8 +46,10 @@ public class SegmentationPoint implements Comparable<SegmentationPoint>{
 			pointType = PointType.PORT;
 		else if( point instanceof End)
 			pointType = PointType.END;
-		else
+		else if( point instanceof Glyph)
 			pointType = PointType.GLYPH;
+		else
+			pointType = PointType.CUSTOM;
 	}
 
 	@Override
@@ -133,6 +135,13 @@ public class SegmentationPoint implements Comparable<SegmentationPoint>{
 		else
 			return false;
 	}
+	
+	public boolean isCustomEgdePoint(){
+		if( pointType == PointType.CUSTOM )
+			return true;
+		else
+			return false;
+	}
 
 	// Getters and Setters
 	public float getX(){
@@ -141,6 +150,7 @@ public class SegmentationPoint implements Comparable<SegmentationPoint>{
 			case NEXT : return ((Next) point).getX();
 			case PORT : return ((Port) point).getX();
 			case GLYPH : return ((Glyph) point).getBbox().getX();
+			case CUSTOM : return ((CustomEdgePoint) point).getX();
 			default : return ((End) point).getX();
 		}
 	}
@@ -151,6 +161,7 @@ public class SegmentationPoint implements Comparable<SegmentationPoint>{
 			case NEXT : return ((Next) point).getY();
 			case PORT : return ((Port) point).getY();
 			case GLYPH : return ((Glyph) point).getBbox().getY();
+			case CUSTOM : return ((CustomEdgePoint) point).getY();
 			default : return ((End) point).getY();
 		}
 	}
@@ -180,6 +191,7 @@ public class SegmentationPoint implements Comparable<SegmentationPoint>{
 			case NEXT : output.append("Next"); break;
 			case PORT : output.append("Port"); break;
 			case GLYPH : output.append("Glyph"); break;
+			case CUSTOM : output.append("Custom"); break;
 			default : output.append("End"); break;
 		}
 		
@@ -189,13 +201,14 @@ public class SegmentationPoint implements Comparable<SegmentationPoint>{
 		
 		return output.toString();
 	}
-	
+
 	// Enum type of the point
 	private enum PointType{
 		START,
 		END,
 		PORT,
 		NEXT,
+		CUSTOM,
 		GLYPH;
 	}
 	

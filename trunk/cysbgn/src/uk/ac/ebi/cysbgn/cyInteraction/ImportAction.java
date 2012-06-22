@@ -16,12 +16,11 @@ package uk.ac.ebi.cysbgn.cyInteraction;
 import java.io.IOException;
 
 import uk.ac.ebi.cysbgn.CySBGN;
-import uk.ac.ebi.cysbgn.mapunits.Diagram;
+import uk.ac.ebi.cysbgn.io.readers.SBGNReader;
+import uk.ac.ebi.cysbgn.visualization.SBGNVisualStyle;
 import cytoscape.CyNetwork;
-import cytoscape.Cytoscape;
 import cytoscape.data.readers.AbstractGraphReader;
 import cytoscape.task.TaskMonitor;
-import cytoscape.view.CyNetworkView;
 
 /**
  * Class responsible to call the SBGN reader when the SBGN diagram file is selected from the import menu of Cytoscape.
@@ -31,29 +30,34 @@ import cytoscape.view.CyNetworkView;
  */
 public class ImportAction extends AbstractGraphReader{
 
-	protected CySBGN plugin;
-	protected Diagram diagram;
-	
 	private TaskMonitor taskMonitor;
+	
+	protected CySBGN plugin;
+	protected SBGNVisualStyle visualStyle;
 	
 	
 	public ImportAction(String fileName, CySBGN plugin){
 		super(fileName);
 		this.plugin = plugin;
+		this.visualStyle = new SBGNVisualStyle(plugin);
 	}
 
 	@Override
 	public void read() throws IOException {
-		try {
-			diagram = plugin.readSBGNDiagram(fileName);
-		} catch (Exception e) {
-			throw new IOException(e.getMessage(), e);
-		}
+		
 	}
 	
 	public void doPostProcessing(CyNetwork network){
-		CyNetworkView cyNetworkView = Cytoscape.getNetworkView(network.getIdentifier());
-		plugin.displayDiagram(diagram, cyNetworkView);
+		SBGNReader newReader = new SBGNReader();
+		try {
+			network = newReader.read(fileName, false, network);
+			
+			visualStyle.applyVisualStyle();
+	    	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+		plugin.addSBGNNetworkHistory(fileName, newReader.getMap());
 	}
 	
 	@Override
