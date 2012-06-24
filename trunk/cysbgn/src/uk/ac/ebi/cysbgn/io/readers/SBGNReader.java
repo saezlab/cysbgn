@@ -156,11 +156,19 @@ public class SBGNReader{
 		Boolean		clone = false;
 		
 		
-		// Create all inner Glyphs
-		for(Glyph innerGlyphs : glyph.getGlyph())
-			createNode(innerGlyphs, newCyNetwork);
-		
 		CyNode newCyNode = Cytoscape.getCyNode(glyph.getId(), true);
+
+		// Create all inner Glyphs
+		for(Glyph innerGlyphs : glyph.getGlyph()){
+			
+			CyNode innerCyNode = createNode(innerGlyphs, newCyNetwork);
+			
+			CyNode target = newCyNode;
+			CyEdge cyEdge = createEdge(innerCyNode, target, ArcClazz.LOGIC_ARC, innerCyNode.getIdentifier() + "link", new ArrayList<Point2D>());
+			
+			newCyNetwork.addEdge(cyEdge);
+		}
+		
 
 		switch(nodeClass){
 			case UNIT_OF_INFORMATION : 
@@ -373,25 +381,32 @@ public class SBGNReader{
 						addBendPoint( bendPoints, arc.getTarget() );
 					}
 						
-					if(arc.getTarget() instanceof Glyph)
-						if( ((Glyph)arc.getTarget()).getClazz().equals(GlyphClazz.IMPLICIT_XOR.getClazz()) )
-							arcClass = ArcClazz.LOGIC_ARC;
-					
+					if(arc.getTarget() instanceof Glyph){
+						switch( GlyphClazz.fromClazz(((Glyph)arc.getTarget()).getClazz()) ){
+							case IMPLICIT_XOR : ;
+							case INTERACTION: ;
+							case CARDINALITY: ;
+							case OUTCOME : arcClass = ArcClazz.LOGIC_ARC; break;
+							default : ;
+						}
+					}
+
 					// Arcs that point into the same node have anchors in start and end point
 					if( arc.getSource().equals(arc.getTarget()) )
 						addBendPoint( bendPoints, currentPoint );
-						
-					CyEdge cyEdge = createEdge(source, target, arcClass, sbgnID, bendPoints);
+					
+					CyEdge cyEdge = createEdge(source, target, arcClass, sbgnID, bendPoints);	
 					cyNetwork.addEdge(cyEdge);
 					
+					arcClass = ArcClazz.fromClazz( arc.getClazz() );
 					bendPoints = new ArrayList<Point2D>();
 					
 				} else if( currentPoint instanceof Glyph){ 
 					sbgnID = ((Glyph)currentPoint).getId();
 					target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(sbgnID));
 					
-					GlyphClazz glyphClass = GlyphClazz.fromClazz( ((Glyph) currentPoint).getClazz() );
-					switch( glyphClass ){
+					switch( GlyphClazz.fromClazz( ((Glyph) currentPoint).getClazz() ) ){
+						case IMPLICIT_XOR : ;
 						case INTERACTION: ;
 						case CARDINALITY: ;
 						case OUTCOME : arcClass = ArcClazz.LOGIC_ARC; break;
@@ -402,7 +417,7 @@ public class SBGNReader{
 					switch( ArcClazz.fromClazz(arc.getClazz()) ){
 						case INTERACTION : 
 							if( linksToStart(arcPoints, i) ){
-								cyEdge = createEdge(target, source, ArcClazz.INTERACTION, sbgnID, bendPoints);
+								cyEdge = createEdge(target, source, arcClass, sbgnID, bendPoints);
 								break;
 							}
 						default : 
