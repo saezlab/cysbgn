@@ -38,7 +38,7 @@ public class ArcSegmentationAlgorithm {
 	private static final double SAFETY_DISTANCE_NODE_ARC_INTERSECTION = 10.0;
 	
 	
-	public List<SegmentationPoint> generateSortedPointsList(Arc arc){
+	public List<SegmentationPoint> generateSortedPointsList(Arc arc, boolean isAnalysisMethod){
 		List<Port> ports = arc.getPort(); 
 		List<Next> nexts = arc.getNext();
 		List<Glyph> glyphs = arc.getGlyph();
@@ -87,21 +87,23 @@ public class ArcSegmentationAlgorithm {
 		// Sort the segment list by distance to the origin
 		Collections.sort(segmentPoints);
 		
-		// Add custom edges 
-		ArcClazz arcClass = ArcClazz.fromClazz(arc.getClazz());
-
-		switch( arcClass ){
-			case NECESSARY_STIMULATION : 
-				customEdges(arc, segmentPoints, ArcClazz.INHIBITION, NECESSARY_STIMULATION_DISTANCE); break;
-			case ABSOLUTE_INHIBITION : 
-				customEdges(arc, segmentPoints, ArcClazz.INHIBITION, ABSOLUTE_INHIBITION_DISTANCE); break;
-			case ABSOLUTE_STIMULATION : 
-				customEdges(arc, segmentPoints, ArcClazz.STIMULATION, ABSOLUTE_STIMULATION_DISTANCE); break;
-			default:;
+		// Add custom edges
+		
+		if( !isAnalysisMethod ){
+			ArcClazz arcClass = ArcClazz.fromClazz(arc.getClazz());
+	
+			switch( arcClass ){
+				case NECESSARY_STIMULATION : 
+					customEdges(arc, segmentPoints, ArcClazz.INHIBITION, NECESSARY_STIMULATION_DISTANCE); break;
+				case ABSOLUTE_INHIBITION : 
+					customEdges(arc, segmentPoints, ArcClazz.INHIBITION, ABSOLUTE_INHIBITION_DISTANCE); break;
+				case ABSOLUTE_STIMULATION : 
+					customEdges(arc, segmentPoints, ArcClazz.STIMULATION, ABSOLUTE_STIMULATION_DISTANCE); break;
+				default:;
+			}
+			
+			Collections.sort(segmentPoints);
 		}
-		
-		Collections.sort(segmentPoints);
-		
 		return segmentPoints;
 	}
 	

@@ -11,7 +11,7 @@
  *     Martijn van Iersel - co-supervisor
  *     Julio Saez-Rodriguez - supervisor
  ******************************************************************************/
-package uk.ac.ebi.cysbgn.io.messages;
+package uk.ac.ebi.cysbgn.io;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

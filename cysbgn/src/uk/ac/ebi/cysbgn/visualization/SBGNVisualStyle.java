@@ -65,7 +65,7 @@ public class SBGNVisualStyle extends VisualStyle{
 	private EdgeAppearanceCalculator eac;
 	private GlobalAppearanceCalculator gac;
 	
-	private DrawCostumNodes costumNodeShapes;
+	private DrawCustomNodes costumNodeShapes;
 	
 	/**
 	 * Maps the SBGN target arrow shape to the Cytoscape target arrow shape.
@@ -147,7 +147,7 @@ public class SBGNVisualStyle extends VisualStyle{
 	 */
 	public SBGNVisualStyle(CySBGN plugin) {
 		super(NAME);
-		costumNodeShapes = new DrawCostumNodes(plugin);
+		costumNodeShapes = new DrawCustomNodes(plugin);
 	}
 	
 	

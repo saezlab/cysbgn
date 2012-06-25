@@ -16,7 +16,7 @@ package uk.ac.ebi.cysbgn.cyInteraction;
 import java.io.IOException;
 
 import uk.ac.ebi.cysbgn.CySBGN;
-import uk.ac.ebi.cysbgn.io.readers.SBGNReader;
+import uk.ac.ebi.cysbgn.io.SBGNReader;
 import uk.ac.ebi.cysbgn.visualization.SBGNVisualStyle;
 import cytoscape.CyNetwork;
 import cytoscape.data.readers.AbstractGraphReader;
@@ -48,16 +48,16 @@ public class ImportAction extends AbstractGraphReader{
 	}
 	
 	public void doPostProcessing(CyNetwork network){
-		SBGNReader newReader = new SBGNReader();
+		SBGNReader newReader = new SBGNReader(false);
 		try {
-			network = newReader.read(fileName, false, network);
+			network = newReader.read(fileName, network);
 			
 			visualStyle.applyVisualStyle();
 	    	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
-		plugin.addSBGNNetworkHistory(fileName, newReader.getMap());
+		plugin.addNetwork(network, newReader.getMap(), fileName);
 	}
 	
 	@Override

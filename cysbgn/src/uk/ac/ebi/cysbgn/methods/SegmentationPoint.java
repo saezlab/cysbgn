@@ -195,13 +195,13 @@ public class SegmentationPoint implements Comparable<SegmentationPoint>{
 			default : output.append("End"); break;
 		}
 		
-		output.append("[");
-		output.append(getDistance());
-		output.append("]");
+		output.append("<");
+		output.append(distance);
+		output.append(">");
 		
 		return output.toString();
 	}
-
+	
 	// Enum type of the point
 	private enum PointType{
 		START,
