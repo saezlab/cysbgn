@@ -133,8 +133,8 @@ class Cytoscape:
 		child_pid = os.fork();
 		if not child_pid :
 			try:
-				cmd = ["java", "-Xmx2048m", "-jar", "/Applications/Cytoscape_v2.8.2/cytoscape.jar", "-p", 
-				"/Applications/Cytoscape_v2.8.2/plugins/"]
+				cmd = ["java", "-Xmx2048m", "-jar", "/Applications/Cytoscape_v2.8.3/cytoscape.jar", "-p", 
+				"/Applications/Cytoscape_v2.8.3/plugins/"]
 				call(cmd)
 			except:
 				pass
