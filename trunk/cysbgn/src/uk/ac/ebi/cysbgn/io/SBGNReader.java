@@ -11,7 +11,7 @@
  *     Martijn van Iersel - co-supervisor
  *     Julio Saez-Rodriguez - supervisor
  ******************************************************************************/
-package uk.ac.ebi.cysbgn.io.readers;
+package uk.ac.ebi.cysbgn.io;
 
 import java.awt.geom.Point2D;
 import java.io.File;
@@ -56,24 +56,28 @@ import cytoscape.data.Semantics;
  */
 public class SBGNReader{
 
-	
+	private boolean isAnalysisStyle;
 	private ArcSegmentationAlgorithm nextPortCreator;
-	
 	private Sbgn map;
-	
 	/**
+	 * Maps the nodes ID to the SBGN nodes IDs
 	 * HashMap<SBGN_ID, Cytoscape_ID>
 	 */
 	private HashMap<String,String> nodesIDs;
 	
 	
 	public SBGNReader(){
-		nextPortCreator = new ArcSegmentationAlgorithm();
-		nodesIDs = new HashMap<String, String>();
+		this(false);
+	}
+	
+	public SBGNReader(boolean isAnalysisStyle){
+		this.nextPortCreator = new ArcSegmentationAlgorithm();
+		this.nodesIDs = new HashMap<String, String>();
+		this.isAnalysisStyle = isAnalysisStyle;
 	}
 	
 		
-	public CyNetwork read(String networkFilePath, Boolean isAnalysisStyle, CyNetwork cyNetwork) throws Exception{
+	public CyNetwork read(String networkFilePath, CyNetwork cyNetwork) throws Exception{
 		File file = new File(networkFilePath);
 		File targetFile = file;
 		
@@ -86,7 +90,7 @@ public class SBGNReader{
 		}
 		
 		map = SbgnUtil.readFromFile(targetFile);
-		CyNetwork network = readNetwork(map.getMap(), isAnalysisStyle, cyNetwork);
+		CyNetwork network = readNetwork(map.getMap(), cyNetwork);
 
 		return network;
 	}
@@ -99,7 +103,7 @@ public class SBGNReader{
 	 * @return
 	 * @throws Exception 
 	 */
-	protected CyNetwork readNetwork(Map diagramNetwork, Boolean isAnalysisStyle, CyNetwork newNetwork) throws Exception {
+	protected CyNetwork readNetwork(Map diagramNetwork, CyNetwork newNetwork) throws Exception {
 		
 		// Load all nodes
 		for(Glyph glyph : diagramNetwork.getGlyph())
@@ -153,10 +157,10 @@ public class SBGNReader{
 		String 		label = "";
 		String		compartment = SBGNAttributes.NODE_COMPARTMENT_NA.getName();
 		String 		orientation = SBGNAttributes.NODE_ORIENTATION_NA.getName();
-		Boolean		clone = false;
+		Boolean		clone = (glyph.getClone() == null) ? false : true;
 		
-		
-		CyNode newCyNode = Cytoscape.getCyNode(glyph.getId(), true);
+			
+		CyNode newCyNode = Cytoscape.getCyNode( CyNetworkUtils.createUniqueNodeID(glyph.getId()), true);
 
 		// Create all inner Glyphs
 		for(Glyph innerGlyphs : glyph.getGlyph()){
@@ -172,11 +176,10 @@ public class SBGNReader{
 
 		switch(nodeClass){
 			case UNIT_OF_INFORMATION : 
-				String newNodeClass;
 				if( glyph.getEntity() != null )
-					newNodeClass = glyph.getEntity().getName();
+					nodeClass = GlyphClazz.fromClazz( glyph.getEntity().getName() );
 				else
-					newNodeClass = glyph.getClazz();
+					nodeClass = GlyphClazz.fromClazz( glyph.getClazz() );
 	
 				break;	
 			case ANNOTATION :
@@ -243,10 +246,10 @@ public class SBGNReader{
 		// Set tag and terminal shapes orientation
 		if( nodeClass == GlyphClazz.TERMINAL || nodeClass == GlyphClazz.TAG )
 			orientation = glyph.getOrientation();
-
+		
 		if( glyph.getClone() != null )
 			clone = true;
-
+		
 		// Add the node and attributes
 		newCyNetwork.addNode(newCyNode);
 		
@@ -267,6 +270,7 @@ public class SBGNReader{
 	}
 	
 	private CyNode createNode(Port port, CyNetwork newCyNetwork){
+		
 		// Node attributes 
 		String 		nodeClass = SBGNAttributes.CLASS_INVISIBLE.getName();
 		String 		sbgnID = port.getId();
@@ -279,7 +283,7 @@ public class SBGNReader{
 		String 		orientation = SBGNAttributes.NODE_ORIENTATION_NA.getName();
 		Boolean		clone = false;
 		
-		CyNode newCyNode = Cytoscape.getCyNode(sbgnID, true);
+		CyNode newCyNode = Cytoscape.getCyNode( CyNetworkUtils.createUniqueNodeID(sbgnID), true);
 		
 		x = CySBGN.convert_X_coord_SBGN_to_Cytoscape(x, width);
 		y = CySBGN.convert_Y_coord_SBGN_to_Cytoscape(y, height);
@@ -314,10 +318,12 @@ public class SBGNReader{
 			
 
 			// Get segment list points of the arc
-			List<SegmentationPoint> arcPoints = nextPortCreator.generateSortedPointsList(arc);
+			List<SegmentationPoint> arcPoints = nextPortCreator.generateSortedPointsList(arc, isAnalysisStyle);
 			
 			System.out.print(arc.getId()+": ");
 			System.out.println(arcPoints);
+			
+			// Define arc type 
 			
 			for(int i=0; i<arcPoints.size(); i++){
 				
@@ -405,7 +411,7 @@ public class SBGNReader{
 					sbgnID = ((Glyph)currentPoint).getId();
 					target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(sbgnID));
 					
-					switch( GlyphClazz.fromClazz( ((Glyph) currentPoint).getClazz() ) ){
+					switch( CyNetworkUtils.getCyNodeClass(source) ){
 						case IMPLICIT_XOR : ;
 						case INTERACTION: ;
 						case CARDINALITY: ;
@@ -420,6 +426,9 @@ public class SBGNReader{
 								cyEdge = createEdge(target, source, arcClass, sbgnID, bendPoints);
 								break;
 							}
+						case ASSIGNMENT : 
+							cyEdge = createEdge(source, target, ArcClazz.LOGIC_ARC, sbgnID, bendPoints);
+							break;
 						default : 
 							cyEdge = createEdge(source, target, arcClass, sbgnID, bendPoints);
 					}
@@ -449,7 +458,8 @@ public class SBGNReader{
 		
 		String interaction;
 		switch(arcClazz){
-			case ABSOLUTE_INHIBITION: 
+			case NEGATIVE_INFLUENCE: ;
+			case ABSOLUTE_INHIBITION: ;
 			case INHIBITION: interaction = "-1"; break;
 			default : interaction = "1";
 		}

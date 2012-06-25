@@ -21,8 +21,8 @@ import org.sbgn.bindings.Sbgn;
 import uk.ac.ebi.cysbgn.cyInteraction.ExportAction;
 import uk.ac.ebi.cysbgn.cyInteraction.SbgnFilter;
 import uk.ac.ebi.cysbgn.enums.SBGNAttributes;
-import uk.ac.ebi.cysbgn.io.messages.MessagesHandler;
-import uk.ac.ebi.cysbgn.io.writers.SBGNWriter;
+import uk.ac.ebi.cysbgn.io.MessagesHandler;
+import uk.ac.ebi.cysbgn.io.SBGNWriter;
 import uk.ac.ebi.cysbgn.visualization.SBGNVisualStyle;
 import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
@@ -56,16 +56,25 @@ public class CySBGN extends CytoscapePlugin {
 	public static final String SBGN_EXTENSION = ".sbgn";
 
 	private SBGNVisualStyle visualStyle;
+	
+	/** 
+	 * Maps the CyNetwork IDs to the SBGN map imported.
+	 * i.e: HashMap< CyNetwork.Identifier, Sbgn_Map >
+	 */
+	private HashMap<String, Sbgn> mapCyNetworkToSbgn;
 
-	private HashMap<String, Sbgn> diagramsHistory;
-	private HashMap<String, Boolean> diagramStyle;
-
+	/**
+	 * Maps the CyNetwork IDs to the SBGN-ML file path used to import the network.
+	 * i.e: HashMap< CyNetwork.Identifier, SBGM_ML.Absolute_Path >
+	 */
+	private HashMap<String, String> mapCyNetworkToSBGNML;
+	
 	
 	public CySBGN() {
 		System.out.println("Loading CySBGN...");
 
-		diagramsHistory = new HashMap<String, Sbgn>();
-		diagramStyle = new HashMap<String, Boolean>();
+		mapCyNetworkToSbgn = new HashMap<String, Sbgn>();
+		mapCyNetworkToSBGNML = new HashMap<String, String>();
 		
 		Cytoscape.getImportHandler().addFilter(new SbgnFilter(this));
 
@@ -77,6 +86,10 @@ public class CySBGN extends CytoscapePlugin {
 		// testMethod();
 	}
 
+	/**
+	 * Adds the visual style to the available styles in VizMapper and also adds the nodes and edges attributes.
+	 * 
+	 */
 	private void initialiseVisualStyle(){
 		visualStyle = new SBGNVisualStyle(this);
 		visualStyle.applyVisualStyle();
@@ -112,10 +125,6 @@ public class CySBGN extends CytoscapePlugin {
 		LoadNetworkTask.loadFile(sbgnDiagram, true);
 	}
 
-	public void writeSBGNDiagram(CyNetwork network, CyNetworkView cyNetworkView, String filePath) {
-		SBGNWriter sbgnWriter = new SBGNWriter(network, cyNetworkView, filePath);
-		MessagesHandler.executeTask(sbgnWriter, false);
-	}
 
 	/**
 	 * Function called when reading the .sbgn file to convert the libSBGN
@@ -147,18 +156,34 @@ public class CySBGN extends CytoscapePlugin {
 		return yCy;
 	}
 
-	public static float convert_X_coord_Cytoscape_to_SBGN(int xCy, int width) {
-		int xSbgn = xCy - (width / 2);
+	public static float convert_X_coord_Cytoscape_to_SBGN(int xCy, double width) {
+		float xSbgn = (float) (xCy - (width / 2));
 		return xSbgn;
 	}
 
-	public static float convert_Y_coord_Cytoscape_to_SBGN(int yCy, int height) {
-		int ySbgn = yCy - (height / 2);
+	public static float convert_Y_coord_Cytoscape_to_SBGN(int yCy, double height) {
+		float ySbgn = (float) (yCy - (height / 2));
 		return ySbgn;
 	}
 	
-	public void addSBGNNetworkHistory(String sbgnFilePath, Sbgn sbgnMap){
-		diagramsHistory.put(sbgnFilePath, sbgnMap);
+	/**
+	 * After a successful import the cyNetwork is mapped to the correspondent SBGN map and SBGM_ML file used.  
+	 * 
+	 * @param cyNetwork
+	 * @param sbgnMap
+	 * @param absolutePath
+	 */
+	public void addNetwork(CyNetwork cyNetwork, Sbgn sbgnMap, String absolutePath){
+		this.mapCyNetworkToSbgn.put(cyNetwork.getIdentifier(), sbgnMap);
+		this.mapCyNetworkToSBGNML.put(cyNetwork.getIdentifier(), absolutePath);
 	}
 	
+	
+	public Sbgn getSbgn(String cyNetworkId){
+		return mapCyNetworkToSbgn.get(cyNetworkId);
+	}
+	
+	public String getSbgnML(String cyNetworkID){
+		return mapCyNetworkToSBGNML.get(cyNetworkID);
+	}
 }
