@@ -16,8 +16,10 @@ package uk.ac.ebi.cysbgn;
 import java.io.File;
 import java.util.HashMap;
 
+import org.sbgn.SbgnUtil;
 import org.sbgn.bindings.Sbgn;
 
+import uk.ac.ebi.cysbgn.cyInteraction.AnalysisStyleAction;
 import uk.ac.ebi.cysbgn.cyInteraction.ExportAction;
 import uk.ac.ebi.cysbgn.cyInteraction.SbgnFilter;
 import uk.ac.ebi.cysbgn.enums.SBGNAttributes;
@@ -52,10 +54,13 @@ import cytoscape.view.CyNetworkView;
 
 public class CySBGN extends CytoscapePlugin {
 
+	public static boolean SHOW_LIMITATIONS_PANEL = true;
 	public static final String SBGN_MENU = "Plugins.CySBGN";
 	public static final String SBGN_EXTENSION = ".sbgn";
 
 	private SBGNVisualStyle visualStyle;
+	
+	
 	
 	/** 
 	 * Maps the CyNetwork IDs to the SBGN map imported.
@@ -80,6 +85,9 @@ public class CySBGN extends CytoscapePlugin {
 
 		ExportAction exportAction = new ExportAction(this);
 		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction) exportAction);
+		
+		AnalysisStyleAction analysisAction = new AnalysisStyleAction(this);
+		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction) analysisAction);
 		
 		initialiseVisualStyle();
 		

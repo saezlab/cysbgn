@@ -66,6 +66,8 @@ public class SBGNReader{
 	private HashMap<String,String> nodesIDs;
 	
 	
+	private HashMap<String, String> simplifiedGlypihs;
+	
 	public SBGNReader(){
 		this(false);
 	}
@@ -74,6 +76,8 @@ public class SBGNReader{
 		this.nextPortCreator = new ArcSegmentationAlgorithm();
 		this.nodesIDs = new HashMap<String, String>();
 		this.isAnalysisStyle = isAnalysisStyle;
+		
+		simplifiedGlypihs = new HashMap<String, String>();
 	}
 	
 		
@@ -103,7 +107,7 @@ public class SBGNReader{
 	 * @return
 	 * @throws Exception 
 	 */
-	protected CyNetwork readNetwork(Map diagramNetwork, CyNetwork newNetwork) throws Exception {
+	public CyNetwork readNetwork(Map diagramNetwork, CyNetwork newNetwork) throws Exception {
 		
 		// Load all nodes
 		for(Glyph glyph : diagramNetwork.getGlyph())
@@ -159,21 +163,65 @@ public class SBGNReader{
 		String 		orientation = SBGNAttributes.NODE_ORIENTATION_NA.getName();
 		Boolean		clone = (glyph.getClone() == null) ? false : true;
 		
+		
+		// If Analysis style ON check which elements to create
+		boolean createInnerGlyphs = true;
+		if( isAnalysisStyle ){
+			switch( nodeClass ){
+				case SUBMAP : ;
+					createInnerGlyphs = false;
+					StringBuilder submapLabel = new StringBuilder("Submap: ");
+					for(Glyph innerGlyph : glyph.getGlyph()){
+						if(innerGlyph.getLabel() != null){
+							submapLabel.append( innerGlyph.getLabel().getText() + " ");
+							simplifiedGlypihs.put(innerGlyph.getId(), glyph.getId());
+						}
+					}
+					label = submapLabel.toString();
+					
+					break;
+				case COMPLEX :  
+					createInnerGlyphs = false;
+					StringBuilder complexLabel = new StringBuilder("Complex: ");
+					for(Glyph innerGlyph : glyph.getGlyph()){
+						if(innerGlyph.getLabel() != null){
+							complexLabel.append( innerGlyph.getLabel().getText() + " ");
+							simplifiedGlypihs.put(innerGlyph.getId(), glyph.getId());
+						}
+					}
+					label = complexLabel.toString();
+					break;
+				case EXISTENCE: ;
+				case LOCATION: ;
+				case ANNOTATION: ;
+				case UNIT_OF_INFORMATION : ;
+				case STATE_VARIABLE : ;
+				case COMPARTMENT : 
+					return null;
+				default: ;
+			}
+		}
 			
 		CyNode newCyNode = Cytoscape.getCyNode( CyNetworkUtils.createUniqueNodeID(glyph.getId()), true);
 
-		// Create all inner Glyphs
-		for(Glyph innerGlyphs : glyph.getGlyph()){
-			
-			CyNode innerCyNode = createNode(innerGlyphs, newCyNetwork);
-			
-			CyNode target = newCyNode;
-			CyEdge cyEdge = createEdge(innerCyNode, target, ArcClazz.LOGIC_ARC, innerCyNode.getIdentifier() + "link", new ArrayList<Point2D>());
-			
-			newCyNetwork.addEdge(cyEdge);
+		// Create all inner Glyphs and link them to source Glyph
+		if(createInnerGlyphs){
+			for(Glyph innerGlyphs : glyph.getGlyph()){
+				CyNode innerCyNode = createNode(innerGlyphs, newCyNetwork);
+				
+				if( innerCyNode != null ){
+					CyNode target = newCyNode;
+					CyEdge cyEdge = createEdge(innerCyNode, target, ArcClazz.LOGIC_ARC, innerCyNode.getIdentifier() + "link", new ArrayList<Point2D>());
+					
+					newCyNetwork.addEdge(cyEdge);
+				}else{
+					simplifiedGlypihs.put(innerGlyphs.getId(), glyph.getId());
+				}
+			}
 		}
 		
 
+		// Special types of Glyphs
 		switch(nodeClass){
 			case UNIT_OF_INFORMATION : 
 				if( glyph.getEntity() != null )
@@ -184,15 +232,16 @@ public class SBGNReader{
 				break;	
 			case ANNOTATION :
 				String annotationArcID = glyph.getId() + "callout";
-				
+	
 				CyNode target = CyNetworkUtils.getNode(newCyNetwork, nodesIDs.get( ((Glyph)glyph.getCallout().getTarget()).getId()) ); 
 				CyEdge cyEdge = createEdge(newCyNode, target, ArcClazz.LOGIC_ARC, annotationArcID, new ArrayList<Point2D>());
-				
+	
 				newCyNetwork.addEdge(cyEdge);
 				break;
 			default : break; 
 		}
 
+		// Define Label
 		switch( nodeClass ){
 			case AND : label = "AND"; break;
 			case OR : label = "OR"; break;
@@ -234,6 +283,7 @@ public class SBGNReader{
 				break;
 		}
 		
+		// Define Glyph width, height and positions 
 		width = (double) glyph.getBbox().getW();
 		height = (double) glyph.getBbox().getH();
 		
@@ -250,9 +300,12 @@ public class SBGNReader{
 		if( glyph.getClone() != null )
 			clone = true;
 		
+		// Check compartment
+		if( glyph.getCompartmentRef() != null)
+			compartment = ((Glyph)glyph.getCompartmentRef()).getId();
+		
 		// Add the node and attributes
 		newCyNetwork.addNode(newCyNode);
-		
 		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.CLASS.getName(), nodeClass.getClazz());
 		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.SBGN_ID.getName(), sbgnID);
 		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_WIDTH.getName(), width);
@@ -320,10 +373,8 @@ public class SBGNReader{
 			// Get segment list points of the arc
 			List<SegmentationPoint> arcPoints = nextPortCreator.generateSortedPointsList(arc, isAnalysisStyle);
 			
-			System.out.print(arc.getId()+": ");
-			System.out.println(arcPoints);
-			
-			// Define arc type 
+//			System.out.print(arc.getId()+": ");
+//			System.out.println(arcPoints);
 			
 			for(int i=0; i<arcPoints.size(); i++){
 				
@@ -338,6 +389,10 @@ public class SBGNReader{
 						sourceNodeID = ((Port)arc.getSource()).getId();
 					
 					source = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(sourceNodeID));
+					
+					// Check if the Glyph was removed due to simplification
+					if(target == null)
+						target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get( simplifiedGlypihs.get(sourceNodeID) ));
 					
 					if(source == null){ // No Node found, search node by port
 						String glyphID = getNodeByPort((Port)arc.getSource(), diagramMap);
@@ -379,6 +434,10 @@ public class SBGNReader{
 						targetNodeID = ((Port)arc.getTarget()).getId();
 					
 					target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(targetNodeID));
+
+					// Check if the Glyph was removed due to simplification
+					if(target == null)
+						target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get( simplifiedGlypihs.get(targetNodeID) ));
 					
 					if(target == null){
 						String glyphID = getNodeByPort((Port)arc.getTarget(), diagramMap);
@@ -450,7 +509,9 @@ public class SBGNReader{
 			}
 			
 		}catch(Exception e){
-			throw new Exception("Arc "+ arc.getId() +": Invalid target or source node.\n\n"+e.getMessage(), e.getCause());
+			System.out.println("Arc: " + arc.getId());
+			e.printStackTrace();
+//			throw new Exception("Arc "+ arc.getId() +": Invalid target or source node.\n\n"+e.getMessage(), e.getCause());
 		}
 	}
 	
@@ -514,7 +575,7 @@ public class SBGNReader{
 	}
 	
 	
-	public void addBendPoint(List<Point2D> list, Object point){
+	private void addBendPoint(List<Point2D> list, Object point){
 		if( point instanceof Glyph )
 			addBendPoint(list, ((Glyph)point));
 		if( point instanceof Port )
@@ -527,23 +588,23 @@ public class SBGNReader{
 			addBendPoint(list, ((Next)point));
 	}
 	
-	public void addBendPoint(List<Point2D> list, Glyph point){
+	private void addBendPoint(List<Point2D> list, Glyph point){
 		list.add( new Point2D.Float(point.getBbox().getX(), point.getBbox().getY()) );
 	}
 	
-	public void addBendPoint(List<Point2D> list, Port point){
+	private void addBendPoint(List<Point2D> list, Port point){
 		list.add( new Point2D.Float(point.getX(), point.getY()) );
 	}
 	
-	public void addBendPoint(List<Point2D> list, Start point){
+	private void addBendPoint(List<Point2D> list, Start point){
 		list.add( new Point2D.Float(point.getX(), point.getY()) );
 	}
 	
-	public void addBendPoint(List<Point2D> list, End point){
+	private void addBendPoint(List<Point2D> list, End point){
 		list.add( new Point2D.Float(point.getX(), point.getY()) );
 	}
 	
-	public void addBendPoint(List<Point2D> list, Next point){
+	private void addBendPoint(List<Point2D> list, Next point){
 		list.add( new Point2D.Float(point.getX(), point.getY()) );
 	}
 
