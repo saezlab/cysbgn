@@ -15,10 +15,14 @@ package uk.ac.ebi.cysbgn.cyInteraction;
 
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import uk.ac.ebi.cysbgn.CySBGN;
 import uk.ac.ebi.cysbgn.io.SBGNReader;
+import uk.ac.ebi.cysbgn.utils.LimitationPanel;
 import uk.ac.ebi.cysbgn.visualization.SBGNVisualStyle;
 import cytoscape.CyNetwork;
+import cytoscape.Cytoscape;
 import cytoscape.data.readers.AbstractGraphReader;
 import cytoscape.task.TaskMonitor;
 
@@ -58,11 +62,24 @@ public class ImportAction extends AbstractGraphReader{
 			e.printStackTrace();
 		}		
 		plugin.addNetwork(network, newReader.getMap(), fileName);
+		
+		
+		if( CySBGN.SHOW_LIMITATIONS_PANEL )
+			showLimitationDialog();
+		
+	}
+	
+	private void showLimitationDialog(){
+		String[] options = {"Ok, don't show me again.", "Ok, I understand."};
+		int answer = JOptionPane.showOptionDialog(Cytoscape.getDesktop(), new LimitationPanel(), "Rendering limitations", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[1]);
+		
+		if( answer == 0 )
+			CySBGN.SHOW_LIMITATIONS_PANEL = false;
 	}
 	
 	@Override
 	public void setTaskMonitor(TaskMonitor monitor) throws IllegalThreadStateException {
 		taskMonitor = monitor;
 	}
-
+	
 }
