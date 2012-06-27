@@ -34,7 +34,7 @@ public class SbgnFilter extends CyFileFilter{
 	}
 
 	public GraphReader getReader(String fileName) {
-		return new ImportAction(fileName, plugin);
+		return new SBGNReader(fileName, plugin);
 	}
 
 }

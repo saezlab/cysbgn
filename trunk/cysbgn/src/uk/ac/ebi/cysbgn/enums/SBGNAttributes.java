@@ -25,11 +25,17 @@ import java.util.Map;
 
 public enum SBGNAttributes {
 
+	// General Attributes
 	CLASS ("Class"),
 	CLASS_INVISIBLE ("Invisible"),
-	
 	SBGN_ID ("SBGN_ID"),
 	
+	VALIDATION ("Validation"),
+	VALIDATION_CORRECT ("Correct"),
+	VALIDATION_INCORRECT ("Incorrect"),
+	VALIDATION_NA ("N/A"),
+	
+	// Nodes Attributes
 	NODE_WIDTH ("Width"),
 	NODE_HEIGHT ("Height"),
 	NODE_POS_X ("X"),
@@ -48,6 +54,7 @@ public enum SBGNAttributes {
 	
 	NODE_CLONE_MARKER ("isClone"),
 	
+	// Edge Attributes
 	EDGE_ANCHORS ("Anchors")
 	;
 	

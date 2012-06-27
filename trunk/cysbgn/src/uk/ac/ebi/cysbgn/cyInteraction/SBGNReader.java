@@ -13,17 +13,25 @@
  ******************************************************************************/
 package uk.ac.ebi.cysbgn.cyInteraction;
 
+import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JOptionPane;
+import javax.xml.bind.JAXBException;
+
+import org.sbgn.SbgnUtil;
+import org.xml.sax.SAXException;
 
 import uk.ac.ebi.cysbgn.CySBGN;
-import uk.ac.ebi.cysbgn.io.SBGNReader;
-import uk.ac.ebi.cysbgn.utils.LimitationPanel;
+import uk.ac.ebi.cysbgn.enums.Icons;
+import uk.ac.ebi.cysbgn.io.MessagesHandler;
+import uk.ac.ebi.cysbgn.io.SBGNMLReader;
+import uk.ac.ebi.cysbgn.utils.LimitationDialog;
+import uk.ac.ebi.cysbgn.utils.MessageDialog;
 import uk.ac.ebi.cysbgn.visualization.SBGNVisualStyle;
 import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
 import cytoscape.data.readers.AbstractGraphReader;
+import cytoscape.logger.CyLogger;
 import cytoscape.task.TaskMonitor;
 
 /**
@@ -32,54 +40,59 @@ import cytoscape.task.TaskMonitor;
  * @author emanuel
  *
  */
-public class ImportAction extends AbstractGraphReader{
+public class SBGNReader extends AbstractGraphReader{
 
-	private TaskMonitor taskMonitor;
-	
 	protected CySBGN plugin;
 	protected SBGNVisualStyle visualStyle;
 	
+	private TaskMonitor taskMonitor;
+	private static CyLogger logger = CyLogger.getLogger(SBGNReader.class);
 	
-	public ImportAction(String fileName, CySBGN plugin){
+	
+	public SBGNReader(String fileName, CySBGN plugin){
+		this(fileName, plugin, null);
+	}
+
+	public SBGNReader(String fileName, CySBGN plugin, final TaskMonitor monitor){
 		super(fileName);
 		this.plugin = plugin;
 		this.visualStyle = new SBGNVisualStyle(plugin);
+		setTaskMonitor(monitor);
 	}
-
+	
 	@Override
 	public void read() throws IOException {
 		
 	}
 	
 	public void doPostProcessing(CyNetwork network){
-		SBGNReader newReader = new SBGNReader(false);
+		SBGNMLReader newReader = new SBGNMLReader(false);
 		try {
 			network = newReader.read(fileName, network);
 			
 			visualStyle.applyVisualStyle();
-	    	
+			
+			plugin.addNetwork(network, newReader.getMap(), fileName);
+			
+			if( CySBGN.SHOW_LIMITATIONS_PANEL )
+				new LimitationDialog();
+			
 		} catch (Exception e) {
-			e.printStackTrace();
-		}		
-		plugin.addNetwork(network, newReader.getMap(), fileName);
-		
-		
-		if( CySBGN.SHOW_LIMITATIONS_PANEL )
-			showLimitationDialog();
-		
+			Cytoscape.destroyNetwork(network);
+			if( taskMonitor != null){
+				taskMonitor.setStatus(e.getMessage());
+				taskMonitor.setException(e, "Error reading SBGN file.");
+			}else{
+				new MessageDialog(e.getMessage(), MessagesHandler.getStackTrace(e), Icons.ERROR_LOGO.getPath());
+				logger.warn("Error reading SBGN file " + network.getTitle() + ": " + e.getMessage(), e);
+				throw new RuntimeException(e.getMessage());
+			}
+			
+		}
 	}
-	
-	private void showLimitationDialog(){
-		String[] options = {"Ok, don't show me again.", "Ok, I understand."};
-		int answer = JOptionPane.showOptionDialog(Cytoscape.getDesktop(), new LimitationPanel(), "Rendering limitations", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[1]);
 		
-		if( answer == 0 )
-			CySBGN.SHOW_LIMITATIONS_PANEL = false;
-	}
-	
-	@Override
-	public void setTaskMonitor(TaskMonitor monitor) throws IllegalThreadStateException {
-		taskMonitor = monitor;
+	public void setTaskMonitor(TaskMonitor monitor) {
+		this.taskMonitor = monitor;
 	}
 	
 }
