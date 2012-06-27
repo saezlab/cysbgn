@@ -3,18 +3,18 @@ package uk.ac.ebi.cysbgn.cyInteraction;
 import java.awt.event.ActionEvent;
 
 import uk.ac.ebi.cysbgn.CySBGN;
-import uk.ac.ebi.cysbgn.io.SBGNReader;
+import uk.ac.ebi.cysbgn.io.SBGNMLReader;
 import uk.ac.ebi.cysbgn.visualization.SBGNVisualStyle;
 import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
 import cytoscape.util.CytoscapeAction;
 
 @SuppressWarnings("serial")
-public class AnalysisStyleAction extends CytoscapeAction{
+public class SimplifyNetwork extends CytoscapeAction{
 
 	private CySBGN plugin;
 
-	public AnalysisStyleAction(CySBGN plugin){
+	public SimplifyNetwork(CySBGN plugin){
 		super("Create simplified network...");
 		setPreferredMenu(CySBGN.SBGN_MENU);
 
@@ -26,7 +26,7 @@ public class AnalysisStyleAction extends CytoscapeAction{
 		try{
 			String currentNetworkID = Cytoscape.getCurrentNetwork().getIdentifier();
 			if( (currentNetworkID != null) && (plugin.getSbgn(currentNetworkID) != null) ){ 
-				SBGNReader reader = new SBGNReader(true);
+				SBGNMLReader reader = new SBGNMLReader(true);
 
 				String simplifiedNetworkTitle = Cytoscape.getCurrentNetwork().getTitle() + "Simp";
 				CyNetwork simplifiedNetwork = Cytoscape.createNetwork(simplifiedNetworkTitle, true);

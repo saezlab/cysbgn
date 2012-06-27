@@ -54,7 +54,7 @@ import cytoscape.data.Semantics;
  * @author emanuel
  *
  */
-public class SBGNReader{
+public class SBGNMLReader{
 
 	private boolean isAnalysisStyle;
 	private ArcSegmentationAlgorithm nextPortCreator;
@@ -68,11 +68,11 @@ public class SBGNReader{
 	
 	private HashMap<String, String> simplifiedGlypihs;
 	
-	public SBGNReader(){
+	public SBGNMLReader(){
 		this(false);
 	}
 	
-	public SBGNReader(boolean isAnalysisStyle){
+	public SBGNMLReader(boolean isAnalysisStyle){
 		this.nextPortCreator = new ArcSegmentationAlgorithm();
 		this.nodesIDs = new HashMap<String, String>();
 		this.isAnalysisStyle = isAnalysisStyle;
@@ -162,6 +162,7 @@ public class SBGNReader{
 		String		compartment = SBGNAttributes.NODE_COMPARTMENT_NA.getName();
 		String 		orientation = SBGNAttributes.NODE_ORIENTATION_NA.getName();
 		Boolean		clone = (glyph.getClone() == null) ? false : true;
+		String		validation = SBGNAttributes.VALIDATION_NA.getName();
 		
 		
 		// If Analysis style ON check which elements to create
@@ -316,6 +317,7 @@ public class SBGNReader{
 		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_COMPARTMENT.getName(), compartment);
 		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_ORIENTATION.getName(), orientation);
 		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName(), clone);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.VALIDATION.getName(), validation);
 		
 		nodesIDs.put(sbgnID, newCyNode.getIdentifier());
 		
@@ -335,6 +337,7 @@ public class SBGNReader{
 		String		compartment = SBGNAttributes.NODE_COMPARTMENT_NA.getName();
 		String 		orientation = SBGNAttributes.NODE_ORIENTATION_NA.getName();
 		Boolean		clone = false;
+		String		validation = SBGNAttributes.VALIDATION_NA.getName();
 		
 		CyNode newCyNode = Cytoscape.getCyNode( CyNetworkUtils.createUniqueNodeID(sbgnID), true);
 		
@@ -353,6 +356,7 @@ public class SBGNReader{
 		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_COMPARTMENT.getName(), compartment);
 		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_ORIENTATION.getName(), orientation);
 		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName(), clone);
+		Cytoscape.getNodeAttributes().setAttribute(newCyNode.getIdentifier(), SBGNAttributes.VALIDATION.getName(), validation);
 		
 		nodesIDs.put(sbgnID, newCyNode.getIdentifier());
 		
@@ -361,7 +365,8 @@ public class SBGNReader{
 
 	
 	private void getArc(Arc arc, Map diagramMap, CyNetwork cyNetwork) throws Exception{
-		try{
+		
+//		try{
 			// Edges attributes
 			ArcClazz		arcClass = ArcClazz.fromClazz( arc.getClazz() );
 			String 			sbgnID = arc.getId();
@@ -369,40 +374,47 @@ public class SBGNReader{
 			CyNode			target = null;
 			List<Point2D> 	bendPoints = new ArrayList<Point2D>();
 			
-
+	
 			// Get segment list points of the arc
 			List<SegmentationPoint> arcPoints = nextPortCreator.generateSortedPointsList(arc, isAnalysisStyle);
 			
-//			System.out.print(arc.getId()+": ");
-//			System.out.println(arcPoints);
+	//			System.out.print(arc.getId()+": ");
+	//			System.out.println(arcPoints);
 			
 			for(int i=0; i<arcPoints.size(); i++){
 				
 				Object currentPoint = arcPoints.get(i).getPoint(); 
 				
 				if( currentPoint instanceof Start){
-					String sourceNodeID;
-
-					if( arc.getSource() instanceof Glyph)
-						sourceNodeID = ((Glyph)arc.getSource()).getId();
-					else
-						sourceNodeID = ((Port)arc.getSource()).getId();
 					
-					source = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(sourceNodeID));
-					
-					// Check if the Glyph was removed due to simplification
-					if(target == null)
-						target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get( simplifiedGlypihs.get(sourceNodeID) ));
-					
-					if(source == null){ // No Node found, search node by port
-						String glyphID = getNodeByPort((Port)arc.getSource(), diagramMap);
-						source = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(glyphID));
-						addBendPoint( bendPoints, arc.getSource() );
+					try{
+						String sourceNodeID;
+						if( arc.getSource() instanceof Glyph)
+							sourceNodeID = ((Glyph)arc.getSource()).getId();
+						else
+							sourceNodeID = ((Port)arc.getSource()).getId();
+						
+						source = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(sourceNodeID));
+						
+						// Check if the Glyph was removed due to simplification
+						if(target == null)
+							target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get( simplifiedGlypihs.get(sourceNodeID) ));
+						
+						if(source == null){ // No Node found, search node by port
+							String glyphID = getNodeByPort((Port)arc.getSource(), diagramMap);
+							source = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(glyphID));
+							addBendPoint( bendPoints, arc.getSource() );
+						}
+		
+						// Arcs that point into the same node have anchors in start and end point
+						if( arc.getSource().equals(arc.getTarget()) )
+							addBendPoint( bendPoints, currentPoint );
+						
+					}catch(Exception e){
+						Exception sourceException = new Exception("Arc "+ arc.getId() +": Has an invalid source node.\n", e);
+						sourceException.setStackTrace(e.getStackTrace());
+						throw sourceException;
 					}
-
-					// Arcs that point into the same node have anchors in start and end point
-					if( arc.getSource().equals(arc.getTarget()) )
-						addBendPoint( bendPoints, currentPoint );
 					
 				} else if( currentPoint instanceof Next ){ // Add the anchor point of the segment
 					addBendPoint( bendPoints, currentPoint );
@@ -427,45 +439,51 @@ public class SBGNReader{
 					bendPoints = new ArrayList<Point2D>();
 					
 				} else if( currentPoint instanceof End){
-					String targetNodeID;
-					if(arc.getTarget() instanceof Glyph)
-						targetNodeID = ((Glyph)arc.getTarget()).getId();
-					else
-						targetNodeID = ((Port)arc.getTarget()).getId();
-					
-					target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(targetNodeID));
-
-					// Check if the Glyph was removed due to simplification
-					if(target == null)
-						target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get( simplifiedGlypihs.get(targetNodeID) ));
-					
-					if(target == null){
-						String glyphID = getNodeByPort((Port)arc.getTarget(), diagramMap);
-						target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(glyphID));
+					try{
+						String targetNodeID;
+						if(arc.getTarget() instanceof Glyph)
+							targetNodeID = ((Glyph)arc.getTarget()).getId();
+						else
+							targetNodeID = ((Port)arc.getTarget()).getId();
 						
-						addBendPoint( bendPoints, arc.getTarget() );
-					}
+						target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(targetNodeID));
+		
+						// Check if the Glyph was removed due to simplification
+						if(target == null)
+							target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get( simplifiedGlypihs.get(targetNodeID) ));
 						
-					if(arc.getTarget() instanceof Glyph){
-						switch( GlyphClazz.fromClazz(((Glyph)arc.getTarget()).getClazz()) ){
-							case IMPLICIT_XOR : ;
-							case INTERACTION: ;
-							case CARDINALITY: ;
-							case OUTCOME : arcClass = ArcClazz.LOGIC_ARC; break;
-							default : ;
+						if(target == null){
+							String glyphID = getNodeByPort((Port)arc.getTarget(), diagramMap);
+							target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(glyphID));
+							
+							addBendPoint( bendPoints, arc.getTarget() );
 						}
+							
+						if(arc.getTarget() instanceof Glyph){
+							switch( GlyphClazz.fromClazz(((Glyph)arc.getTarget()).getClazz()) ){
+								case IMPLICIT_XOR : ;
+								case INTERACTION: ;
+								case CARDINALITY: ;
+								case OUTCOME : arcClass = ArcClazz.LOGIC_ARC; break;
+								default : ;
+							}
+						}
+		
+						// Arcs that point into the same node have anchors in start and end point
+						if( arc.getSource().equals(arc.getTarget()) )
+							addBendPoint( bendPoints, currentPoint );
+						
+						CyEdge cyEdge = createEdge(source, target, arcClass, sbgnID, bendPoints);	
+						cyNetwork.addEdge(cyEdge);
+						
+						arcClass = ArcClazz.fromClazz( arc.getClazz() );
+						bendPoints = new ArrayList<Point2D>();
+					
+					}catch(Exception e){
+						Exception targetException = new Exception("Arc "+ arc.getId() +": Has an invalid target node.\n", e);
+						targetException.setStackTrace(e.getStackTrace());
+						throw targetException;
 					}
-
-					// Arcs that point into the same node have anchors in start and end point
-					if( arc.getSource().equals(arc.getTarget()) )
-						addBendPoint( bendPoints, currentPoint );
-					
-					CyEdge cyEdge = createEdge(source, target, arcClass, sbgnID, bendPoints);	
-					cyNetwork.addEdge(cyEdge);
-					
-					arcClass = ArcClazz.fromClazz( arc.getClazz() );
-					bendPoints = new ArrayList<Point2D>();
-					
 				} else if( currentPoint instanceof Glyph){ 
 					sbgnID = ((Glyph)currentPoint).getId();
 					target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(sbgnID));
@@ -507,12 +525,10 @@ public class SBGNReader{
 					bendPoints = new ArrayList<Point2D>();
 				}
 			}
-			
-		}catch(Exception e){
-			System.out.println("Arc: " + arc.getId());
-			e.printStackTrace();
+//		}catch(Exception e){
+//			System.out.println("Arc: " + arc.getId());
 //			throw new Exception("Arc "+ arc.getId() +": Invalid target or source node.\n\n"+e.getMessage(), e.getCause());
-		}
+//		}
 	}
 	
 	private CyEdge createEdge(CyNode source, CyNode target, ArcClazz arcClazz, String sbgnID, List<Point2D> bendPoints){
@@ -530,6 +546,7 @@ public class SBGNReader{
 		Cytoscape.getEdgeAttributes().setAttribute(cyEdge.getIdentifier(), SBGNAttributes.CLASS.getName(), arcClazz.getClazz());
 		Cytoscape.getEdgeAttributes().setAttribute(cyEdge.getIdentifier(), SBGNAttributes.SBGN_ID.getName(), sbgnID);
 		Cytoscape.getEdgeAttributes().setAttribute(cyEdge.getIdentifier(), SBGNAttributes.EDGE_ANCHORS.getName(), CyEdgeAttrUtils.getAnchorAttribute(bendPoints));
+		Cytoscape.getEdgeAttributes().setAttribute(cyEdge.getIdentifier(), SBGNAttributes.VALIDATION.getName(), SBGNAttributes.VALIDATION_NA.getName());
 		
 		return cyEdge;
 	}

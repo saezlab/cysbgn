@@ -13,25 +13,29 @@
  ******************************************************************************/
 package uk.ac.ebi.cysbgn;
 
+import java.awt.BorderLayout;
 import java.io.File;
 import java.util.HashMap;
 
-import org.sbgn.SbgnUtil;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
+import org.sbgn.bindings.SBGNBase;
 import org.sbgn.bindings.Sbgn;
 
-import uk.ac.ebi.cysbgn.cyInteraction.AnalysisStyleAction;
-import uk.ac.ebi.cysbgn.cyInteraction.ExportAction;
+import uk.ac.ebi.cysbgn.cyInteraction.SBGNValidator;
+import uk.ac.ebi.cysbgn.cyInteraction.SimplifyNetwork;
+import uk.ac.ebi.cysbgn.cyInteraction.SBGNWriter;
 import uk.ac.ebi.cysbgn.cyInteraction.SbgnFilter;
 import uk.ac.ebi.cysbgn.enums.SBGNAttributes;
-import uk.ac.ebi.cysbgn.io.MessagesHandler;
-import uk.ac.ebi.cysbgn.io.SBGNWriter;
 import uk.ac.ebi.cysbgn.visualization.SBGNVisualStyle;
 import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
 import cytoscape.actions.LoadNetworkTask;
 import cytoscape.plugin.CytoscapePlugin;
 import cytoscape.util.CytoscapeAction;
-import cytoscape.view.CyNetworkView;
+import cytoscape.view.cytopanels.CytoPanelImp;
 
 /**
  * This is the main class of the SBGNplugin and it extends the CytoscapePlugin
@@ -61,7 +65,6 @@ public class CySBGN extends CytoscapePlugin {
 	private SBGNVisualStyle visualStyle;
 	
 	
-	
 	/** 
 	 * Maps the CyNetwork IDs to the SBGN map imported.
 	 * i.e: HashMap< CyNetwork.Identifier, Sbgn_Map >
@@ -69,7 +72,7 @@ public class CySBGN extends CytoscapePlugin {
 	private HashMap<String, Sbgn> mapCyNetworkToSbgn;
 
 	/**
-	 * Maps the CyNetwork IDs to the SBGN-ML file path used to import the network.
+	 * Maps the CyNetwork IDs to the SBGN-ML absolute file path used to import the CyNetwork.
 	 * i.e: HashMap< CyNetwork.Identifier, SBGM_ML.Absolute_Path >
 	 */
 	private HashMap<String, String> mapCyNetworkToSBGNML;
@@ -83,13 +86,21 @@ public class CySBGN extends CytoscapePlugin {
 		
 		Cytoscape.getImportHandler().addFilter(new SbgnFilter(this));
 
-		ExportAction exportAction = new ExportAction(this);
+		SBGNWriter exportAction = new SBGNWriter(this);
 		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction) exportAction);
 		
-		AnalysisStyleAction analysisAction = new AnalysisStyleAction(this);
+		SimplifyNetwork analysisAction = new SimplifyNetwork(this);
 		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction) analysisAction);
 		
+		SBGNValidator validator = new SBGNValidator(this);
+		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction) validator);
+		
 		initialiseVisualStyle();
+	
+//		JPanel testPanel = new JPanel(new BorderLayout());
+//		JLabel selected = new JLabel("Nothing selected");
+//		testPanel.add(selected, BorderLayout.CENTER);
+//		((CytoPanelImp) Cytoscape.getDesktop().getCytoPanel(SwingConstants.EAST)).add("CySBGN", testPanel);
 		
 		// testMethod();
 	}
@@ -115,6 +126,7 @@ public class CySBGN extends CytoscapePlugin {
 		Cytoscape.getNodeAttributes().setAttribute(dummyNodeID, SBGNAttributes.NODE_COMPARTMENT.getName(), new String());
 		Cytoscape.getNodeAttributes().setAttribute(dummyNodeID, SBGNAttributes.NODE_ORIENTATION.getName(), new String());
 		Cytoscape.getNodeAttributes().setAttribute(dummyNodeID, SBGNAttributes.NODE_CLONE_MARKER.getName(), new Boolean(true));
+		Cytoscape.getNodeAttributes().setAttribute(dummyNodeID, SBGNAttributes.VALIDATION.getName(), new String());
 		
 		Cytoscape.getNodeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.CLASS.getName());
 		Cytoscape.getNodeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.SBGN_ID.getName());
@@ -126,6 +138,7 @@ public class CySBGN extends CytoscapePlugin {
 		Cytoscape.getNodeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.NODE_COMPARTMENT.getName());
 		Cytoscape.getNodeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.NODE_ORIENTATION.getName());
 		Cytoscape.getNodeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.NODE_CLONE_MARKER.getName());
+		Cytoscape.getNodeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.VALIDATION.getName());
 	}
 
 	private void testMethod() {

@@ -16,11 +16,8 @@ package uk.ac.ebi.cysbgn.io;
 import java.io.File;
 import java.util.Iterator;
 
-import org.sbgn.ArcClazz;
 import org.sbgn.SbgnUtil;
 import org.sbgn.bindings.Arc;
-import org.sbgn.bindings.Arc.End;
-import org.sbgn.bindings.Arc.Start;
 import org.sbgn.bindings.Bbox;
 import org.sbgn.bindings.Glyph;
 import org.sbgn.bindings.Glyph.Clone;
@@ -30,15 +27,12 @@ import org.sbgn.bindings.Sbgn;
 
 import uk.ac.ebi.cysbgn.CySBGN;
 import uk.ac.ebi.cysbgn.enums.SBGNAttributes;
-import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
-import cytoscape.data.CyAttributes;
 import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
 import cytoscape.view.CyNetworkView;
-import cytoscape.visual.VisualPropertyType;
 
 /**
  * AbstarctWriter class implements all methods shared among the SBGN writers.  
@@ -46,7 +40,7 @@ import cytoscape.visual.VisualPropertyType;
  * @author emanuel
  *
  */
-public class SBGNWriter implements Task{
+public class SBGNMLWriter implements Task{
 
 	private CySBGN plugin;
 	
@@ -57,7 +51,7 @@ public class SBGNWriter implements Task{
 	private TaskMonitor taskMonitor;
 	
 	
-	public SBGNWriter(CySBGN plugin, CyNetwork cyNetwork, CyNetworkView cyNetworkView, String filePath){
+	public SBGNMLWriter(CySBGN plugin, CyNetwork cyNetwork, CyNetworkView cyNetworkView, String filePath){
 		this.plugin = plugin;
 		this.filePath = filePath + CySBGN.SBGN_EXTENSION;
 		this.cyNetwork = cyNetwork;
