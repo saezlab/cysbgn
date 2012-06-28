@@ -29,6 +29,7 @@ import uk.ac.ebi.cysbgn.cyInteraction.SimplifyNetwork;
 import uk.ac.ebi.cysbgn.cyInteraction.SBGNWriter;
 import uk.ac.ebi.cysbgn.cyInteraction.SbgnFilter;
 import uk.ac.ebi.cysbgn.enums.SBGNAttributes;
+import uk.ac.ebi.cysbgn.utils.CyEdgeAttrUtils;
 import uk.ac.ebi.cysbgn.visualization.SBGNVisualStyle;
 import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
@@ -115,7 +116,7 @@ public class CySBGN extends CytoscapePlugin {
 		
 		String dummyNodeID = "dummy";
 		
-		// Add attributes
+		// Add Nodes attributes
 		Cytoscape.getNodeAttributes().setAttribute(dummyNodeID, SBGNAttributes.CLASS.getName(), new String());
 		Cytoscape.getNodeAttributes().setAttribute(dummyNodeID, SBGNAttributes.SBGN_ID.getName(), new String());
 		Cytoscape.getNodeAttributes().setAttribute(dummyNodeID, SBGNAttributes.NODE_WIDTH.getName(), new Double(0));
@@ -139,6 +140,21 @@ public class CySBGN extends CytoscapePlugin {
 		Cytoscape.getNodeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.NODE_ORIENTATION.getName());
 		Cytoscape.getNodeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.NODE_CLONE_MARKER.getName());
 		Cytoscape.getNodeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.VALIDATION.getName());
+		
+		Cytoscape.getNodeAttributes().setAttributeDescription(SBGNAttributes.VALIDATION.getName(), "Check CySBGN validation panel to see any issues associated");
+		
+		// Add Edges attributes
+		Cytoscape.getEdgeAttributes().setAttribute(dummyNodeID, SBGNAttributes.CLASS.getName(), new String());
+		Cytoscape.getEdgeAttributes().setAttribute(dummyNodeID, SBGNAttributes.SBGN_ID.getName(), new String());
+		Cytoscape.getEdgeAttributes().setAttribute(dummyNodeID, SBGNAttributes.EDGE_ANCHORS.getName(), new String());
+		Cytoscape.getEdgeAttributes().setAttribute(dummyNodeID, SBGNAttributes.VALIDATION.getName(), new String());
+		
+		Cytoscape.getEdgeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.CLASS.getName());
+		Cytoscape.getEdgeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.SBGN_ID.getName());
+		Cytoscape.getEdgeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.EDGE_ANCHORS.getName());
+		Cytoscape.getEdgeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.VALIDATION.getName());
+		
+		Cytoscape.getEdgeAttributes().setAttributeDescription(SBGNAttributes.VALIDATION.getName(), "Check CySBGN validation panel to see any issues associated");
 	}
 
 	private void testMethod() {
