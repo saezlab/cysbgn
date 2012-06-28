@@ -174,7 +174,7 @@ public class SBGNVisualStyle extends VisualStyle{
 		setNodeShape(cyNetwork);
 		setNodeFontSize(cyNetwork);
 		setNodeColour(cyNetwork);
-		setNodeBorderWidthPosition(cyNetwork);
+		setNodeLineWidth(cyNetwork);
 //		setNodeLabelPosition(cyNetwork);
 
 		// Edge features
@@ -202,7 +202,7 @@ public class SBGNVisualStyle extends VisualStyle{
 	}
 
 	// Nodes attributes methods
-	private void setNodeBorderWidthPosition(CyNetwork cyNetwork){
+	private void setNodeLineWidth(CyNetwork cyNetwork){
 		DiscreteMapping disMapping = new DiscreteMapping(nac.getDefaultAppearance().get(VisualPropertyType.NODE_LINE_WIDTH), ObjectMapping.NODE_MAPPING);
 		disMapping.setControllingAttributeName(SBGNAttributes.CLASS.getName(), cyNetwork, false);
 		disMapping.putMapValue(GlyphClazz.COMPARTMENT.getClazz(), new Double(6));

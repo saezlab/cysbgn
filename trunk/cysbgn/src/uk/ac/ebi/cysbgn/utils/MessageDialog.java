@@ -23,8 +23,6 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
-import uk.ac.ebi.cysbgn.io.MessagesHandler;
-
 import cytoscape.Cytoscape;
 
 @SuppressWarnings("serial")
@@ -36,6 +34,8 @@ private JPanel sidePanel;
 	private static final String DETAILS = "exception card";
 
 	private Boolean isDetailedDialog = false;
+	
+	private String dialogBoxTitle;
 	
 	private String shortTitle;
 	private String detailedMessage;
@@ -52,9 +52,10 @@ private JPanel sidePanel;
 	private JButton okButton;
 	
 	
-	public MessageDialog(String shortTitle, String detailedMessage, String iconFilePath){
+	public MessageDialog(String dialogBoxTitle, String shortTitle, String detailedMessage, String iconFilePath){
 		super();
-		
+
+		this.dialogBoxTitle = dialogBoxTitle;
 		this.shortTitle = shortTitle;
 		this.detailedMessage = detailedMessage;
 		this.iconPath = iconFilePath;
@@ -70,7 +71,7 @@ private JPanel sidePanel;
 		dialogPanel.add(sidePanel, BorderLayout.WEST);
 		dialogPanel.add(centralPanel, BorderLayout.CENTER);		
 		
-		this.setTitle("Rendering Limitations");
+		this.setTitle(dialogBoxTitle);
 		this.setModal(true);
 		this.setSize(600, 400);
 		this.getContentPane().add(dialogPanel);

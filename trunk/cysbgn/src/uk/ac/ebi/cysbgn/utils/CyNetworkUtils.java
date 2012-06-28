@@ -1,9 +1,13 @@
 package uk.ac.ebi.cysbgn.utils;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.sbgn.GlyphClazz;
 
 import uk.ac.ebi.cysbgn.enums.SBGNAttributes;
-
+import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
@@ -47,5 +51,37 @@ public class CyNetworkUtils {
 			return GlyphClazz.fromClazz(cyNodeClass);
 		else
 			return null;
+	}
+	
+	public static List<CyNode> getCyNodesBySbgnId(CyNetwork cyNetwork, String sbgnID){
+		
+		List<CyNode> cyNodes = new ArrayList<CyNode>();
+	
+		Iterator<CyNode> nodesIterator = cyNetwork.nodesIterator();
+		while( nodesIterator.hasNext() ){
+			CyNode cyNode = nodesIterator.next();
+			String nodeSbgnID = Cytoscape.getNodeAttributes().getStringAttribute(cyNode.getIdentifier(), SBGNAttributes.SBGN_ID.getName());
+			
+			if( sbgnID.equals(nodeSbgnID) )
+				cyNodes.add(cyNode);
+		}
+		
+		return cyNodes;
+	}
+	
+	public static List<CyEdge> getCyEdgesBySbgnId(CyNetwork cyNetwork, String sbgnID){
+		
+		List<CyEdge> cyEdges = new ArrayList<CyEdge>();
+	
+		Iterator<CyEdge> edgesIterator = cyNetwork.edgesIterator();
+		while( edgesIterator.hasNext() ){
+			CyEdge cyEdge = edgesIterator.next();
+			String cyEdgeSbgnID = Cytoscape.getEdgeAttributes().getStringAttribute(cyEdge.getIdentifier(), SBGNAttributes.SBGN_ID.getName());
+			
+			if( sbgnID.equals(cyEdgeSbgnID) )
+				cyEdges.add(cyEdge);
+		}
+		
+		return cyEdges;
 	}
 }

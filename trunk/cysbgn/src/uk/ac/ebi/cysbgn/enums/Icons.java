@@ -4,7 +4,8 @@ public enum Icons {
 
 	LOGO ("/logo.png"),
 	WARNING_LOGO ("/warningLogo.png"),
-	ERROR_LOGO ("/errorLogo.png");
+	ERROR_LOGO ("/errorLogo.png"),
+	CORRECT_LOGO ("/correctLogo.png");
 	
 	
 	private Icons(String iconPath){

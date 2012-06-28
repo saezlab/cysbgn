@@ -33,7 +33,7 @@ import cytoscape.task.util.TaskManager;
 public class MessagesHandler {
 	
 	public static void printMessageCommandLine(String message){
-		System.out.println("[SBGNPlugin] "+message+".");
+		System.out.println("[CySBGN] " + message + ".");
 	}
 
 	public static void showErrorMessageDialog(String message, String title, Exception e){

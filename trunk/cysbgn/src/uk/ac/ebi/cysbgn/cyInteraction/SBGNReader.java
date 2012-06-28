@@ -13,13 +13,7 @@
  ******************************************************************************/
 package uk.ac.ebi.cysbgn.cyInteraction;
 
-import java.io.File;
 import java.io.IOException;
-
-import javax.xml.bind.JAXBException;
-
-import org.sbgn.SbgnUtil;
-import org.xml.sax.SAXException;
 
 import uk.ac.ebi.cysbgn.CySBGN;
 import uk.ac.ebi.cysbgn.enums.Icons;
@@ -83,7 +77,7 @@ public class SBGNReader extends AbstractGraphReader{
 				taskMonitor.setStatus(e.getMessage());
 				taskMonitor.setException(e, "Error reading SBGN file.");
 			}else{
-				new MessageDialog(e.getMessage(), MessagesHandler.getStackTrace(e), Icons.ERROR_LOGO.getPath());
+				new MessageDialog("Rendering Limitations", e.getMessage(), MessagesHandler.getStackTrace(e), Icons.ERROR_LOGO.getPath());
 				logger.warn("Error reading SBGN file " + network.getTitle() + ": " + e.getMessage(), e);
 				throw new RuntimeException(e.getMessage());
 			}
