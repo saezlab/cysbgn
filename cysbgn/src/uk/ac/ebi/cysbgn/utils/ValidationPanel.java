@@ -2,6 +2,8 @@ package uk.ac.ebi.cysbgn.utils;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,11 +12,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import org.sbgn.schematron.Issue;
 
@@ -26,12 +31,15 @@ import cytoscape.CyNetwork;
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
 import cytoscape.view.CyNetworkView;
+import cytoscape.view.cytopanels.CytoPanelImp;
 
 @SuppressWarnings("serial")
 public class ValidationPanel extends JPanel{
 
+	private static final int[] ISSUE_TABLE_HEADERS_WIDTH = {80, 80, 500, 80};
 	private static final String[] ISSUE_TABLE_HEADERS = {"Severity", "SBGN ID", "Message", "Rule ID"};
 	private static final String[] RULES_TO_IGNORE = {"af10114"};
+	private static final String VALIDATION_PANEL_TITLE =  "CySBGN - Validation";
 	
 	private CySBGN plugin;
 	private List<Issue> issues;
@@ -57,18 +65,30 @@ public class ValidationPanel extends JPanel{
 		initComponents();
 		
 		fillIssuesTable();
-		validateCyNetworkAttributes();
+		refreshCyNetworkAttributes();
 		
+		showPanel();
 		showDialog();
+	}
+	
+	private void showPanel(){
+		int index = ((CytoPanelImp) Cytoscape.getDesktop().getCytoPanel(SwingConstants.SOUTH)).indexOfComponent(VALIDATION_PANEL_TITLE);
+		
+		if( index != -1 )
+			((CytoPanelImp) Cytoscape.getDesktop().getCytoPanel(SwingConstants.SOUTH)).remove(index);
+		
+		((CytoPanelImp) Cytoscape.getDesktop().getCytoPanel(SwingConstants.SOUTH)).add(VALIDATION_PANEL_TITLE, ValidationPanel.this);
+		index = ((CytoPanelImp) Cytoscape.getDesktop().getCytoPanel(SwingConstants.SOUTH)).indexOfComponent(VALIDATION_PANEL_TITLE);
+		((CytoPanelImp) Cytoscape.getDesktop().getCytoPanel(SwingConstants.SOUTH)).setSelectedIndex(index);
+		
 	}
 	
 	private void showDialog(){
 		if( issues.size() == 0 ){
-			String detailedMessage = "No issues were found for " + cyNetworkView.getTitle() + ".";
-			new MessageDialog("SBGN-ML Validation", "No issues were found!", detailedMessage, Icons.CORRECT_LOGO.getPath());
+			new MessageDialog("SBGN-ML Validation", "No issues were found!", null, Icons.CORRECT_LOGO.getPath());
 		}else{
 			String detailedMessage = "Check please CySBGN validation panel below.";
-			new MessageDialog("SBGN-ML Validation", issues.size() + " issues were found for " + cyNetworkView.getTitle(), detailedMessage, Icons.ERROR_LOGO.getPath());
+			new MessageDialog("SBGN-ML Validation", "The validation found " + numberOfIssuesToConsider() + " issues.\n Check CySBGN validation panel below.", null, Icons.ERROR_LOGO.getPath());
 		}
 	}
 
@@ -96,29 +116,42 @@ public class ValidationPanel extends JPanel{
 		issuesTable = new JTable(issuesTableModel);
 		issuesTableScrollPane = new JScrollPane(issuesTable);
 	
+		issuesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		issuesTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent event) {
-				
-				List<CyNode> nodesToSelect = new ArrayList<CyNode>();
-				List<CyEdge> edgesToSelect = new ArrayList<CyEdge>();
-				
-				int[] selectedRows = issuesTable.getSelectedRows();
-				for(int selectedRow : selectedRows){
-					String sbgnID = (String) issuesTable.getValueAt(selectedRow, 1);
-					System.out.println(sbgnID);
-					
-					nodesToSelect.addAll( CyNetworkUtils.getCyNodesBySbgnId(cyNetworkView.getNetwork(), sbgnID) );
-					edgesToSelect.addAll( CyNetworkUtils.getCyEdgesBySbgnId(cyNetworkView.getNetwork(), sbgnID) );
-				}
-				
-				cyNetworkView.getNetwork().unselectAllEdges();
-				cyNetworkView.getNetwork().unselectAllNodes();
-				
-				cyNetworkView.getNetwork().setSelectedNodeState(nodesToSelect, true);
-				cyNetworkView.getNetwork().setSelectedEdgeState(edgesToSelect, true);
+				if( !event.getValueIsAdjusting() )
+					issueRowSelected();
 			}
 		});
+		issuesTable.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent event){}
+			
+			@Override
+			public void mousePressed(MouseEvent event){}
+			
+			@Override
+			public void mouseExited(MouseEvent event){}
+			
+			@Override
+			public void mouseEntered(MouseEvent event){}
+
+			@Override
+			public void mouseClicked(MouseEvent event){
+//				if( event.getButton() == MouseEvent.NOBUTTON )
+					issueRowSelected();
+			}
+		});
+		
+		// Set table headers size
+		issuesTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        int index = 0;
+        while (index < ISSUE_TABLE_HEADERS.length) {
+            TableColumn a = issuesTable.getColumnModel().getColumn(index);
+            a.setPreferredWidth(ISSUE_TABLE_HEADERS_WIDTH[index]);
+            index++;
+        }
 		
 		issuesPanel.add(issuesTableScrollPane, BorderLayout.CENTER);
 		
@@ -126,6 +159,29 @@ public class ValidationPanel extends JPanel{
 		setLayout(new BorderLayout());
 		add(titlePanel, BorderLayout.NORTH);
 		add(issuesPanel, BorderLayout.CENTER);
+	}
+	
+	
+	private void issueRowSelected(){
+		cyNetworkView.getNetwork().unselectAllEdges();
+		cyNetworkView.getNetwork().unselectAllNodes();
+
+		List<CyNode> nodesToSelect = new ArrayList<CyNode>();
+		List<CyEdge> edgesToSelect = new ArrayList<CyEdge>();
+
+		int[] selectedRows = issuesTable.getSelectedRows();
+		for(int selectedRow : selectedRows){
+			String sbgnID = (String) issuesTable.getValueAt(selectedRow, 1);
+
+			nodesToSelect.addAll( CyNetworkUtils.getCyNodesBySbgnId(cyNetworkView.getNetwork(), sbgnID) );
+			edgesToSelect.addAll( CyNetworkUtils.getCyEdgesBySbgnId(cyNetworkView.getNetwork(), sbgnID) );
+		}
+
+		cyNetworkView.getNetwork().setSelectedNodeState(nodesToSelect, true);
+		cyNetworkView.getNetwork().setSelectedEdgeState(edgesToSelect, true);
+
+		cyNetworkView.redrawGraph(true, true);
+		cyNetworkView.updateView();
 	}
 	
 	private void fillIssuesTable(){
@@ -137,7 +193,7 @@ public class ValidationPanel extends JPanel{
 		}
 	}
 	
-	private void validateCyNetworkAttributes(){
+	private void refreshCyNetworkAttributes(){
 		CyNetwork cyNetwork = cyNetworkView.getNetwork();
 		
 		// Refresh nodes validation attribute
@@ -148,7 +204,7 @@ public class ValidationPanel extends JPanel{
 			
 			boolean isCorrect = true;
 			for(int i=0; i<issues.size() && isCorrect; i++)
-				if( issues.get(i).getAboutId().equals(sbgnID) )
+				if( issues.get(i).getAboutId().equals(sbgnID) && ignoreIssue(issues.get(i)) )
 					isCorrect = false;
 			
 			if( isCorrect )
@@ -165,7 +221,7 @@ public class ValidationPanel extends JPanel{
 			
 			boolean isCorrect = true;
 			for(int i=0; i<issues.size() && isCorrect; i++)
-				if( issues.get(i).getAboutId().equals(sbgnID) )
+				if( issues.get(i).getAboutId().equals(sbgnID) && ignoreIssue(issues.get(i)) )
 					isCorrect = false;
 			
 			if( isCorrect )
@@ -182,5 +238,13 @@ public class ValidationPanel extends JPanel{
 				return true;
 		
 		return false;
+	}
+	
+	private int numberOfIssuesToConsider(){
+		int count = 0;
+		for(Issue issue : issues)
+			if( !ignoreIssue(issue) )
+				count++;
+		return count;
 	}
 }

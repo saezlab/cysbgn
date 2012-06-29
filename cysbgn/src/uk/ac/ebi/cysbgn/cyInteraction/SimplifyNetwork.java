@@ -3,7 +3,10 @@ package uk.ac.ebi.cysbgn.cyInteraction;
 import java.awt.event.ActionEvent;
 
 import uk.ac.ebi.cysbgn.CySBGN;
+import uk.ac.ebi.cysbgn.enums.Icons;
+import uk.ac.ebi.cysbgn.io.MessagesHandler;
 import uk.ac.ebi.cysbgn.io.SBGNMLReader;
+import uk.ac.ebi.cysbgn.utils.MessageDialog;
 import uk.ac.ebi.cysbgn.visualization.SBGNVisualStyle;
 import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
@@ -25,6 +28,7 @@ public class SimplifyNetwork extends CytoscapeAction{
 	public void actionPerformed(ActionEvent arg0) {
 		try{
 			String currentNetworkID = Cytoscape.getCurrentNetwork().getIdentifier();
+			
 			if( (currentNetworkID != null) && (plugin.getSbgn(currentNetworkID) != null) ){ 
 				SBGNMLReader reader = new SBGNMLReader(true);
 
@@ -34,10 +38,11 @@ public class SimplifyNetwork extends CytoscapeAction{
 				reader.readNetwork(plugin.getSbgn(currentNetworkID).getMap(), simplifiedNetwork);
 				
 				SBGNVisualStyle visualStyle = new SBGNVisualStyle(plugin);
-				visualStyle.applyVisualStyle();
-				
+				visualStyle.applyVisualStyle();	
 			}
+			
 		}catch(Exception e){
+			new MessageDialog("Network simplification", e.getMessage(), MessagesHandler.getStackTrace(e), Icons.ERROR_LOGO.getPath());
 			e.printStackTrace();
 		}
 

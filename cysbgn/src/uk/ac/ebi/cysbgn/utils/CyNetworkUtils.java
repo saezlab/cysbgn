@@ -71,7 +71,7 @@ public class CyNetworkUtils {
 	
 	public static List<CyEdge> getCyEdgesBySbgnId(CyNetwork cyNetwork, String sbgnID){
 		
-		List<CyEdge> cyEdges = new ArrayList<CyEdge>();
+		List<CyEdge> cyNodes = new ArrayList<CyEdge>();
 	
 		Iterator<CyEdge> edgesIterator = cyNetwork.edgesIterator();
 		while( edgesIterator.hasNext() ){
@@ -79,9 +79,9 @@ public class CyNetworkUtils {
 			String cyEdgeSbgnID = Cytoscape.getEdgeAttributes().getStringAttribute(cyEdge.getIdentifier(), SBGNAttributes.SBGN_ID.getName());
 			
 			if( sbgnID.equals(cyEdgeSbgnID) )
-				cyEdges.add(cyEdge);
+				cyNodes.add(cyEdge);
 		}
 		
-		return cyEdges;
+		return cyNodes;
 	}
 }

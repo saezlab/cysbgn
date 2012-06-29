@@ -64,7 +64,7 @@ public class SBGNMLReader{
 	 * HashMap<SBGN_ID, Cytoscape_ID>
 	 */
 	private HashMap<String,String> nodesIDs;
-	
+	private static final String REMOVE_NODE_AND_ARC = "remove"; 
 	
 	private HashMap<String, String> simplifiedGlypihs;
 	
@@ -168,6 +168,11 @@ public class SBGNMLReader{
 		// If Analysis style ON check which elements to create
 		boolean createInnerGlyphs = true;
 		if( isAnalysisStyle ){
+			if( clone ){
+				simplifiedGlypihs.put(glyph.getId(), REMOVE_NODE_AND_ARC);
+				return null;
+			}
+			
 			switch( nodeClass ){
 				case SUBMAP : ;
 					createInnerGlyphs = false;
@@ -197,7 +202,9 @@ public class SBGNMLReader{
 				case ANNOTATION: ;
 				case UNIT_OF_INFORMATION : ;
 				case STATE_VARIABLE : ;
-				case COMPARTMENT : 
+				case TAG : ;
+				case COMPARTMENT :
+					simplifiedGlypihs.put(glyph.getId(), REMOVE_NODE_AND_ARC);
 					return null;
 				default: ;
 			}
@@ -397,8 +404,16 @@ public class SBGNMLReader{
 						source = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(sourceNodeID));
 						
 						// Check if the Glyph was removed due to simplification
-						if(target == null)
-							target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get( simplifiedGlypihs.get(sourceNodeID) ));
+						if( (isAnalysisStyle) && (source == null) ){
+							String rederectingSource = simplifiedGlypihs.get(sourceNodeID);
+							
+							// If the source node was removed and no alternative source was given the arc is not added
+							if( (rederectingSource != null) && rederectingSource.equals(REMOVE_NODE_AND_ARC) )
+								return;
+							
+							if( rederectingSource != null)
+								source = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get( rederectingSource ));
+						}
 						
 						if(source == null){ // No Node found, search node by port
 							String glyphID = getNodeByPort((Port)arc.getSource(), diagramMap);
@@ -449,8 +464,16 @@ public class SBGNMLReader{
 						target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get(targetNodeID));
 		
 						// Check if the Glyph was removed due to simplification
-						if(target == null)
-							target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get( simplifiedGlypihs.get(targetNodeID) ));
+						if( (isAnalysisStyle) && (target == null) ){
+							String rederectingTarget = simplifiedGlypihs.get(targetNodeID);
+							
+							// If the target node was removed and no alternative target was given the arc is not added
+							if( (rederectingTarget != null) && rederectingTarget.equals(REMOVE_NODE_AND_ARC) )
+								return;
+							
+							if( rederectingTarget != null)
+								target = CyNetworkUtils.getNode(cyNetwork, nodesIDs.get( rederectingTarget ));
+						}
 						
 						if(target == null){
 							String glyphID = getNodeByPort((Port)arc.getTarget(), diagramMap);
