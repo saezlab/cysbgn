@@ -2,6 +2,7 @@ package uk.ac.ebi.cysbgn.utils;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -109,9 +110,13 @@ private JPanel sidePanel;
 		topPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
 		
 		titleLabel = new JLabel("");
+		titleLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		titleLabel.setText(shortTitle);
 		
 		detailsButton = new JButton("Details");
+		if( detailedMessage == null)
+			detailsButton.setEnabled(false);
+		
 		detailsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

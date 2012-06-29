@@ -97,7 +97,7 @@ public class CySBGN extends CytoscapePlugin {
 		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction) validator);
 		
 		initialiseVisualStyle();
-	
+		
 //		JPanel testPanel = new JPanel(new BorderLayout());
 //		JLabel selected = new JLabel("Nothing selected");
 //		testPanel.add(selected, BorderLayout.CENTER);
@@ -141,8 +141,6 @@ public class CySBGN extends CytoscapePlugin {
 		Cytoscape.getNodeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.NODE_CLONE_MARKER.getName());
 		Cytoscape.getNodeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.VALIDATION.getName());
 		
-		Cytoscape.getNodeAttributes().setAttributeDescription(SBGNAttributes.VALIDATION.getName(), "Check CySBGN validation panel to see any issues associated");
-		
 		// Add Edges attributes
 		Cytoscape.getEdgeAttributes().setAttribute(dummyNodeID, SBGNAttributes.CLASS.getName(), new String());
 		Cytoscape.getEdgeAttributes().setAttribute(dummyNodeID, SBGNAttributes.SBGN_ID.getName(), new String());
@@ -154,9 +152,8 @@ public class CySBGN extends CytoscapePlugin {
 		Cytoscape.getEdgeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.EDGE_ANCHORS.getName());
 		Cytoscape.getEdgeAttributes().deleteAttribute(dummyNodeID, SBGNAttributes.VALIDATION.getName());
 		
-		Cytoscape.getEdgeAttributes().setAttributeDescription(SBGNAttributes.VALIDATION.getName(), "Check CySBGN validation panel to see any issues associated");
 	}
-
+	
 	private void testMethod() {
 		File sbgnDiagram = new File("/Users/emanuel/SBGNFiles/AF/submap.sbgn");
 		LoadNetworkTask.loadFile(sbgnDiagram, true);

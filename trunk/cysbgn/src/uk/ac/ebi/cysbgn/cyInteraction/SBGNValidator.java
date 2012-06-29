@@ -4,12 +4,12 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.List;
 
-import javax.swing.SwingConstants;
-
 import org.sbgn.schematron.Issue;
 import org.sbgn.schematron.SchematronValidator;
 
 import uk.ac.ebi.cysbgn.CySBGN;
+import uk.ac.ebi.cysbgn.enums.Icons;
+import uk.ac.ebi.cysbgn.utils.MessageDialog;
 import uk.ac.ebi.cysbgn.utils.ValidationPanel;
 import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
@@ -17,7 +17,6 @@ import cytoscape.logger.CyLogger;
 import cytoscape.task.TaskMonitor;
 import cytoscape.util.CytoscapeAction;
 import cytoscape.view.CyNetworkView;
-import cytoscape.view.cytopanels.CytoPanelImp;
 
 @SuppressWarnings("serial")
 public class SBGNValidator extends CytoscapeAction{
@@ -40,30 +39,31 @@ public class SBGNValidator extends CytoscapeAction{
 		try{
 			CyNetwork currentNetwork = Cytoscape.getCurrentNetwork();
 			CyNetworkView currentNetworkView = Cytoscape.getCurrentNetworkView();
+			String sbgnFilePath = plugin.getSbgnML(currentNetwork.getIdentifier());
 			
-			if( currentNetwork != null){
-				String sbgnFilePath = plugin.getSbgnML(currentNetwork.getIdentifier());
-				System.out.println(sbgnFilePath);
+			if( (currentNetwork != null) && (sbgnFilePath != null) ){
 				File sbgnFile = new File(sbgnFilePath);
 				
 				List<Issue> issues = SchematronValidator.validate(sbgnFile);
 				
-				for( Issue issue : issues){
-					System.out.print(issue.getRuleId()+": ");
-					System.out.println(issue);
-				}
-				
 				// Create and show the validation panel
 				ValidationPanel validationPanel = new ValidationPanel(plugin, issues, currentNetworkView);
-				((CytoPanelImp) Cytoscape.getDesktop().getCytoPanel(SwingConstants.SOUTH)).add("CySBGN", validationPanel);
 				
-				int index = ((CytoPanelImp) Cytoscape.getDesktop().getCytoPanel(SwingConstants.SOUTH)).indexOfComponent("CySBGN");
-				((CytoPanelImp) Cytoscape.getDesktop().getCytoPanel(SwingConstants.SOUTH)).setSelectedIndex(index);
+			}else{
+				String detailedMessage = 
+						"Either no network is selected or the network selected is not\nimported from a SBGN-ML " +
+						"file.\n\nPlease please select a network imported from a SBGN-ML file.";
 				
+				new MessageDialog("SBGN Network Simplification", "Invalid network selected", detailedMessage, Icons.ERROR_LOGO.getPath());
 			}
 		}catch(Exception e){
 			e.printStackTrace();
-//			new MessageDialog(e.getMessage(), MessagesHandler.getStackTrace(e), Icons.ERROR_LOGO.getPath());
+			String detailedMessage = 
+					"Either no network is selected or the network selected is not\nimported from a SBGN-ML " +
+					"file.\n\nPlease please select a network imported from a SBGN-ML file.";
+			
+			new MessageDialog("SBGN Network Simplification", "Invalid network selected", detailedMessage, Icons.ERROR_LOGO.getPath());
+			
 			logger.warn("Error validating SBGN file : " + e.getMessage(), e);
 		}
 	}
