@@ -17,16 +17,15 @@ import java.io.File;
 import java.util.Iterator;
 
 import org.sbgn.SbgnUtil;
-import org.sbgn.bindings.Arc;
-import org.sbgn.bindings.Bbox;
 import org.sbgn.bindings.Glyph;
 import org.sbgn.bindings.Glyph.Clone;
 import org.sbgn.bindings.Label;
-import org.sbgn.bindings.Map;
 import org.sbgn.bindings.Sbgn;
 
 import uk.ac.ebi.cysbgn.CySBGN;
 import uk.ac.ebi.cysbgn.enums.SBGNAttributes;
+import uk.ac.ebi.cysbgn.utils.CyNetworkViewUtils;
+import uk.ac.ebi.cysbgn.utils.SbgnDiagramUtils;
 import cytoscape.CyNetwork;
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
@@ -86,13 +85,16 @@ public class SBGNMLWriter implements Task{
 			// Create SBGN-ML file
 			File changedFile = new File(filePath);
 			
+			//
+			CyNetworkViewUtils.refreshNodesAttributes(cyNetworkView);
+			
 			// Apply nodes modifications
 			Iterator<CyNode> nodeIterator = cyNetwork.nodesIterator();
 			while( nodeIterator.hasNext() ){
 				CyNode cyNode = nodeIterator.next();
 				String nodeSbgnID = Cytoscape.getNodeAttributes().getStringAttribute(cyNode.getIdentifier(), SBGNAttributes.SBGN_ID.getName());
 				
-				Glyph nodeGlyph = getGlyph(nodeSbgnID, importedSbgn.getMap());
+				Glyph nodeGlyph = SbgnDiagramUtils.getGlyph(nodeSbgnID, importedSbgn.getMap());
 				if( nodeGlyph != null ){
 					saveCyNodeAttributes(cyNode, nodeGlyph);
 				}
@@ -116,12 +118,10 @@ public class SBGNMLWriter implements Task{
 		int x = Cytoscape.getNodeAttributes().getIntegerAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_POS_X.getName());
 		int y = Cytoscape.getNodeAttributes().getIntegerAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_POS_Y.getName());
 		
-		Bbox bbox = new Bbox();
-		bbox.setW((float) width);
-		bbox.setH((float) height);
-		bbox.setX( CySBGN.convert_X_coord_Cytoscape_to_SBGN(x, width) );
-		bbox.setY( CySBGN.convert_Y_coord_Cytoscape_to_SBGN(y, height) );
-		glyph.setBbox(bbox);
+		glyph.getBbox().setW(( float) width);
+		glyph.getBbox().setH( (float) height);
+		glyph.getBbox().setX( CySBGN.convert_X_coord_Cytoscape_to_SBGN(x, width) );
+		glyph.getBbox().setY( CySBGN.convert_Y_coord_Cytoscape_to_SBGN(y, height) );
 		
 		// Store clone marker
 		if( Cytoscape.getNodeAttributes().getBooleanAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName()) )
@@ -135,19 +135,5 @@ public class SBGNMLWriter implements Task{
 			glyph.setLabel(label);	
 		}
 	}
-	
-	
-	private Glyph getGlyph(String glyphID, Map diagram){
-		for(Glyph glyph : diagram.getGlyph())
-			if( glyph.getId().equals(glyphID) )
-				return glyph;
-		return null;
-	}
-	
-	private Arc getArc(String arcID, Map diagram){
-		for(Arc arc : diagram.getArc())
-			if( arc.getId().equals(arcID) )
-				return arc;
-		return null;
-	}
+
 }
