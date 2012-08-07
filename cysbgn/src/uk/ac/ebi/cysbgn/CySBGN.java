@@ -13,30 +13,23 @@
  ******************************************************************************/
 package uk.ac.ebi.cysbgn;
 
-import java.awt.BorderLayout;
 import java.io.File;
 import java.util.HashMap;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-
-import org.sbgn.bindings.SBGNBase;
 import org.sbgn.bindings.Sbgn;
 
+import uk.ac.ebi.cysbgn.cyInteraction.SBGNTest;
 import uk.ac.ebi.cysbgn.cyInteraction.SBGNValidator;
-import uk.ac.ebi.cysbgn.cyInteraction.SimplifyNetwork;
 import uk.ac.ebi.cysbgn.cyInteraction.SBGNWriter;
 import uk.ac.ebi.cysbgn.cyInteraction.SbgnFilter;
+import uk.ac.ebi.cysbgn.cyInteraction.SimplifyNetwork;
 import uk.ac.ebi.cysbgn.enums.SBGNAttributes;
-import uk.ac.ebi.cysbgn.utils.CyEdgeAttrUtils;
 import uk.ac.ebi.cysbgn.visualization.SBGNVisualStyle;
 import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
 import cytoscape.actions.LoadNetworkTask;
 import cytoscape.plugin.CytoscapePlugin;
 import cytoscape.util.CytoscapeAction;
-import cytoscape.view.cytopanels.CytoPanelImp;
 
 /**
  * This is the main class of the SBGNplugin and it extends the CytoscapePlugin
@@ -95,6 +88,9 @@ public class CySBGN extends CytoscapePlugin {
 		
 		SBGNValidator validator = new SBGNValidator(this);
 		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction) validator);
+		
+		SBGNTest test = new SBGNTest(this);
+		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction) test);
 		
 		initialiseVisualStyle();
 		

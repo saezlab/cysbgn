@@ -3,8 +3,13 @@ package uk.ac.ebi.cysbgn.utils;
 import org.sbgn.bindings.Arcgroup;
 import org.sbgn.bindings.Glyph;
 import org.sbgn.bindings.Map;
+import org.sbgn.bindings.Sbgn;
 
 public class SbgnDiagramUtils {
+	
+	public static Glyph getGlyph(String glyphID, Sbgn map){
+		return getGlyph(glyphID, map.getMap());
+	}
 	
 	public static Glyph getGlyph(String glyphID, Map diagram){
 		// Check Glyph

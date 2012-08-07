@@ -16,12 +16,10 @@ public class CyNetworkViewUtils {
 		Iterator<NodeView> nodesIterator = cyNetworkView.getNodeViewsIterator();
 		while( nodesIterator.hasNext() ){
 			NodeView nodeView = nodesIterator.next();
-			
+
 			// Refresh nodes positions
 			Cytoscape.getNodeAttributes().setAttribute(nodeView.getNode().getIdentifier(), SBGNAttributes.NODE_POS_X.getName(), ((int)nodeView.getXPosition()) );
 			Cytoscape.getNodeAttributes().setAttribute(nodeView.getNode().getIdentifier(), SBGNAttributes.NODE_POS_Y.getName(), ((int)nodeView.getYPosition()) );
-			
 		}
-		
 	}
 }

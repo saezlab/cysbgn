@@ -1,16 +1,12 @@
 package uk.ac.ebi.cysbgn.cyInteraction;
 
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.util.List;
-
-import org.sbgn.schematron.Issue;
-import org.sbgn.schematron.SchematronValidator;
 
 import uk.ac.ebi.cysbgn.CySBGN;
 import uk.ac.ebi.cysbgn.enums.Icons;
+import uk.ac.ebi.cysbgn.io.MessagesHandler;
 import uk.ac.ebi.cysbgn.utils.MessageDialog;
-import uk.ac.ebi.cysbgn.utils.ValidationPanel;
+import uk.ac.ebi.cysbgn.utils.SBGNMLValidationTask;
 import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
 import cytoscape.logger.CyLogger;
@@ -42,12 +38,9 @@ public class SBGNValidator extends CytoscapeAction{
 			String sbgnFilePath = plugin.getSbgnML(currentNetwork.getIdentifier());
 			
 			if( (currentNetwork != null) && (sbgnFilePath != null) ){
-				File sbgnFile = new File(sbgnFilePath);
 				
-				List<Issue> issues = SchematronValidator.validate(sbgnFile);
-				
-				// Create and show the validation panel
-				ValidationPanel validationPanel = new ValidationPanel(plugin, issues, currentNetworkView);
+				SBGNMLValidationTask valiadatorTask = new SBGNMLValidationTask(plugin, sbgnFilePath, currentNetworkView);
+				MessagesHandler.executeTask(valiadatorTask, true);
 				
 			}else{
 				String detailedMessage = 

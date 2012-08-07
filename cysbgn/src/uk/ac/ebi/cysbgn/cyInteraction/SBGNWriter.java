@@ -30,7 +30,6 @@ public class SBGNWriter extends CytoscapeAction{
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		CyNetwork currentNetwork = Cytoscape.getCurrentNetwork();
 		CyNetworkView currentNetworkView = Cytoscape.getCurrentNetworkView();
 		
 		CyFileFilter[] filters = new CyFileFilter[1];
@@ -38,7 +37,7 @@ public class SBGNWriter extends CytoscapeAction{
 		File selectedFolder = FileUtil.getFile("Export SBGN network", FileUtil.SAVE, filters);
 		
 		if( selectedFolder != null ){	
-			SBGNMLWriter sbgnWriter = new SBGNMLWriter(plugin, currentNetwork, currentNetworkView, selectedFolder.getAbsolutePath());
+			SBGNMLWriter sbgnWriter = new SBGNMLWriter(plugin, currentNetworkView, selectedFolder.getAbsolutePath());
 			MessagesHandler.executeTask(sbgnWriter, false);
 		}
 	}
