@@ -320,6 +320,9 @@ public class SBGNVisualStyle extends VisualStyle{
 		while( nodesIterator.hasNext() ){
 			NodeView nodeView = nodesIterator.next();
 			
+			
+			nodeView.setSelectedPaint(new Color(0f,0f,0f,0f));
+			
 			int posX = Cytoscape.getNodeAttributes().getIntegerAttribute(nodeView.getNode().getIdentifier(), SBGNAttributes.NODE_POS_X.getName());
 			int posY = Cytoscape.getNodeAttributes().getIntegerAttribute(nodeView.getNode().getIdentifier(), SBGNAttributes.NODE_POS_Y.getName());
 			

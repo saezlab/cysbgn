@@ -50,10 +50,10 @@ public class SBGNMLWriter implements Task{
 	private TaskMonitor taskMonitor;
 	
 	
-	public SBGNMLWriter(CySBGN plugin, CyNetwork cyNetwork, CyNetworkView cyNetworkView, String filePath){
+	public SBGNMLWriter(CySBGN plugin, CyNetworkView cyNetworkView, String filePath){
 		this.plugin = plugin;
 		this.filePath = filePath + CySBGN.SBGN_EXTENSION;
-		this.cyNetwork = cyNetwork;
+		this.cyNetwork = cyNetworkView.getNetwork();
 		this.cyNetworkView = cyNetworkView;
 	}
 	
