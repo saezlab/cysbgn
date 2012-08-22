@@ -6,7 +6,6 @@ import java.io.File;
 import uk.ac.ebi.cysbgn.CySBGN;
 import uk.ac.ebi.cysbgn.io.MessagesHandler;
 import uk.ac.ebi.cysbgn.io.SBGNMLWriter;
-import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
 import cytoscape.util.CyFileFilter;
 import cytoscape.util.CytoscapeAction;

@@ -15,15 +15,15 @@ import cytoscape.util.CytoscapeAction;
 import cytoscape.util.FileUtil;
 
 @SuppressWarnings("serial")
-public class SBGNTest extends CytoscapeAction{
+public class SBGNConverter extends CytoscapeAction{
 
 	protected CySBGN plugin;
 	
 	private TaskMonitor taskMonitor;	
-	private static CyLogger logger = CyLogger.getLogger(SBGNTest.class);
+	private static CyLogger logger = CyLogger.getLogger(SBGNConverter.class);
 	
 	
-	public SBGNTest(CySBGN plugin){
+	public SBGNConverter(CySBGN plugin){
 		super("SBML to SBGN...");
 		setPreferredMenu(CySBGN.SBGN_MENU);
 		
@@ -39,13 +39,13 @@ public class SBGNTest extends CytoscapeAction{
 			File sbmlFile = FileUtil.getFile("Select SBML model file", FileUtil.LOAD, filters);
 
 			if( sbmlFile != null){
-				Sbml2SbgnTask convert = new Sbml2SbgnTask(plugin, sbmlFile);
-				MessagesHandler.executeTask(convert, false);
+				Sbml2SbgnTask converterTask = new Sbml2SbgnTask(plugin, sbmlFile);
+				MessagesHandler.executeTask(converterTask, false);
 			}
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			String detailedMessage = "Error importing hepatonet1 sbml file!";
+			String detailedMessage = "Error!";
 			
 			new MessageDialog("Error importing hepatonet1 sbml file", "Error importing hepatonet1 sbml file", detailedMessage, Icons.ERROR_LOGO.getPath());
 			logger.warn("Error Hepatonet1 SBML file : " + e.getMessage(), e);

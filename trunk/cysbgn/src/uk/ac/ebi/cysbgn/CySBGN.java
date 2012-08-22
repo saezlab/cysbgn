@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 import org.sbgn.bindings.Sbgn;
 
-import uk.ac.ebi.cysbgn.cyInteraction.SBGNTest;
+import uk.ac.ebi.cysbgn.cyInteraction.SBGNConverter;
 import uk.ac.ebi.cysbgn.cyInteraction.SBGNValidator;
 import uk.ac.ebi.cysbgn.cyInteraction.SBGNWriter;
 import uk.ac.ebi.cysbgn.cyInteraction.SbgnFilter;
@@ -89,7 +89,7 @@ public class CySBGN extends CytoscapePlugin {
 		SBGNValidator validator = new SBGNValidator(this);
 		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction) validator);
 		
-		SBGNTest test = new SBGNTest(this);
+		SBGNConverter test = new SBGNConverter(this);
 		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction) test);
 		
 		initialiseVisualStyle();

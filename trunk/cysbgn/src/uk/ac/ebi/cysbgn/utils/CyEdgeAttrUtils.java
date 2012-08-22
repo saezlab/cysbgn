@@ -40,6 +40,9 @@ public class CyEdgeAttrUtils {
 	public static List<Point2D> getAnchorAttribute(String anchors){
 		List<Point2D> anchorsList = new ArrayList<Point2D>();
 		
+		if( anchors == null )
+			return anchorsList;
+		
 		if( anchors.equals("[]") )
 			return anchorsList;
 		
