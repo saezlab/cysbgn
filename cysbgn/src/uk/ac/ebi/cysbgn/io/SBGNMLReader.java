@@ -91,18 +91,32 @@ public class SBGNMLReader{
 		File file = new File(networkFilePath);
 		File targetFile = file;
 
-		// Check file version
-		int version = SbgnVersionFinder.getVersion(targetFile);
-		if (version == 1){
-			targetFile = File.createTempFile(file.getName(), ".sbgn");
-			System.out.println ("Converted to " + targetFile);
-			ConvertMilestone1to2.convert (file, targetFile);
-		}
+		File versionFile = checkFileVersion(targetFile); 
+		if( versionFile != null )
+			targetFile = versionFile;
 
-		map = SbgnUtil.readFromFile(targetFile);
+		SbgnUtil sbgnUtil = new SbgnUtil();
+		map = sbgnUtil.readFromFile(targetFile);
 		CyNetwork network = readNetwork(map.getMap(), cyNetwork);
 
 		return network;
+	}
+	
+	public File checkFileVersion(File file){
+		try{
+			//Check file version
+			File sbgnFile = file;
+			int version = SbgnVersionFinder.getVersion(file);
+			if (version == 1){
+				sbgnFile = File.createTempFile(file.getName(), ".sbgn");
+				System.out.println ("Converted to " + file);
+				ConvertMilestone1to2.convert (file, file);
+			}
+			
+			return sbgnFile;
+		}catch(Exception e){
+			return null;
+		}
 	}
 
 	/**

@@ -21,6 +21,7 @@ import uk.ac.ebi.cysbgn.io.MessagesHandler;
 import uk.ac.ebi.cysbgn.io.SBGNMLReader;
 import uk.ac.ebi.cysbgn.utils.LimitationDialog;
 import uk.ac.ebi.cysbgn.utils.MessageDialog;
+import uk.ac.ebi.cysbgn.visualization.DrawCustomNodes;
 import uk.ac.ebi.cysbgn.visualization.SBGNVisualStyle;
 import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
@@ -59,26 +60,29 @@ public class SBGNReader extends AbstractGraphReader{
 		
 	}
 	
-	public void doPostProcessing(CyNetwork network){
+	public void doPostProcessing(CyNetwork cyNetwork){
 		SBGNMLReader newReader = new SBGNMLReader(false);
 		try {
-			network = newReader.read(fileName, network);
+			cyNetwork = newReader.read(fileName, cyNetwork);
 			
 			visualStyle.applyVisualStyle();
 			
-			plugin.addNetwork(network, newReader.getMap(), fileName);
+			DrawCustomNodes costumNodeShapes = new DrawCustomNodes(plugin);
+			costumNodeShapes.drawCustomNodes(cyNetwork, Cytoscape.getNetworkView(cyNetwork.getIdentifier()));
+			
+			plugin.addNetwork(cyNetwork, newReader.getMap(), fileName);
 			
 			if( CySBGN.SHOW_LIMITATIONS_PANEL )
 				new LimitationDialog();
 			
 		} catch (Exception e) {
-			Cytoscape.destroyNetwork(network);
+			Cytoscape.destroyNetwork(cyNetwork);
 			if( taskMonitor != null){
 				taskMonitor.setStatus(e.getMessage());
 				taskMonitor.setException(e, "Error reading SBGN file.");
 			}else{
 				new MessageDialog("Rendering Limitations", e.getMessage(), MessagesHandler.getStackTrace(e), Icons.ERROR_LOGO.getPath());
-				logger.warn("Error reading SBGN file " + network.getTitle() + ": " + e.getMessage(), e);
+				logger.warn("Error reading SBGN file " + cyNetwork.getTitle() + ": " + e.getMessage(), e);
 				throw new RuntimeException(e.getMessage());
 			}
 			
