@@ -33,7 +33,7 @@ public class ArcSegmentationAlgorithm {
 
 	
 	private static final double ABSOLUTE_STIMULATION_DISTANCE = 11.0;
-	private static final double ABSOLUTE_INHIBITION_DISTANCE = 1.0;
+	private static final double ABSOLUTE_INHIBITION_DISTANCE = 0.5;
 	private static final double NECESSARY_STIMULATION_DISTANCE = 13.0;
 	private static final double SAFETY_DISTANCE_NODE_ARC_INTERSECTION = 10.0;
 	

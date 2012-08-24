@@ -369,8 +369,10 @@ public class SBGNVisualStyle extends VisualStyle{
         cyNetworkView.setVisualStyle(vs.getName());
         manager.setVisualStyle(vs);
         
-        cyNetworkView.setBackgroundPaint(Color.WHITE);
+        Cytoscape.getVisualMappingManager().getVisualStyle().getGlobalAppearanceCalculator().setDefaultBackgroundColor(Color.WHITE);
+        cyNetworkView.redrawGraph(true, true);
         
         costumNodeShapes.drawCustomNodes(cyNetwork, cyNetworkView);
+        cyNetworkView.redrawGraph(true, true);
 	}
 }

@@ -55,6 +55,7 @@ public class CySBGN extends CytoscapePlugin {
 	public static boolean SHOW_LIMITATIONS_PANEL = true;
 	public static final String SBGN_MENU = "Plugins.CySBGN";
 	public static final String SBGN_EXTENSION = ".sbgn";
+	public static final String WEB_PAGE_LINK = "http://www.ebi.ac.uk/saezrodriguez/cno/cysbgn/";
 
 	private SBGNVisualStyle visualStyle;
 	

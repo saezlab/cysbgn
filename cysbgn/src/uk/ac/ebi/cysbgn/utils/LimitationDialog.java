@@ -140,7 +140,7 @@ public class LimitationDialog extends JDialog{
 	private String createLimitationsTitle(){
 		String briefExplanation = 
 				"<html> Be aware that due to some Cytoscape v2.8.x limitations SBGN diagrams may <b>NOT</b> be fully <br>" +
-				"supported. Hopefully, in Cytoscape 3 all of these limitations will be fixed:<br> </html>";
+				"supported:<br> </html>";
 		
 		return briefExplanation;
 	}
@@ -149,24 +149,24 @@ public class LimitationDialog extends JDialog{
 		StringBuilder limitations = new StringBuilder("<html> <ul>");
 		
 		limitations.append(
-				"<li><b>No Z Ordering: </b>The Z coordinate of the nodes is not calculated, therefore Cytoscape <br>" +
-				" is not able to distinguish nodes order when they overlap. For further details <a href=https://sourceforge.net/projects/cysbgn/>click here</a>. </li>");
+				"<li><b>No Z Ordering: </b>The Z coordinate of the nodes is not stored, therefore Cytoscape <br>" +
+				" is not able to distinguish nodes order when they overlap. For further details <a href=" + CySBGN.WEB_PAGE_LINK + ">click here</a>. </li>");
 		
 		limitations.append(
 				"<li><b>Limited Edges Shapes: </b>Cytoscape offers a limited amount of edges shapes and it is <br>" +
 				"not possible to extend them. Thus, some edges are not represented exactly as the original<br>" +
-				"SBGN diagram. For further details <a href=https://sourceforge.net/projects/cysbgn/>click here</a>. </li>");
+				"SBGN diagram. For further details <a href=" + CySBGN.WEB_PAGE_LINK + ">click here</a>. </li>");
 		
 		limitations.append(
 				"<li><b>No Compartments: </b>Compartments are not supported by Cytoscape therefore compartment<br>" +
 				"nodes in SBGN visual style are drawn transparent. Though, if they are selected they may<br>" +
-				"cover inner nodes due to the node order limitation of Cytoscape. For further details <a href=https://sourceforge.net/projects/cysbgn/>click here</a>. </li>");
+				"hide inner nodes due to the node order limitation of Cytoscape. For further details <a href=" + CySBGN.WEB_PAGE_LINK + ">click here</a>. </li>");
 		
 		limitations.append(
 				"<li><b>Analysis Methods: </b>In order to render the SBGN diagrams as close as possible to<br>" +
 				"the original aspect some auxiliary nodes and edges are drawn. Since these introduce some<br>" +
 				"problems when running analysis methods we offer an option under CySBGN menu in the Plugins<br>" +
-				"menu to simplify the network. For further details <a href=https://sourceforge.net/projects/cysbgn/>click here</a>. <br></li>");
+				"menu to simplify the network. For further details <a href=" + CySBGN.WEB_PAGE_LINK + ">click here</a>. <br></li>");
 		
 		limitations.append("</ul> </html>");
 		
