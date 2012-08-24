@@ -106,7 +106,8 @@ public class Sbml2SbgnTask implements Task{
 			SBGNVisualStyle visualStyle = new SBGNVisualStyle(plugin);
 			visualStyle.applyVisualStyle();
 			sbmlCyNetworkView.fitContent();
-			sbmlCyNetworkView.redrawGraph(true, true);
+			
+//			sbmlCyNetworkView.redrawGraph(true, true);
 			
 			taskMonitor.setStatus("Convertion finished! SBGN diagram and file created.");
 		}catch (Exception e) {

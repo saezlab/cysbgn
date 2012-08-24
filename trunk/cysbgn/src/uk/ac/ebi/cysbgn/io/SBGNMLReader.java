@@ -15,9 +15,13 @@ package uk.ac.ebi.cysbgn.io;
 
 import java.awt.geom.Point2D;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.security.sasl.SaslException;
 
 import org.sbgn.ArcClazz;
 import org.sbgn.ConvertMilestone1to2;
@@ -110,10 +114,16 @@ public class SBGNMLReader{
 			if (version == 1){
 				sbgnFile = File.createTempFile(file.getName(), ".sbgn");
 				System.out.println ("Converted to " + file);
-				ConvertMilestone1to2.convert (file, file);
+				ConvertMilestone1to2.convert (file, sbgnFile);
 			}
 			
 			return sbgnFile;
+		}catch(SaslException e){
+			return null;
+		}catch(FileNotFoundException e){
+			return null;
+		}catch(IOException e){
+			return null;
 		}catch(Exception e){
 			return null;
 		}
