@@ -1,0 +1,33 @@
+SBGNplugin -
+		SBGN (http://www.sbgn.org/Main_Page) assumes to be the standard graphical notation for 
+	systems biology. This plug-in adds the support to Cytoscape to load SBGN-ML networks.
+
+
+NOTE :
+		Due to some Cytoscape representation limitations (e.g. no support for custom edges shapes) 
+	some of the edges and nodes shapes are not represented exactly as they should be.
+
+#######   v1.0  Release notes    #######
+
+	Main features:
+		- Display SBGN diagrams
+		- Display SBGN-ML networks
+		- Import SBGN-ML files
+		- Export SBGN layout
+		- Supports Entity Relationship (ER) diagrams
+		- Supports Activity Flow (AF) diagrams
+		- Supports Process Description (PD) diagrams
+		- Supports ER notation as defined in http://www.sbgn.org/Image:Refcard-ER.png
+		- Supports AF notation as defined in http://www.sbgn.org/Image:Refcard-AF.png
+		- Supports ER notation as defined in http://www.sbgn.org/Image:Refcard-PD.png
+		- Anchors (middle points in the arcs) supported
+		- Custom edges, e.g. necessary stimulation, supported
+		
+#######   v1.1  Release notes    #######
+
+	Main features:
+		- Diagram simplification feature added
+		- Automated SBGN-ML generation from a SBML model
+		- SBGN-ML validation feature added
+		- CySBML integration
+		
