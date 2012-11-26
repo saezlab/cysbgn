@@ -10,7 +10,7 @@
   <target name="init">
     <property name="plugin_class" value="uk.ac.ebi.cysbgn.CySBGN"/>  	  	  	
     <property name="year" value="2012"/>
-  	<property name="version" value="1.1"/>
+  	<property name="version" value="1.2"/>
   	<property name="plugin_name" value="CySBGN-v${version}"/>
   	<property name="project.jar" value="${plugin_name}.jar"/>
   	
