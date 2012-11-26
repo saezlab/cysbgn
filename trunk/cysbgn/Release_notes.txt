@@ -4,7 +4,7 @@ SBGNplugin -
 
 
 NOTE :
-		Due to some Cytoscape representation limitations (e.g. no support for custom edges shapes) 
+		Due to some Cytoscape representation constraints (e.g. no support for custom edges shapes) 
 	some of the edges and nodes shapes are not represented exactly as they should be.
 
 #######   v1.0  Release notes    #######
@@ -30,4 +30,10 @@ NOTE :
 		- Automated SBGN-ML generation from a SBML model
 		- SBGN-ML validation feature added
 		- CySBML integration
+		
+#######   v1.2  Release notes    #######
+
+	Main features:
+		- Bug fixed in SBGN-ML write function (nodes coordinates).
+		- Simplification process improved.
 		
