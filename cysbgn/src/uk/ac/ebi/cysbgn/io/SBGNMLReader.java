@@ -202,39 +202,39 @@ public class SBGNMLReader{
 				}
 
 				switch( nodeClass ){
-				case SUBMAP : ;
-				createInnerGlyphs = false;
-				StringBuilder submapLabel = new StringBuilder("Submap: ");
-				for(Glyph innerGlyph : glyph.getGlyph()){
-					if(innerGlyph.getLabel() != null){
-						submapLabel.append( innerGlyph.getLabel().getText() + " ");
-						simplifiedGlypihs.put(innerGlyph.getId(), glyph.getId());
-					}
-				}
-				label = submapLabel.toString();
-
-				break;
-				case COMPLEX :  
-					createInnerGlyphs = false;
-					StringBuilder complexLabel = new StringBuilder("Complex: ");
-					for(Glyph innerGlyph : glyph.getGlyph()){
-						if(innerGlyph.getLabel() != null){
-							complexLabel.append( innerGlyph.getLabel().getText() + " ");
-							simplifiedGlypihs.put(innerGlyph.getId(), glyph.getId());
+					case SUBMAP : ;
+						createInnerGlyphs = false;
+						StringBuilder submapLabel = new StringBuilder("Submap: ");
+						for(Glyph innerGlyph : glyph.getGlyph()){
+							if(innerGlyph.getLabel() != null){
+								submapLabel.append( innerGlyph.getLabel().getText() + " ");
+								simplifiedGlypihs.put(innerGlyph.getId(), glyph.getId());
+							}
 						}
-					}
-					label = complexLabel.toString();
-					break;
-				case EXISTENCE: ;
-				case LOCATION: ;
-				case ANNOTATION: ;
-				case UNIT_OF_INFORMATION : ;
-				case STATE_VARIABLE : ;
-				case TAG : ;
-				case COMPARTMENT :
-					simplifiedGlypihs.put(glyph.getId(), REMOVE_NODE_AND_ARC);
-					return null;
-				default: ;
+						label = submapLabel.toString();
+						break;
+					case COMPLEX :  
+						createInnerGlyphs = false;
+						StringBuilder complexLabel = new StringBuilder("Complex: ");
+						for(Glyph innerGlyph : glyph.getGlyph()){
+							if(innerGlyph.getLabel() != null){
+								complexLabel.append( innerGlyph.getLabel().getText() + " ");
+								simplifiedGlypihs.put(innerGlyph.getId(), glyph.getId());
+							}
+						}
+						label = complexLabel.toString();
+						break;
+					case EXISTENCE: ;
+					case LOCATION: ;
+					case ANNOTATION: ;
+					case UNIT_OF_INFORMATION : ;
+					case STATE_VARIABLE : ;
+					case TAG : ;
+					case COMPARTMENT :
+						simplifiedGlypihs.put(glyph.getId(), REMOVE_NODE_AND_ARC);
+						return null;
+					default:
+						;
 				}
 			}
 
@@ -283,44 +283,72 @@ public class SBGNMLReader{
 
 			// Define Label
 			switch( nodeClass ){
-			case AND : label = "AND"; break;
-			case OR : label = "OR"; break;
-			case NOT : label = "NOT"; break;
-			case OMITTED_PROCESS : label = "\\\\"; break;
-			case UNCERTAIN_PROCESS : label = "?"; break;
-			case DISSOCIATION : label = "O"; break;
-			case DELAY : label = "\u03C4"; break;
-			case STATE_VARIABLE : 
-				if( glyph.getState() != null ){
-					label = "";
-
-					String value = null;
-					String variable = null;
-
-					if( glyph.getState().getValue() != null )
-						value = glyph.getState().getValue();
-					if( glyph.getState().getVariable() != null )
-						variable = glyph.getState().getVariable();
-
-					if( (value != null) && (variable != null) )
-						label = value + "@" + variable;
-					if( (value != null) && (variable == null) )
-						label = value;
-					if( (value == null) && (variable != null) )
-						label = variable;
-				}
-				break;
-			case LOCATION : label = ""; break;
-			case ASSOCIATION : label = ""; break;
-			case PROCESS : label = ""; break;
-			case SOURCE_AND_SINK : label = ""; break;
-			case OUTCOME : label = ""; break;
-			case INTERACTION : label = ""; break;
-			case EXISTENCE : label = ""; break;
-			default :
-				if( glyph.getLabel() != null )
-					label =  glyph.getLabel().getText();
-				break;
+				case AND : label = "AND"; break;
+				case OR : label = "OR"; break;
+				case NOT : label = "NOT"; break;
+				case OMITTED_PROCESS : label = "\\\\"; break;
+				case UNCERTAIN_PROCESS : label = "?"; break;
+				case DISSOCIATION : label = "O"; break;
+				case DELAY : label = "\u03C4"; break;
+				case STATE_VARIABLE : 
+					if( glyph.getState() != null ){
+						label = "";
+	
+						String value = null;
+						String variable = null;
+	
+						if( glyph.getState().getValue() != null )
+							value = glyph.getState().getValue();
+						if( glyph.getState().getVariable() != null )
+							variable = glyph.getState().getVariable();
+	
+						if( (value != null) && (variable != null) )
+							label = value + "@" + variable;
+						if( (value != null) && (variable == null) )
+							label = value;
+						if( (value == null) && (variable != null) )
+							label = variable;
+					}
+					break;
+				case LOCATION : label = ""; break;
+				case ASSOCIATION : label = ""; break;
+				case PROCESS : label = ""; break;
+				case SOURCE_AND_SINK : label = ""; break;
+				case OUTCOME : label = ""; break;
+				case INTERACTION : label = ""; break;
+				case EXISTENCE : label = ""; break;
+				case COMPLEX :
+				case SUBMAP : 
+					if( isAnalysisStyle ) break;
+				default :
+					StringBuilder labelBuilder = new StringBuilder();
+					
+					if( glyph.getLabel() != null )
+						labelBuilder.append( glyph.getLabel().getText() );
+					
+					if( isAnalysisStyle && glyph.getGlyph() != null ){
+						for(Glyph innerGlyph : glyph.getGlyph()){
+							
+							switch( GlyphClazz.fromClazz(innerGlyph.getClazz()) ){
+								case STATE_VARIABLE :
+									if(innerGlyph.getState() != null){
+										labelBuilder.append("_");
+										labelBuilder.append(innerGlyph.getState().getValue());
+									}
+									break;
+								case UNIT_OF_INFORMATION :
+									if(innerGlyph.getLabel() != null){
+										labelBuilder.append("_");
+										labelBuilder.append(innerGlyph.getLabel().getText());
+									}
+									break;
+								default: ;
+							}
+						}
+					}
+					
+					label = labelBuilder.toString();
+					
 			}
 
 			// Define Glyph width, height and positions 

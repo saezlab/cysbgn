@@ -121,7 +121,7 @@ public class Sbml2SbgnTask implements Task{
 			
 			taskMonitor.setStatus("Convertion finished! SBGN diagram and file created.");
 		}catch (Exception e) {
-			taskMonitor.setException(e, "ERROR");
+			taskMonitor.setException(e, "Error converting SMBL model to SBGN diagram.");
 			e.printStackTrace();
 			return;
 		}

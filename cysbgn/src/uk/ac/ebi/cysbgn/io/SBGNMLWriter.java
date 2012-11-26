@@ -17,6 +17,7 @@ import org.sbgn.SbgnUtil;
 import org.sbgn.bindings.Glyph;
 import org.sbgn.bindings.Glyph.Clone;
 import org.sbgn.bindings.Label;
+import org.sbgn.bindings.Port;
 import org.sbgn.bindings.Sbgn;
 
 import uk.ac.ebi.cysbgn.CySBGN;
@@ -83,7 +84,7 @@ public class SBGNMLWriter implements Task{
 			File changedFile = new File(filePath);
 			
 			//
-			CyNetworkViewUtils.refreshNodesAttributes(cyNetworkView);
+//			CyNetworkViewUtils.refreshNodesAttributes(cyNetworkView);
 			
 			// Apply nodes modifications
 			Iterator<CyNode> nodeIterator = cyNetwork.nodesIterator();
@@ -119,6 +120,14 @@ public class SBGNMLWriter implements Task{
 		glyph.getBbox().setH( (float) height);
 		glyph.getBbox().setX( CySBGN.convert_X_coord_Cytoscape_to_SBGN(x, width) );
 		glyph.getBbox().setY( CySBGN.convert_Y_coord_Cytoscape_to_SBGN(y, height) );
+	
+		// If port coordinates
+		for(Port port : glyph.getPort()){
+			if( port.getX() == 0.0 && port.getY() == 0.0 ){
+				port.setX( CySBGN.convert_X_coord_Cytoscape_to_SBGN(x, width) );
+				port.setY( CySBGN.convert_Y_coord_Cytoscape_to_SBGN(y, height) );
+			}
+		}
 		
 		// Store clone marker
 		if( Cytoscape.getNodeAttributes().getBooleanAttribute(cyNode.getIdentifier(), SBGNAttributes.NODE_CLONE_MARKER.getName()) )

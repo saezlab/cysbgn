@@ -17,7 +17,6 @@ import java.util.Iterator;
 import uk.ac.ebi.cysbgn.enums.SBGNAttributes;
 import cytoscape.Cytoscape;
 import cytoscape.view.CyNetworkView;
-import cytoscape.view.CyNodeView;
 
 public class CyNetworkViewUtils {
 
