@@ -11,6 +11,7 @@
 package uk.ac.ebi.cysbgn;
 
 import java.io.File;
+import java.net.URL;
 import java.util.HashMap;
 
 import org.sbgn.bindings.Sbgn;
@@ -26,6 +27,7 @@ import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
 import cytoscape.actions.LoadNetworkTask;
 import cytoscape.plugin.CytoscapePlugin;
+import cytoscape.plugin.PluginManager;
 import cytoscape.util.CytoscapeAction;
 
 /**
@@ -55,7 +57,7 @@ public class CySBGN extends CytoscapePlugin {
 	public static final String WEB_PAGE_LINK = "http://www.ebi.ac.uk/saezrodriguez/cno/cysbgn/";
 
 	private SBGNVisualStyle visualStyle;
-	
+	private boolean hasCySBML = false;
 	
 	/** 
 	 * Maps the CyNetwork IDs to the SBGN map imported.
@@ -91,6 +93,11 @@ public class CySBGN extends CytoscapePlugin {
 		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction) test);
 		
 		initialiseVisualStyle();
+
+		// Check CySBML plug-in availability
+		for(URL pluginURL : PluginManager.getPluginURLs())
+			if( pluginURL.getFile().contains("CySBML") )
+				hasCySBML = true;
 		
 //		JPanel testPanel = new JPanel(new BorderLayout());
 //		JLabel selected = new JLabel("Nothing selected");
@@ -214,4 +221,9 @@ public class CySBGN extends CytoscapePlugin {
 	public String getSbgnML(String cyNetworkID){
 		return mapCyNetworkToSBGNML.get(cyNetworkID);
 	}
+
+	public boolean isCySBML_Installed() {
+		return hasCySBML;
+	}
+	
 }

@@ -23,6 +23,7 @@ import cytoscape.task.TaskMonitor;
 import cytoscape.util.CyFileFilter;
 import cytoscape.util.CytoscapeAction;
 import cytoscape.util.FileUtil;
+import cytoscape.view.CytoscapeDesktop;
 
 @SuppressWarnings("serial")
 public class SBGNConverter extends CytoscapeAction{
@@ -43,22 +44,31 @@ public class SBGNConverter extends CytoscapeAction{
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		try{
-			// Browse for sbml file
-			CyFileFilter[] filters = new CyFileFilter[1];
-			filters[0] = new CyFileFilter("xml");
-			File sbmlFile = FileUtil.getFile("Select SBML model file", FileUtil.LOAD, filters);
-
-			if( sbmlFile != null){
-				Sbml2SbgnTask converterTask = new Sbml2SbgnTask(plugin, sbmlFile);
-				MessagesHandler.executeTask(converterTask, false);
+			//Check if CySBML is installed if not warn the user
+			if( plugin.isCySBML_Installed() ){
+				
+				// Browse for sbml file
+				CyFileFilter[] filters = new CyFileFilter[1];
+				filters[0] = new CyFileFilter("xml");
+				File sbmlFile = FileUtil.getFile("Select SBML model file", FileUtil.LOAD, filters);
+	
+				if( sbmlFile != null){
+					Sbml2SbgnTask converterTask = new Sbml2SbgnTask(plugin, sbmlFile);
+					MessagesHandler.executeTask(converterTask, false);
+				}
+				
+			}else{
+				String detailedMessage = "To use this feature CySBML plug-in needs to be installed.\nFor more details see on how to install CySBGN webpage.\nhttp://www.ebi.ac.uk/saezrodriguez/cysbgn/";
+				new MessageDialog("CySBML plug-in not installed", "CySBML plug-in not installed", detailedMessage, Icons.WARNING_LOGO.getPath());
+				logger.warn("SBML to SBGN conversion requires CySBML plug-in installed.");
 			}
 			
 		}catch(Exception e){
 			e.printStackTrace();
-			String detailedMessage = "Error!";
+			String detailedMessage = "No details.";
 			
-			new MessageDialog("Error importing hepatonet1 sbml file", "Error importing hepatonet1 sbml file", detailedMessage, Icons.ERROR_LOGO.getPath());
-			logger.warn("Error Hepatonet1 SBML file : " + e.getMessage(), e);
+			new MessageDialog("Error importing sbml file", "Error importing sbml file", detailedMessage, Icons.ERROR_LOGO.getPath());
+			logger.warn("Error SBML file : " + e.getMessage(), e);
 		}
 	}
 
