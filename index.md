@@ -9,6 +9,4 @@ CySBGN imports, modifies and analyzes [SBGN](http://www.sbgn.org/) diagrams in [
 
 # References
 
-+ [Goncalves et al. BMC Bioinformatics, 2013](http://dx.doi.org/10.1186/1471-2105-14-17)
-
-> Gonçalves, E., van Iersel, M., Saez-Rodriguez, J., 2013. CySBGN: a Cytoscape plug-in to integrate SBGN maps. BMC Bioinformatics 14, 17.
+[Gonçalves, E., van Iersel, M., Saez-Rodriguez, J., 2013. CySBGN: a Cytoscape plug-in to integrate SBGN maps. BMC Bioinformatics 14, 17.](http://dx.doi.org/10.1186/1471-2105-14-17)
