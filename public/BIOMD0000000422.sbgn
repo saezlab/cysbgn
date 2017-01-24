@@ -1,0 +1,1695 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sbgn xmlns="http://sbgn.org/libsbgn/0.2">
+    <map language="">
+        <glyph id="s1" class="unspecified entity">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:isVersionOf>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:obo.chebi:CHEBI%3A32902"/>
+                    </sbfcanno:isVersionOf>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="GA4"/>
+            <bbox y="483.0" x="250.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s2" class="unspecified entity">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:isVersionOf>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:uniprot:Q9MAA7"/>
+                    </sbfcanno:isVersionOf>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="GID"/>
+            <bbox y="503.0" x="397.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s16" class="unspecified entity">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:isVersionOf>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:uniprot:Q9LQT8"/>
+                    </sbfcanno:isVersionOf>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="DELLA"/>
+            <bbox y="262.0" x="532.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s22" class="unspecified entity">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:isVersionOf>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:uniprot:Q9LQT8"/>
+                    </sbfcanno:isVersionOf>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="DELLA_U"/>
+            <bbox y="55.0" x="915.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s23" class="unspecified entity">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:isVersionOf>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:obo.chebi:CHEBI%3A30088"/>
+                    </sbfcanno:isVersionOf>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="GA12"/>
+            <bbox y="1172.0" x="859.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s24" class="unspecified entity">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:isVersionOf>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:obo.chebi:CHEBI%3A29590"/>
+                    </sbfcanno:isVersionOf>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="GA15"/>
+            <bbox y="1019.0" x="457.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s25" class="unspecified entity">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:isVersionOf>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:obo.chebi:CHEBI%3A32906"/>
+                    </sbfcanno:isVersionOf>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="GA24"/>
+            <bbox y="1332.0" x="530.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s26" class="unspecified entity">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:isVersionOf>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:obo.chebi:CHEBI%3A29605"/>
+                    </sbfcanno:isVersionOf>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="GA9"/>
+            <bbox y="967.0" x="206.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s27" class="unspecified entity">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:isVersionOf>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:kegg.genes:ath%3AAT4G25420"/>
+                    </sbfcanno:isVersionOf>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="GA20ox"/>
+            <bbox y="1099.0" x="612.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s28" class="unspecified entity">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:isVersionOf>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:kegg.genes:ath%3AAT4G21690"/>
+                    </sbfcanno:isVersionOf>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="GA3ox"/>
+            <bbox y="729.0" x="77.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s39" class="unspecified entity">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:isVersionOf>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:kegg.genes:ath%3AAT4G25420"/>
+                    </sbfcanno:isVersionOf>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="ga20ox"/>
+            <bbox y="674.0" x="717.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s40" class="unspecified entity">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:isVersionOf>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:uniprot:Q9LQT8"/>
+                    </sbfcanno:isVersionOf>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="della"/>
+            <bbox y="84.0" x="321.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s41" class="unspecified entity">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:isVersionOf>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:kegg.genes:ath%3AAT4G21690"/>
+                    </sbfcanno:isVersionOf>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="ga3ox"/>
+            <bbox y="417.0" x="139.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s42" class="unspecified entity">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:isVersionOf>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:uniprot:Q9MAA7"/>
+                    </sbfcanno:isVersionOf>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="gid"/>
+            <bbox y="515.0" x="639.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s65" class="complex">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:hasPart>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:obo.chebi:CHEBI%3A32902"/>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:uniprot:Q9MAA7"/>
+                    </sbfcanno:hasPart>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="GA4-GID"/>
+            <bbox y="305.0" x="450.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s29" class="complex">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:hasPart>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:obo.chebi:CHEBI%3A29605"/>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:kegg.genes:ath%3AAT4G21690"/>
+                    </sbfcanno:hasPart>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="GA9-GA3ox"/>
+            <bbox y="747.0" x="142.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s30" class="complex">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:hasPart>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:obo.chebi:CHEBI%3A32906"/>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:kegg.genes:ath%3AAT4G25420"/>
+                    </sbfcanno:hasPart>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="GA24-GA20ox"/>
+            <bbox y="1194.0" x="428.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s31" class="complex">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:hasPart>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:obo.chebi:CHEBI%3A29590"/>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:kegg.genes:ath%3AAT4G25420"/>
+                    </sbfcanno:hasPart>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="GA15-GA20ox"/>
+            <bbox y="1082.0" x="488.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s32" class="complex">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:hasPart>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:obo.chebi:CHEBI%3A30088"/>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:kegg.genes:ath%3AAT4G25420"/>
+                    </sbfcanno:hasPart>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="GA12-GA20ox"/>
+            <bbox y="1178.0" x="639.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s62" class="complex">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:hasPart>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:obo.chebi:CHEBI%3A32902"/>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:uniprot:Q9MAA7"/>
+                    </sbfcanno:hasPart>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="GA4-GID-closed"/>
+            <bbox y="153.0" x="668.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s3" class="source and sink">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <label text=""/>
+            <bbox y="1075.0" x="1120.0" h="60.0" w="60.0"/>
+        </glyph>
+        <glyph id="s5" class="source and sink">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <label text=""/>
+            <bbox y="601.0" x="-30.0" h="60.0" w="60.0"/>
+        </glyph>
+        <glyph id="s6" class="source and sink">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <label text=""/>
+            <bbox y="942.0" x="815.0" h="60.0" w="60.0"/>
+        </glyph>
+        <glyph id="s7" class="source and sink">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <label text=""/>
+            <bbox y="-30.0" x="481.0" h="60.0" w="60.0"/>
+        </glyph>
+        <glyph id="s33" class="source and sink">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <label text=""/>
+            <bbox y="621.0" x="466.0" h="60.0" w="60.0"/>
+        </glyph>
+        <glyph id="s11" class="source and sink">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <label text=""/>
+            <bbox y="511.0" x="830.0" h="60.0" w="60.0"/>
+        </glyph>
+        <glyph id="s15" class="source and sink">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <label text=""/>
+            <bbox y="507.0" x="615.0" h="60.0" w="60.0"/>
+        </glyph>
+        <glyph id="s34" class="source and sink">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <label text=""/>
+            <bbox y="25.0" x="380.0" h="60.0" w="60.0"/>
+        </glyph>
+        <glyph id="s35" class="source and sink">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <label text=""/>
+            <bbox y="293.0" x="199.0" h="60.0" w="60.0"/>
+        </glyph>
+        <glyph id="s36" class="complex">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:hasPart>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:obo.chebi:CHEBI%3A32902"/>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:uniprot:Q9MAA7"/>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:uniprot:Q9LQT8"/>
+                    </sbfcanno:hasPart>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="GA4-GID-DELLA2"/>
+            <bbox y="20.0" x="619.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s45" class="complex">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno">
+                    <sbfcanno:hasPart>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:obo.chebi:CHEBI%3A32902"/>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:uniprot:Q9LQT8"/>
+                        <sbfcanno:resource sbfcanno:urn="urn:miriam:uniprot:Q9MAA7"/>
+                    </sbfcanno:hasPart>
+                </sbfcanno:annotation>
+            </extension>
+            <label text="GA4-GID-DELLA1"/>
+            <bbox y="208.0" x="777.0" h="60.0" w="120.0"/>
+        </glyph>
+        <glyph id="s66" class="source and sink">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <label text=""/>
+            <bbox y="231.0" x="151.0" h="60.0" w="60.0"/>
+        </glyph>
+        <glyph id="s67" class="source and sink">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <label text=""/>
+            <bbox y="1291.0" x="1092.0" h="60.0" w="60.0"/>
+        </glyph>
+        <glyph id="s68" class="source and sink">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <label text=""/>
+            <bbox y="854.0" x="403.0" h="60.0" w="60.0"/>
+        </glyph>
+        <glyph id="s69" class="source and sink">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <label text=""/>
+            <bbox y="1570.0" x="540.0" h="60.0" w="60.0"/>
+        </glyph>
+        <glyph id="s70" class="source and sink">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <label text=""/>
+            <bbox y="1114.0" x="46.0" h="60.0" w="60.0"/>
+        </glyph>
+        <glyph id="s71" class="source and sink">
+            <extension>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <label text=""/>
+            <bbox y="702.0" x="318.0" h="60.0" w="60.0"/>
+        </glyph>
+        <glyph id="re1" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> la </ci>
+                        <ci> s1 </ci>
+                        <ci> s2 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="432.0" x="386.0" h="20.0" w="20.0"/>
+            <port y="432.0" x="386.0" id="re1.1"/>
+            <port y="432.0" x="386.0" id="re1.2"/>
+        </glyph>
+        <glyph id="re2" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> ld </ci>
+                        <ci> s65 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="418.0" x="432.0" h="20.0" w="20.0"/>
+            <port y="418.0" x="432.0" id="re2.1"/>
+            <port y="418.0" x="432.0" id="re2.2"/>
+        </glyph>
+        <glyph id="re3" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> ua1 </ci>
+                        <ci> s62 </ci>
+                        <ci> s16 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="265.0" x="699.0" h="20.0" w="20.0"/>
+            <port y="265.0" x="699.0" id="re3.1"/>
+            <port y="265.0" x="699.0" id="re3.2"/>
+        </glyph>
+        <glyph id="re4" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> ud1 </ci>
+                        <ci> s45 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="288.0" x="742.0" h="20.0" w="20.0"/>
+            <port y="288.0" x="742.0" id="re4.1"/>
+            <port y="288.0" x="742.0" id="re4.2"/>
+        </glyph>
+        <glyph id="re5" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> um </ci>
+                        <ci> s45 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="124.0" x="852.0" h="20.0" w="20.0"/>
+            <port y="124.0" x="852.0" id="re5.1"/>
+            <port y="124.0" x="852.0" id="re5.2"/>
+        </glyph>
+        <glyph id="re6" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <ci> omegaGA12 </ci>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="1139.0" x="1030.0" h="20.0" w="20.0"/>
+            <port y="1139.0" x="1030.0" id="re6.1"/>
+            <port y="1139.0" x="1030.0" id="re6.2"/>
+        </glyph>
+        <glyph id="re7" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> ka12 </ci>
+                        <ci> s23 </ci>
+                        <ci> s27 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="1149.0" x="791.0" h="20.0" w="20.0"/>
+            <port y="1149.0" x="791.0" id="re7.1"/>
+            <port y="1149.0" x="791.0" id="re7.2"/>
+        </glyph>
+        <glyph id="re8" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> kd12 </ci>
+                        <ci> s32 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="1214.0" x="787.0" h="20.0" w="20.0"/>
+            <port y="1214.0" x="787.0" id="re8.1"/>
+            <port y="1214.0" x="787.0" id="re8.2"/>
+        </glyph>
+        <glyph id="re9" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> km12 </ci>
+                        <ci> s32 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="1146.0" x="585.0" h="20.0" w="20.0"/>
+            <port y="1146.0" x="585.0" id="re9.1"/>
+            <port y="1146.0" x="585.0" id="re9.2"/>
+        </glyph>
+        <glyph id="re10" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> ka15 </ci>
+                        <ci> s24 </ci>
+                        <ci> s27 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="1037.0" x="620.0" h="20.0" w="20.0"/>
+            <port y="1037.0" x="620.0" id="re10.1"/>
+            <port y="1037.0" x="620.0" id="re10.2"/>
+        </glyph>
+        <glyph id="re11" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> kd15 </ci>
+                        <ci> s31 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="1001.0" x="590.0" h="20.0" w="20.0"/>
+            <port y="1001.0" x="590.0" id="re11.1"/>
+            <port y="1001.0" x="590.0" id="re11.2"/>
+        </glyph>
+        <glyph id="re12" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> km15 </ci>
+                        <ci> s31 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="1211.0" x="561.0" h="20.0" w="20.0"/>
+            <port y="1211.0" x="561.0" id="re12.1"/>
+            <port y="1211.0" x="561.0" id="re12.2"/>
+        </glyph>
+        <glyph id="re13" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> ka24 </ci>
+                        <ci> s25 </ci>
+                        <ci> s27 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="1242.0" x="623.0" h="20.0" w="20.0"/>
+            <port y="1242.0" x="623.0" id="re13.1"/>
+            <port y="1242.0" x="623.0" id="re13.2"/>
+        </glyph>
+        <glyph id="re14" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> kd24 </ci>
+                        <ci> s30 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="1260.0" x="573.0" h="20.0" w="20.0"/>
+            <port y="1260.0" x="573.0" id="re14.1"/>
+            <port y="1260.0" x="573.0" id="re14.2"/>
+        </glyph>
+        <glyph id="re15" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> km24 </ci>
+                        <ci> s30 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="1100.0" x="442.0" h="20.0" w="20.0"/>
+            <port y="1100.0" x="442.0" id="re15.1"/>
+            <port y="1100.0" x="442.0" id="re15.2"/>
+        </glyph>
+        <glyph id="re16" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> ka9 </ci>
+                        <ci> s26 </ci>
+                        <ci> s28 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="866.0" x="203.0" h="20.0" w="20.0"/>
+            <port y="866.0" x="203.0" id="re16.1"/>
+            <port y="866.0" x="203.0" id="re16.2"/>
+        </glyph>
+        <glyph id="re17" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> kd9 </ci>
+                        <ci> s29 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="875.0" x="150.0" h="20.0" w="20.0"/>
+            <port y="875.0" x="150.0" id="re17.1"/>
+            <port y="875.0" x="150.0" id="re17.2"/>
+        </glyph>
+        <glyph id="re18" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> km9 </ci>
+                        <ci> s29 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="647.0" x="209.0" h="20.0" w="20.0"/>
+            <port y="647.0" x="209.0" id="re18.1"/>
+            <port y="647.0" x="209.0" id="re18.2"/>
+        </glyph>
+        <glyph id="re19" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> q </ci>
+                        <ci> s65 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="222.0" x="569.0" h="20.0" w="20.0"/>
+            <port y="222.0" x="569.0" id="re19.1"/>
+            <port y="222.0" x="569.0" id="re19.2"/>
+        </glyph>
+        <glyph id="re20" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> p </ci>
+                        <ci> s62 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="256.0" x="635.0" h="20.0" w="20.0"/>
+            <port y="256.0" x="635.0" id="re20.1"/>
+            <port y="256.0" x="635.0" id="re20.2"/>
+        </glyph>
+        <glyph id="re21" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> deltaDELLA </ci>
+                        <ci> s40 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="124.0" x="503.0" h="20.0" w="20.0"/>
+            <port y="124.0" x="503.0" id="re21.1"/>
+            <port y="124.0" x="503.0" id="re21.2"/>
+        </glyph>
+        <glyph id="re22" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> deltaGA20ox </ci>
+                        <ci> s39 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="907.0" x="733.0" h="20.0" w="20.0"/>
+            <port y="907.0" x="733.0" id="re22.1"/>
+            <port y="907.0" x="733.0" id="re22.2"/>
+        </glyph>
+        <glyph id="re23" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> deltaGA3ox </ci>
+                        <ci> s41 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="586.0" x="108.0" h="20.0" w="20.0"/>
+            <port y="586.0" x="108.0" id="re23.1"/>
+            <port y="586.0" x="108.0" id="re23.2"/>
+        </glyph>
+        <glyph id="re24" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> deltaGID </ci>
+                        <ci> s42 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="589.0" x="571.0" h="20.0" w="20.0"/>
+            <port y="589.0" x="571.0" id="re24.1"/>
+            <port y="589.0" x="571.0" id="re24.2"/>
+        </glyph>
+        <glyph id="re27" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci> muGA20ox </ci>
+                            <ci> s16 </ci>
+    </apply>
+                        <apply>
+                            <plus/>
+                            <ci> s16 </ci>
+                            <ci> thetaGA20ox </ci>
+    </apply>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="478.0" x="729.0" h="20.0" w="20.0"/>
+            <port y="478.0" x="729.0" id="re27.1"/>
+            <port y="478.0" x="729.0" id="re27.2"/>
+        </glyph>
+        <glyph id="re28" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci> muGID </ci>
+                            <ci> s16 </ci>
+    </apply>
+                        <apply>
+                            <plus/>
+                            <ci> s16 </ci>
+                            <ci> thetaGID </ci>
+    </apply>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="412.0" x="641.0" h="20.0" w="20.0"/>
+            <port y="412.0" x="641.0" id="re28.1"/>
+            <port y="412.0" x="641.0" id="re28.2"/>
+        </glyph>
+        <glyph id="re29" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci> muDELLA </ci>
+                            <ci> thetaDELLA </ci>
+    </apply>
+                        <apply>
+                            <plus/>
+                            <ci> s16 </ci>
+                            <ci> thetaDELLA </ci>
+    </apply>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="176.0" x="455.0" h="20.0" w="20.0"/>
+            <port y="176.0" x="455.0" id="re29.1"/>
+            <port y="176.0" x="455.0" id="re29.2"/>
+        </glyph>
+        <glyph id="re30" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <divide/>
+                        <apply>
+                            <times/>
+                            <ci> muGA3ox </ci>
+                            <ci> s16 </ci>
+    </apply>
+                        <apply>
+                            <plus/>
+                            <ci> s16 </ci>
+                            <ci> thetaGA3ox </ci>
+    </apply>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="332.0" x="357.0" h="20.0" w="20.0"/>
+            <port y="332.0" x="357.0" id="re30.1"/>
+            <port y="332.0" x="357.0" id="re30.2"/>
+        </glyph>
+        <glyph id="re31" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> muDELLA </ci>
+                        <ci> s40 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="22.0" x="293.0" h="20.0" w="20.0"/>
+            <port y="22.0" x="293.0" id="re31.1"/>
+            <port y="22.0" x="293.0" id="re31.2"/>
+        </glyph>
+        <glyph id="re32" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> muGID </ci>
+                        <ci> s42 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="635.0" x="689.0" h="20.0" w="20.0"/>
+            <port y="635.0" x="689.0" id="re32.1"/>
+            <port y="635.0" x="689.0" id="re32.2"/>
+        </glyph>
+        <glyph id="re33" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> muGA20ox </ci>
+                        <ci> s39 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="647.0" x="869.0" h="20.0" w="20.0"/>
+            <port y="647.0" x="869.0" id="re33.1"/>
+            <port y="647.0" x="869.0" id="re33.2"/>
+        </glyph>
+        <glyph id="re34" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> muGA3ox </ci>
+                        <ci> s41 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="362.0" x="105.0" h="20.0" w="20.0"/>
+            <port y="362.0" x="105.0" id="re34.1"/>
+            <port y="362.0" x="105.0" id="re34.2"/>
+        </glyph>
+        <glyph id="re35" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> gammaGA20ox </ci>
+                        <ci> s27 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="1052.0" x="758.0" h="20.0" w="20.0"/>
+            <port y="1052.0" x="758.0" id="re35.1"/>
+            <port y="1052.0" x="758.0" id="re35.2"/>
+        </glyph>
+        <glyph id="re37" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> gammaGID </ci>
+                        <ci> s2 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="535.0" x="539.0" h="20.0" w="20.0"/>
+            <port y="535.0" x="539.0" id="re37.1"/>
+            <port y="535.0" x="539.0" id="re37.2"/>
+        </glyph>
+        <glyph id="re38" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> gammaGA3ox </ci>
+                        <ci> s28 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="732.0" x="14.0" h="20.0" w="20.0"/>
+            <port y="732.0" x="14.0" id="re38.1"/>
+            <port y="732.0" x="14.0" id="re38.2"/>
+        </glyph>
+        <glyph id="re39" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> ua2 </ci>
+                        <ci> s62 </ci>
+                        <ci> s16 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="170.0" x="626.0" h="20.0" w="20.0"/>
+            <port y="170.0" x="626.0" id="re39.1"/>
+            <port y="170.0" x="626.0" id="re39.2"/>
+        </glyph>
+        <glyph id="re40" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> ud2 </ci>
+                        <ci> s36 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="125.0" x="613.0" h="20.0" w="20.0"/>
+            <port y="125.0" x="613.0" id="re40.1"/>
+            <port y="125.0" x="613.0" id="re40.2"/>
+        </glyph>
+        <glyph id="re41" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> Pmem </ci>
+                        <ci> A1 </ci>
+                        <ci> omegaGA4 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="375.0" x="244.0" h="20.0" w="20.0"/>
+            <port y="375.0" x="244.0" id="re41.1"/>
+            <port y="375.0" x="244.0" id="re41.2"/>
+        </glyph>
+        <glyph id="re42" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> muGA </ci>
+                        <ci> s23 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="1262.0" x="1003.0" h="20.0" w="20.0"/>
+            <port y="1262.0" x="1003.0" id="re42.1"/>
+            <port y="1262.0" x="1003.0" id="re42.2"/>
+        </glyph>
+        <glyph id="re43" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> muGA </ci>
+                        <ci> s24 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="981.0" x="416.0" h="20.0" w="20.0"/>
+            <port y="981.0" x="416.0" id="re43.1"/>
+            <port y="981.0" x="416.0" id="re43.2"/>
+        </glyph>
+        <glyph id="re44" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> muGA </ci>
+                        <ci> s25 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="1471.0" x="569.0" h="20.0" w="20.0"/>
+            <port y="1471.0" x="569.0" id="re44.1"/>
+            <port y="1471.0" x="569.0" id="re44.2"/>
+        </glyph>
+        <glyph id="re45" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <ci> muGA </ci>
+                        <ci> s26 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="1064.0" x="165.0" h="20.0" w="20.0"/>
+            <port y="1064.0" x="165.0" id="re45.1"/>
+            <port y="1064.0" x="165.0" id="re45.2"/>
+        </glyph>
+        <glyph id="re46" class="process">
+            <extension>
+                <math:math xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns="http://www.w3.org/1998/Math/MathML">
+                    <apply>
+                        <times/>
+                        <apply>
+                            <plus/>
+                            <ci> muGA </ci>
+                            <apply>
+<times/>
+<ci> Pmem </ci>
+<ci> B1 </ci>
+      </apply>
+    </apply>
+                        <ci> s1 </ci>
+  </apply>
+</math:math>
+                <sbfcanno:annotation xmlns:sbfcanno="http://www.sbfc.org/sbfcanno"/>
+            </extension>
+            <bbox y="612.0" x="305.0" h="20.0" w="20.0"/>
+            <port y="612.0" x="305.0" id="re46.1"/>
+            <port y="612.0" x="305.0" id="re46.2"/>
+        </glyph>
+        <arc target="re1.1" source="s1" id="s1_re1.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re1.1" source="s2" id="s2_re1.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s65" source="re1.2" id="re1.2_s65" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re1" source="s1" id="s1_re1" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re1" source="s2" id="s2_re1" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re2.1" source="s65" id="s65_re2.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s1" source="re2.2" id="re2.2_s1" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s2" source="re2.2" id="re2.2_s2" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re2" source="s65" id="s65_re2" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re3.1" source="s62" id="s62_re3.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re3.1" source="s16" id="s16_re3.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s45" source="re3.2" id="re3.2_s45" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re3" source="s62" id="s62_re3" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re3" source="s16" id="s16_re3" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re4.1" source="s45" id="s45_re4.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s62" source="re4.2" id="re4.2_s62" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s16" source="re4.2" id="re4.2_s16" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re4" source="s45" id="s45_re4" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re5.1" source="s45" id="s45_re5.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s62" source="re5.2" id="re5.2_s62" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s22" source="re5.2" id="re5.2_s22" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re5" source="s45" id="s45_re5" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re6.1" source="s3" id="s3_re6.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s23" source="re6.2" id="re6.2_s23" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re7.1" source="s23" id="s23_re7.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re7.1" source="s27" id="s27_re7.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s32" source="re7.2" id="re7.2_s32" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re7" source="s23" id="s23_re7" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re7" source="s27" id="s27_re7" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re8.1" source="s32" id="s32_re8.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s23" source="re8.2" id="re8.2_s23" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s27" source="re8.2" id="re8.2_s27" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re8" source="s32" id="s32_re8" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re9.1" source="s32" id="s32_re9.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s27" source="re9.2" id="re9.2_s27" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s24" source="re9.2" id="re9.2_s24" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re9" source="s32" id="s32_re9" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re10.1" source="s24" id="s24_re10.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re10.1" source="s27" id="s27_re10.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s31" source="re10.2" id="re10.2_s31" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re10" source="s24" id="s24_re10" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re10" source="s27" id="s27_re10" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re11.1" source="s31" id="s31_re11.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s24" source="re11.2" id="re11.2_s24" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s27" source="re11.2" id="re11.2_s27" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re11" source="s31" id="s31_re11" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re12.1" source="s31" id="s31_re12.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s27" source="re12.2" id="re12.2_s27" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s25" source="re12.2" id="re12.2_s25" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re12" source="s31" id="s31_re12" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re13.1" source="s25" id="s25_re13.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re13.1" source="s27" id="s27_re13.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s30" source="re13.2" id="re13.2_s30" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re13" source="s25" id="s25_re13" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re13" source="s27" id="s27_re13" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re14.1" source="s30" id="s30_re14.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s25" source="re14.2" id="re14.2_s25" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s27" source="re14.2" id="re14.2_s27" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re14" source="s30" id="s30_re14" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re15.1" source="s30" id="s30_re15.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s27" source="re15.2" id="re15.2_s27" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s26" source="re15.2" id="re15.2_s26" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re15" source="s30" id="s30_re15" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re16.1" source="s26" id="s26_re16.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re16.1" source="s28" id="s28_re16.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s29" source="re16.2" id="re16.2_s29" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re16" source="s26" id="s26_re16" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re16" source="s28" id="s28_re16" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re17.1" source="s29" id="s29_re17.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s26" source="re17.2" id="re17.2_s26" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s28" source="re17.2" id="re17.2_s28" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re17" source="s29" id="s29_re17" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re18.1" source="s29" id="s29_re18.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s28" source="re18.2" id="re18.2_s28" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s1" source="re18.2" id="re18.2_s1" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re18" source="s29" id="s29_re18" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re19.1" source="s65" id="s65_re19.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s62" source="re19.2" id="re19.2_s62" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re19" source="s65" id="s65_re19" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re20.1" source="s62" id="s62_re20.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s65" source="re20.2" id="re20.2_s65" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re20" source="s62" id="s62_re20" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re21.1" source="s7" id="s7_re21.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s16" source="re21.2" id="re21.2_s16" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re21" source="s40" id="s40_re21" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re21" source="s40" id="s40_re21" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re22.1" source="s6" id="s6_re22.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s27" source="re22.2" id="re22.2_s27" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re22" source="s39" id="s39_re22" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re22" source="s39" id="s39_re22" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re23.1" source="s5" id="s5_re23.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s28" source="re23.2" id="re23.2_s28" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re23" source="s41" id="s41_re23" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re23" source="s41" id="s41_re23" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re24.1" source="s33" id="s33_re24.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s2" source="re24.2" id="re24.2_s2" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re24" source="s42" id="s42_re24" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re24" source="s42" id="s42_re24" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re27.1" source="s11" id="s11_re27.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s39" source="re27.2" id="re27.2_s39" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re27" source="s16" id="s16_re27" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re27" source="s16" id="s16_re27" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re28.1" source="s15" id="s15_re28.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s42" source="re28.2" id="re28.2_s42" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re28" source="s16" id="s16_re28" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re28" source="s16" id="s16_re28" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re29.1" source="s34" id="s34_re29.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s40" source="re29.2" id="re29.2_s40" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re29" source="s16" id="s16_re29" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re29" source="s16" id="s16_re29" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re30.1" source="s35" id="s35_re30.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s41" source="re30.2" id="re30.2_s41" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re30" source="s16" id="s16_re30" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re30" source="s16" id="s16_re30" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re31.1" source="s40" id="s40_re31.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s34" source="re31.2" id="re31.2_s34" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re31" source="s40" id="s40_re31" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re32.1" source="s42" id="s42_re32.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s15" source="re32.2" id="re32.2_s15" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re32" source="s42" id="s42_re32" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re33.1" source="s39" id="s39_re33.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s11" source="re33.2" id="re33.2_s11" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re33" source="s39" id="s39_re33" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re34.1" source="s41" id="s41_re34.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s35" source="re34.2" id="re34.2_s35" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re34" source="s41" id="s41_re34" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re35.1" source="s27" id="s27_re35.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s6" source="re35.2" id="re35.2_s6" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re35" source="s27" id="s27_re35" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re37.1" source="s2" id="s2_re37.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s33" source="re37.2" id="re37.2_s33" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re37" source="s2" id="s2_re37" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re38.1" source="s28" id="s28_re38.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s5" source="re38.2" id="re38.2_s5" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re38" source="s28" id="s28_re38" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re39.1" source="s62" id="s62_re39.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re39.1" source="s16" id="s16_re39.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s36" source="re39.2" id="re39.2_s36" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re39" source="s62" id="s62_re39" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re39" source="s16" id="s16_re39" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re40.1" source="s36" id="s36_re40.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s62" source="re40.2" id="re40.2_s62" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s16" source="re40.2" id="re40.2_s16" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re40" source="s36" id="s36_re40" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re41.1" source="s66" id="s66_re41.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s1" source="re41.2" id="re41.2_s1" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re42.1" source="s23" id="s23_re42.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s67" source="re42.2" id="re42.2_s67" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re42" source="s23" id="s23_re42" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re43.1" source="s24" id="s24_re43.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s68" source="re43.2" id="re43.2_s68" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re43" source="s24" id="s24_re43" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re44.1" source="s25" id="s25_re44.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s69" source="re44.2" id="re44.2_s69" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re44" source="s25" id="s25_re44" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re45.1" source="s26" id="s26_re45.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s70" source="re45.2" id="re45.2_s70" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re45" source="s26" id="s26_re45" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re46.1" source="s1" id="s1_re46.1" class="consumption">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="s71" source="re46.2" id="re46.2_s71" class="production">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+        <arc target="re46" source="s1" id="s1_re46" class="modulation">
+            <start y="0.0" x="0.0"/>
+            <end y="0.0" x="0.0"/>
+        </arc>
+    </map>
+</sbgn>
