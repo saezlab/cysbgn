@@ -5,7 +5,7 @@ title: Home
 
 CySBGN imports, modifies and analyzes [SBGN](http://www.sbgn.org/) diagrams in [Cytoscape](http://www.cytoscape.org/), offering thus the large palette of tools available in this platform and its plug-ins to networks and pathways in SBGN format. 
 
-<img src="/cyrface/public/shortest_path_4.png" alt="CySBGN example" style="width:700px;height:600px;">
+<img src="/cysbgn/public/shortest_path_4.png" alt="CySBGN example" style="width:700px;height:600px;">
 
 # References
 

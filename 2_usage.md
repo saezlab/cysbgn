@@ -16,11 +16,11 @@ After CySBGN is installed the user can import a SBGN diagram by clicking in File
 
 Example file can be [downloaded here](http://sourceforge.net/projects/cysbgn/files/SBGN-ML_Example_Files/glycolysis.sbgn/download) and a few other SBGN diagrams files can be [downloaded here](http://sourceforge.net/projects/cysbgn/files/SBGN-ML_Example_Files/).
 
-<img src="/cysbgn/public/first.import.screenshot.png" alt="CySBGN example" style="width:500px;height:500px;">
+<img src="/cysbgn/public/first.import.screenshot.png" alt="CySBGN example" style="width:700px;height:450px;">
 
 After the diagram is successfully imported during the first import the user will be prompted with an information dialog regarding the rendering limitations of Cytoscape that affects the visualization of the SBGN diagrams. This dialog can be disable by ticking the Don’t show me this again box. 
 
-<img src="/cysbgn/public/limitation.panel.screenshot.png" alt="CySBGN example" style="width:500px;height:500px;">
+<img src="/cysbgn/public/limitation.panel.screenshot.png" alt="CySBGN example" style="width:500px;height:300px;">
 
 
 ### **Simplify Diagram**
@@ -31,15 +31,15 @@ To render the diagrams as close as possible to the original, CySBGN creates some
 
 To avoid this a simplification method was created that removes these auxiliary shapes as well as complex or compartments SBGN entities. The image below shows how a user can preform the simplification of a previously imported SBGN diagram.
 
-<img src="/cysbgn/public/simplification_1.png" alt="CySBGN example" style="width:400px;height:500px;">
+<img src="/cysbgn/public/simplification_1.png" alt="CySBGN example" style="width:700px;height:450px;">
 
 After the simplification a view is generated and can be seen side-by-side with the original SBGN diagram.
 
-<img src="/cysbgn/public/simplification_2.png" alt="CySBGN example" style="width:400px;height:500px;">
+<img src="/cysbgn/public/simplification_2.png" alt="CySBGN example" style="width:700px;height:450px;">
 
 At this point a Layout algorithm can also be applied.
 
-<img src="/cysbgn/public/simplification_3.png" alt="CySBGN example" style="width:400px;height:500px;">
+<img src="/cysbgn/public/simplification_3.png" alt="CySBGN example" style="width:700px;height:450px;">
 
 
 ### **SBGN-ML validation**
@@ -48,7 +48,7 @@ At this point a Layout algorithm can also be applied.
 
 CySBGN by using libSBGN enables the users to perform a syntactic validation of SBGN-ML documents. The validation function is accessible under the CySBGN menu in the Plugins menu and runs a syntax validation of the SBGN-ML file used to import currently selected SBGN-ML diagram. 
 
-<img src="/cysbgn/public/validate.screenshot.png" alt="CySBGN example" style="width:400px;height:500px;">
+<img src="/cysbgn/public/validate.screenshot.png" alt="CySBGN example" style="width:700px;height:450px;">
 
 Any issue found with the SBGN-ML file is listed in the Data Panel (bottom panel) in the CySBGN-Validation tab.
 
@@ -63,7 +63,7 @@ Through **Plugins -> CySBGN -> SBML to SBGN...** the user can select a SBML mode
 
 **The conversion process may take awhile**
 
-<img src="/cysbgn/public/convert_cysbgn_1.png" alt="CySBGN example" style="width:400px;height:500px;">
+<img src="/cysbgn/public/convert_cysbgn_1.png" alt="CySBGN example" style="width:700px;height:450px;">
 
 Since we are dealing with automated generation of diagrams the layout may need some manual correction. Here the overlapping nodes were moved to be completely visible. SBML model [link](/cysbgn/public/BIOMD0000000422.xml). 
 
@@ -83,10 +83,11 @@ The example model mentioned above can be downloaded directly from the links belo
 
 CySBGN rendering can be compared [here](http://libsbgn.sourceforge.net/render_comparison/) with other SBGN complaint tools. We re-used an extensive set of test cases covering the three supplementary languages of SBGN to validate the rendering of CySBGN. 
 
-<img src="/cysbgn/public/rendering_comparison.png" alt="CySBGN example" style="width:400px;height:500px;">
+<img src="/cysbgn/public/rendering_comparison.png" alt="CySBGN example" style="width:700px;height:450px;">
 
 ### **FAQ**
-Can I generate a SBGN diagram file (SBGN-ML file format) from a SBML model?
+**Can I generate a SBGN diagram file (SBGN-ML file format) from a SBML model?**
+
 Yes. In CySBGN menu (under plugins menu) select SBML to SBGN, pick the desired SBML model and the SBGN file will be automatically generated and stored with the same name as the SBML file but with .sbgn extension. 
 
-Help me filling this section! <a href="mailto:emanuel@ebi.ac.uk">Mail me your questions.</a></i>
+Help me filling this section! <a href="mailto:emanuel@ebi.ac.uk">Mail me your questions.</a>
