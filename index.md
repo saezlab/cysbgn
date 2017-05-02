@@ -9,7 +9,7 @@ CySBGN imports, modifies and analyzes [SBGN](http://www.sbgn.org/) diagrams in [
 
 <img src="/cysbgn/public/shortest_path_4.png" alt="CySBGN example" style="width:700px;height:600px;">
 
-## How to cite us
+## References
 
 Please use this reference to cite CyBSGN:
 
